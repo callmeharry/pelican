@@ -1,6 +1,10 @@
 {
   "name": "mail",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "mail-listener2":"0.1.8",
+    "nodemailer":"0.7.1"
+  }
 
 }
