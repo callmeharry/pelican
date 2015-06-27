@@ -2,7 +2,10 @@
  * Created by GYX on 15/6/27.
  */
 var Mail = require("../mail.js");
-
+/**
+ *
+ *  请不要上我的邮箱。。
+ */
 var mail = new Mail({
     smtphost:"smtp.buaa.edu.cn",
     smtpport:465,
