@@ -22,6 +22,7 @@ mongoose.connect(config.db, function (err) {
     }
 
     console.log('connect to mongodb successfully');
+ 
 });
 
 //models
