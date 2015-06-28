@@ -8,40 +8,21 @@
 var mongoose = require("mongoose");
 var config = require("../config");
 
-var mongodb_opts = {
-    server: {
-        socketOptions: {keepAlive: 1}, auto_reconnect: true, poolSize: config.db.conn_pool_size
-    },
 
-    user: config.db.user,
-    pass: config.db.pass
-};
 
 /**
 var db_conn = mongoose.createConnection(config.db.host, config.db.db,
     config.db.port, mongodb_opts);
  */
-var db_conn = mongoose.createConnection('mongodb://pelican:Pelican1221@123.57.211.52:27017/pelican');
 
-db_conn.on('connecting', function () {
+mongoose.connect(config.db, function (err) {
+    if (err) {
+        console.error('connect to %s error: ', config.db, err.message);
+        process.exit(1);
+    }
 
-    console.log('Mongodb server is connecting...');
-
-}).on('connected', function () {
-
-    console.log('Mongodb server has connected.');
-
-}).on('reconnected', function () {
-
-    console.log('Mongodb server has subsequently disconnected and successfully reconnected.');
-
-}).on('error', function (err) {
-
-    console.error('Connect to Mongodb[%s] error: %s', config.db.db, err.message);
-
-    process.exit(1);
+    console.log('connect to mongodb successfully');
 });
-
 
 //models
 require("./user");
