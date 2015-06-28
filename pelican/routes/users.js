@@ -14,7 +14,8 @@ router.get('/', function (req, res, next) {
     //
     //    res.send('success');
     //});
-    res.send({status: 0, message: "hello world!"});
+    //res.send({status: 0, message: "hello world!"});
+    res.reply(0, "success", {user: "hello world"});
 });
 
 module.exports = router;

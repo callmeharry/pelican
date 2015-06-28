@@ -22,6 +22,30 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/**
+ * 方便传输数据
+ * 首先就做了
+ */
+app.use(function (req, res, next) {
+    res.reply = function (status, message, data) {
+
+        var rep = {
+            status: status,
+            message: message
+        };
+
+        if (data) {
+            for (var index in data) {
+                rep[index] = data[index];
+            }
+        }
+
+        res.jsonp(rep);
+    };
+    next();
+});
+
+
 app.use('/', routes);
 app.use('/users', users);
 
