@@ -42,7 +42,7 @@ app.use(function (req, res, next) {
                 rep[index] = data[index];
             }
              **/
-            req['data'] = data;
+            rep['data'] = data;
         }
 
         res.jsonp(rep);
