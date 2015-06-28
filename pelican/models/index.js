@@ -43,11 +43,11 @@ db_conn.on('connecting', function () {
 
 //models
 require("./user");
-require("./mail");
+//require("./mail");
 
 
 exports.User = mongoose.model("User");
-exports.Mail = mongoose.model("mail");
+//exports.Mail = mongoose.model("mail");
 
 
 

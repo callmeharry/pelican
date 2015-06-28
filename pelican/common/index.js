@@ -1,0 +1,1 @@
+exports.MailHelper = require('./mail');
