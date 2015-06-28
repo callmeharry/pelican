@@ -6,7 +6,7 @@
 
 var config = {
     //server name
-    server:"pelican"
+    server: "pelican",
     
     //API version
     apiVersion: "0.1",
