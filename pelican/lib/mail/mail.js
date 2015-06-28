@@ -5,6 +5,17 @@
 var nodeMailer = require('nodemailer');
 var mailListener = require("mail-listener2");
 
+/**
+ *
+ * @param option
+ * option include
+ * smtphost
+ * smtpport
+ * imaphost
+ * imapport
+ * user
+ * pass
+ */
 function mail(option) {
     this.smtphost = option.smtphost || "";
     this.smtpport = option.smtpport || "";
@@ -16,6 +27,12 @@ function mail(option) {
     this.listener=null;
     this.transporter=null;
 }
+
+
+/**
+ *  setMailOption 同上
+ * @param otherOption
+ */
     mail.prototype.setMailOption = function(otherOption){
         this.smtphost=otherOption.smtphost||"";
         this.smtpport=otherOption.smtpport||"";
@@ -32,6 +49,11 @@ function mail(option) {
             user:this.user,pass:this.pass};
     };
 
+
+/**
+ * 开始发信，开启SMTP连接
+ * @returns {*}
+ */
     mail.prototype.startSMTPConnection = function(){
         if(!this.smtphost||!this.smtpport||!this.user||!this.pass){
             return {success:0,error:"Error,mail option is not enough"};
@@ -64,6 +86,12 @@ function mail(option) {
         console.log('Message sent: ' +info.message);
     }};
      */
+/**
+ * 发送邮件 数据格式如上
+ * @param mailOptions
+ * @param callback
+ * @returns {{success: number, error: string}}
+ */
     mail.prototype.sendMail=function(mailOptions,callback){
         if(this.transporter==null)
             return {success:0,error:"please start smtp again"};
@@ -71,9 +99,13 @@ function mail(option) {
 
 
 
-        
+
     };
 
+/**
+ * 停止SMTP连接，应该在在sendMail中的callback中调用。
+ * @returns {{success: number, error: string}}
+ */
     this.stopSMTPConnection = function(){
         if(this.transporter==null)
             return {success:0,error:"please start smtp again"};
@@ -82,6 +114,13 @@ function mail(option) {
 
     /**
      *
+     *  mailbox：
+     *      INBOX
+     *      Sent Items
+     *      Drafts
+     *      Trash
+     *      Junk E-mail
+     *      Virus Items
      * searchFilter:
      *       case 'ALL':
              case 'ANSWERED':
@@ -106,7 +145,15 @@ function mail(option) {
      *  when you don't want to listen any more
      *  you should call listener.stop();
      */
-    mail.prototype.createMailListener = function(mailbox,searchFilter,onmail,onattachment){
+/**
+ *  开启邮件接收器，参数如上
+ * @param mailbox
+ * @param searchFilter
+ * @param onmail
+ * @param onattachment
+ * @returns {*}
+ */
+    mail.prototype.createMailListener = function(mailbox,searchFilter,onmail){
         if(!this.imaphost||!this.imaphost||!this.user||!this.pass){
             return {success:0,error:"Error,mail option is not enough"};
         }
@@ -145,12 +192,43 @@ function mail(option) {
 
     };
 
+/**
+ * 确定两个邮件是否相同
+ * @param mail1
+ * @param mail2
+ * @returns {boolean}
+ */
+function compareMail(mail1,mail2){
+    if(mail1.subject==mail2.subject&&
+       mail1.headers.from==mail2.headers.from&&
+       mail1.headers.to==mail2.headers.to&&
+       mail1.date==mail2.date){
+       return true;
+    }
+    return false;
 
+}
+
+/**
+ * 确定某个邮件是否在某个邮件集合之中，
+ * 主要用于判断刚刚获取的邮件是否在数据库中存在，可以做一个用SQL处理的版本，总之这里我就这么写了，如果可以做哈希就更好了
+ * @param mail1
+ * @param mails
+ * @returns {boolean}
+ */
+function mailIn(mail1,mails){
+    for(var m in mails){
+        var b =compareMail(mail1,m);
+        if(b)
+            return true;
+    }
+    return false;
+}
 
 
 
 module.exports = mail;
-
+module.exports.mailIn=mailIn;
 
 
 

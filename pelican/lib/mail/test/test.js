@@ -3,6 +3,10 @@
  */
 var Mail = require("../mail.js");
 
+/**
+ * 设置基本信息
+ * @type {mail|exports|module.exports}
+ */
 var mailControl = new Mail({
     smtphost:"smtp.buaa.edu.cn",
     smtpport:465,
@@ -14,7 +18,9 @@ var mailControl = new Mail({
 
 });
 
-
+/**
+ * 发邮件的准备
+ */
 mailControl.startSMTPConnection();
 var mailOptions = {
     from: 'gyxln@buaa.edu.cn', // sender address
@@ -23,6 +29,11 @@ var mailOptions = {
     text: 'Hello world ', // plaintext body
     html: '<b>Hello world </b>' // html body
 };
+/**
+ * 发送完毕的回调
+ * @param error
+ * @param info
+ */
 var callback =function(error, info){
     if(error){
         console.log(error);
@@ -31,23 +42,36 @@ var callback =function(error, info){
         console.log('Message sent: ' +info.message);
     }};
 
-//mail.sendMail(mailOptions,callback);
+/**
+ * 发送邮件
+ */
+mailControl.sendMail(mailOptions,callback);
+
+
+
+
 var index =0;
+/**
+ * 接收邮件
+ */
 mailControl.createMailListener("Sent Items",["ALL"],
     function(mail) {
         console.log(index++ + " : ");
         if(mail.attachments){
+            /**
+             * 把所有附件的content字段都删掉了，我害怕这个数据很大
+             */
             for (var i = 0; i < mail.attachments.length; i++) {
                 delete mail.attachments[i].content;
             }
         }
 
             console.log(mail);
-            //mailControl.downloadAtt(mail.attachments);
-            //console.log(mail);
-
     }
 );
+
+
+Mail.test();
 
 /**
  *  北航邮箱的文件夹
