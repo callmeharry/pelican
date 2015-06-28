@@ -17,9 +17,11 @@ var mongodb_opts = {
     pass: config.db.pass
 };
 
-
+/**
 var db_conn = mongoose.createConnection(config.db.host, config.db.db,
     config.db.port, mongodb_opts);
+ */
+var db_conn = mongoose.createConnection('mongodb://pelican:Pelican1221@123.57.211.52:27017/pelican');
 
 db_conn.on('connecting', function () {
 
