@@ -10,7 +10,10 @@ var mailControl = new Mail({
     imapport:993,
     user:"gyxln@buaa.edu.cn",
     pass:"69568440"
+
+
 });
+
 
 mailControl.startSMTPConnection();
 var mailOptions = {
