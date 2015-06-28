@@ -13,6 +13,7 @@ function mail(option) {
     this.user = option.user || "";
     this.pass = option.pass || "";
 
+    this.listener=null;
     this.transporter=null;
 }
     mail.prototype.setMailOption = function(otherOption){
@@ -101,11 +102,11 @@ function mail(option) {
      *  when you don't want to listen any more
      *  you should call listener.stop();
      */
-    mail.prototype.createMailListener = function(searchFilter,onmail){
+    mail.prototype.createMailListener = function(mailbox,searchFilter,onmail,onattachment){
         if(!this.imaphost||!this.imaphost||!this.user||!this.pass){
             return {success:0,error:"Error,mail option is not enough"};
         }
-        var listener = new mailListener({
+        this.listener = new mailListener({
             username: this.user,
             password: this.pass,
             host: this.imaphost,
@@ -113,28 +114,30 @@ function mail(option) {
             tls: true,
             searchFilter:searchFilter,           //All unseen seen
             tlsOptions: { rejectUnauthorized: false },
-            mailbox: "INBOX",
+            mailbox: mailbox,
             markSeen: true,
             fetchUnreadOnStart: true,
             attachments: false
+           // attachmentOptions: { directory: "attachment/" }
         });
-        listener.start();
+        this.listener.start();
 
 
-        listener.on("server:connected", function(){
+        this.listener.on("server:connected", function(){
             console.log("imapConnected");
         });
 
-        listener.on("server:disconnected", function(){
+        this.listener.on("server:disconnected", function(){
             console.log("imapDisconnected");
         });
 
-        listener.on("error", function(err){
+        this.listener.on("error", function(err){
             console.log(err);
         });
-        listener.on("mail",onmail);
+        this.listener.on("mail",onmail);
 
-        return listener;
+        //listener.on("attachment", onattachment);
+        return this.listener;
 
     };
 
