@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var config = require('./config');
+var Log = require('./common').LogHelper;
 
 var app = express();
 
@@ -28,6 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
  * 首先就做了关于status 和message 的解析
  */
 app.use(function (req, res, next) {
+    var startTime = Date.now();
+
     res.reply = function (status, message, data) {
 
         var rep = {
@@ -46,6 +49,8 @@ app.use(function (req, res, next) {
         }
 
         res.jsonp(rep);
+        res._content = rep;
+        Log.d({req: req, res: res}, "Time used: %dms", Date.now() - startTime);
     };
     next();
 });
@@ -78,11 +83,8 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
+    Log.e(err);
+    res.reply(-1, "internal error");
 });
 
 
