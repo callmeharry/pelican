@@ -50,6 +50,7 @@ app.use(function (req, res, next) {
 
         res.jsonp(rep);
         res._content = rep;
+
         Log.d({req: req, res: res}, "Time used: %dms", Date.now() - startTime);
     };
     next();
@@ -57,7 +58,7 @@ app.use(function (req, res, next) {
 
 
 app.use('/', routes);
-app.use('/users', users);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
