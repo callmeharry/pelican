@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var config = require('./config');
 
 var app = express();
 
@@ -24,20 +25,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /**
  * 方便传输数据
- * 首先就做了
+ * 首先就做了关于status 和message 的解析
  */
 app.use(function (req, res, next) {
     res.reply = function (status, message, data) {
 
         var rep = {
+            apiVersion: config.apiVersion,
             status: status,
             message: message
         };
 
         if (data) {
+            /**
             for (var index in data) {
                 rep[index] = data[index];
             }
+             **/
+            req['data'] = data;
         }
 
         res.jsonp(rep);
