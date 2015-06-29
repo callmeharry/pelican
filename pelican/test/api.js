@@ -26,8 +26,9 @@ exports.testApi = function (req, res, next) {
 };
 
 exports.testMail = function (req, res, next) {
+    var htmlContent = validator.escape('<div style="font:14px/1.5 \'Lucida Grande\', \'微软雅黑\';color:#333;"><p style="font:14px/1.5 \'Lucida Grande\';margin:0;"><br></p><br><div><div style="font: 14px/1.5 \'Lucida Grande\';">hi</div></div></div>');
     var mailContent = {
-        html: '<div style="font:14px/1.5 \'Lucida Grande\', \'微软雅黑\';color:#333;"><p style="font:14px/1.5 \'Lucida Grande\';margin:0;"><br></p><br><div><div style="font: 14px/1.5 \'Lucida Grande\';">hi</div></div></div>',
+        html: htmlContent,
         subject: 'hi',
         priority: 'normal',
         from: [{address: 'gyxln@buaa.edu.cn', name: 'gyxln'}],
