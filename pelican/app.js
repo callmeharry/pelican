@@ -11,9 +11,14 @@ var Log = require('./common').LogHelper;
 
 var app = express();
 
+var jwt = require('jsonwebtoken');
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.set('superSecret', 'lkasdjflsajf1123lkajl');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -54,7 +59,6 @@ app.use(function (req, res, next) {
     };
     next();
 });
-
 
 app.use('/', routes);
 
