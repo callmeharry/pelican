@@ -25,16 +25,19 @@ exports.login = function (req, res, next) {
 
     console.log(username + " " + password);
 
-    var user = UserProxy.check(username, password);
+    UserProxy.findUserByName(username, function (err, user) {
 
-    if (!user) { // TODO 如果验证出错，返回错误信息
+        if (err) return next(err);
 
-    }
+        if (!user) {
+            res.reply(101, "no such user");
+            return;
+        }
 
-    var data = {};
-    data.username = username;
-    data.token = user.token;
-    data.role = user.type;
+        res.reply(0, "success", user);
 
-    res.reply(0, "success", data);
+
+    });
+
+
 };

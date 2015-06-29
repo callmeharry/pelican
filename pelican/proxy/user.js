@@ -5,16 +5,11 @@
 var models = require('../models');
 var UserModel = models.User;
 
-var ROLE = {
-    ADMIN: 'admin',
-    HANDLER: 'handler',
-    DISTRIBUTION: 'distribution',
-    CHECKER: 'check'
-};
 
-exports.ROLE = ROLE;
-
-exports.newAndSave = function (username, password, type, callback) {
+/*
+ 新建一个用户
+ */
+exports.newAndSave = function (username, password, role, callback) {
     var userModel = new UserModel();
 
     userModel.username = username;
@@ -23,19 +18,16 @@ exports.newAndSave = function (username, password, type, callback) {
 
     userModel.save(callback);
 
-
 };
 
-exports.check = function (username, password) {
-    // TODO 检查用户名密码是否正确
 
-    var userModel = new UserModel();
-    userModel.username = "vincent";
-    userModel.type = ROLE.ADMIN;
-    userModel.token = "alksdjfsa";
+/**
+ * 根据用户名字查找
+ * @param username 用户名字
+ * @param callback 回调函数
+ */
+exports.findUserByName = function (username, callback) {
 
-    return userModel;
-    // 如果正确，返回用户model
+    UserModel.findOne({'username': username}, callback);
 
-    // 如果错误，返回错误信息
 };
