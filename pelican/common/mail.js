@@ -211,11 +211,13 @@ function mail(option) {
                         delete mail.headers;
                         delete mail.messageId;
 
+			/*
                         if(mail.attachments){
                             for(var i=0;i<mail.attachments.length;i++){
                                 delete mail.attachments[i].content;
                             }
                         }
+			*/	
                         _cb(mail);
                     })
                 });
