@@ -27,11 +27,11 @@ mongoose.connect(config.db, function (err) {
 
 //models
 require("./user");
-//require("./mail");
+require("./mail");
 
 
 exports.User = mongoose.model("User");
-//exports.Mail = mongoose.model("mail");
+exports.Mail = mongoose.model("mail");
 
 
 

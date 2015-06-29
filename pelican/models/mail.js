@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var MailSchema = new Schema({
 
     html: {type: String},
+    text: {type: String},
     subject: {type: String},
     messageId: {type: String},
     priority: {type: String},
@@ -19,6 +20,9 @@ var MailSchema = new Schema({
     }],
 
     date: {type: Date, default: Date.now},
+
+    receivedDate: {type: Date, default: Date.now},
+
 
     attachments: [{
         contentType: {type: Date, default: Date.now},
