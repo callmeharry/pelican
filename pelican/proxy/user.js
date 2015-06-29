@@ -31,3 +31,57 @@ exports.findUserByName = function (username, callback) {
     UserModel.findOne({'username': username}, callback);
 
 };
+
+/**
+ * 根据用户的id查找
+ * @param id    用户的id
+ * @param callback
+ */
+exports.findUserById = function (id, callback) {
+    UserModel.findOne({'_id': id}, callback);
+};
+
+/**
+ * 查找满足条件的一群用户
+ * @param ids
+ * @param callback
+ */
+exports.findUsersByIds = function (ids, callback) {
+
+    if (ids.length == 0)
+        return callback(null, []);
+
+    UserModel.find({'_id': {"$in": ids}}, callback);
+};
+
+/**
+ * 根据用户名字查找某些用户
+ * @param names
+ * @param callback
+ * @returns {*}
+ */
+exports.findUsersByNames = function (names, callback) {
+    if (names.length == 0)
+        return callback(null, []);
+
+    UserModel.find({_id: {"$in": names}}, callback);
+
+};
+
+
+/**
+ * 根据关键字，获取一组用户
+ * Callback:
+ * - err, 数据库异常
+ * - users, 用户列表
+ * @param {String} query 关键字
+ * @param {Object} opt 选项
+ * @param {Function} callback 回调函数
+ */
+exports.getUsersByQuery = function (query, opt, callback) {
+    UserModel.find(query, '', opt, callback);
+};
+
+
+
+
