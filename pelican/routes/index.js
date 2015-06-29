@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var controller = require('../controllers');
-var userContro = controller.user;
+var userController = controller.user;
 
 var testApi = require('../test/api');
 
@@ -14,7 +14,10 @@ router.get('/', function (req, res, next) {
 
 
 /*---------user------------*/
-router.get('/user', userContro.helloUser);
+router.get('/user', userController.helloUser);
+
+router.post('/login', userController.login);
+
 
 
 /*--------mail-------------*/
