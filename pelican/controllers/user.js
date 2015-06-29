@@ -36,7 +36,6 @@ exports.login = function (req, res, next) {
 
         res.reply(0, "success", user);
 
-
     });
 
 
