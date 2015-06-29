@@ -26,7 +26,7 @@ router.post('/login', userController.login);
 
 
 /*--------test-------------*/
-router.get('/test', testApi.testApi);
+router.post('/test', testApi.testApi);
 
 
 
