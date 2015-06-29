@@ -31,7 +31,7 @@ exports.login = function (req, res, next) {
         if (err) return next(err);
 
         if (!user || user.password != password) {
-            res.reply(101, "no such user");
+            res.reply(101, "用户名或密码错误");
             return;
         }
 
