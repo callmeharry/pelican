@@ -6,6 +6,15 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var ROLE = {
+    ADMIN: 'admin',
+    HANDLER: 'handler',
+    DISTRIBUTION: 'distribution',
+    CHECKER: 'check'
+};
+
+exports.ROLE = ROLE;
+
 var UserSchema = new Schema({
 
     username: {type: String, unique: true},

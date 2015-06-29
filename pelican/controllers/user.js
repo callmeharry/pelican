@@ -4,6 +4,7 @@
 var UserProxy = require('../proxy').User;
 var validator = require('validator');
 var Log = require('../common').LogHelper;
+var jwt = require('jsonwebtoken');
 
 exports.helloUser = function (req, res, next) {
     //UserProxy.newAndSave('lewiskit2', '123', 1, function (err) {
@@ -23,20 +24,29 @@ exports.login = function (req, res, next) {
     var username = validator.trim(req.body.username);
     var password = validator.trim(req.body.password);
 
-    console.log(username + " " + password);
+    console.error(username + " " + password);
 
     UserProxy.findUserByName(username, function (err, user) {
 
         if (err) return next(err);
 
-        if (!user) {
-            res.reply(101, "no such user");
+        if (!user || user.password != password) {
+            res.reply(101, "用户名或密码错误");
             return;
         }
 
-        res.reply(0, "success", user);
+
+        // create a token
+        var token = jwt.sign(user, req.app.get('superSecret'), {
+            expiresInMinutes: 1440 // expires in 24 hours
+        });
+
+        var data = {};
+        data.username = user.username;
+        data.role = user.role;
+        data.token = token;
+
+        res.reply(0, "success", data);
 
     });
-
-
 };
