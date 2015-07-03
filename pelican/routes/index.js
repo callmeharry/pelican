@@ -3,6 +3,7 @@ var router = express.Router();
 
 var controller = require('../controllers');
 var userController = controller.user;
+var distributorController = controller.distributor;
 
 var testApi = require('../test/api');
 
@@ -55,7 +56,7 @@ router.post('/login', userController.login);
 
 
 /*--------mail-------------*/
-
+router.get('/distribution/getMailList', distributorController.getMailList);
 
 
 
