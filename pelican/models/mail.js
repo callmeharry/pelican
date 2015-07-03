@@ -11,10 +11,10 @@ var MailSchema = new Schema({
     subject: {type: String},
     messageId: {type: String},
     priority: {type: String},
-    from: [{
+    from: {
         address: {type: String},
         name: {type: String}
-    }],
+    },
 
     to: [{
         address: {type: String},

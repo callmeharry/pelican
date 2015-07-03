@@ -48,6 +48,25 @@ function getMailList(query, page, limit, callback) {
     );
 }
 /**
+ * 获取邮件处理人员待处理邮件列表
+ * @param id
+ * @param page
+ * @param callback
+ */
+exports.findHandlerNewMailList = function (id, page, callback) {
+    return getMailList({handler: id, isHandled:false}, page, 10, callback);
+}
+
+/**
+ * 通过id获取邮件内容
+ * @param id
+ * @param callback
+ */
+exports.getMailContent = function (id, callback) {
+    MailModel.findOne({messageId: id}, callback);
+}
+
+/**
  * 获取所有的邮件列表，分页显示
  * @param page 第几页
  * @param callback
@@ -61,3 +80,17 @@ exports.getAllMailList = function (page, callback) {
         callback
     );
 };
+
+/**
+ * 通过id将邮件已处理信息置为true
+ * @param id
+ * @param callback
+ */
+exports.handleMail = function (id, callback) {
+    this.getMailContent(id, function (err, mail) {
+        if(err)
+            return callback(err,null);
+        mail.isHandled = true;
+        mail.save(callback);
+    })
+}

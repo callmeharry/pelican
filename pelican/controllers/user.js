@@ -17,6 +17,8 @@ exports.login = function (req, res, next) {
 
         if (err) return next(err);
 
+        //console.log(user);
+
         if (!user) {
             res.reply(101, "用户名或密码错误");
             return;
@@ -43,7 +45,6 @@ exports.login = function (req, res, next) {
 
     });
 };
-
 
 exports.getAllHandlers = function (req, tes, next) {
     if (req.user.role !== ROLE.DISTRIBUTION) {

@@ -24,7 +24,6 @@ var UserSchema = new Schema({
 
     create_at: {type: Date, default: Date.now}
 
-
 });
 
 //index
