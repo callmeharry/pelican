@@ -40,7 +40,7 @@ var MailSchema = new Schema({
     }],
 
     handler: {type: String},  // 处理这封邮件的人员
-    reader: [{  // 阅读这封邮件的所有人员
+    readers: [{  // 阅读这封邮件的所有人员
         type: String
     }],
 

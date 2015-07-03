@@ -19,6 +19,12 @@ exports.newAndSave = function (mail, callback) {
     }
 
 };
+
+exports.findMailById = function (id, callback) {
+    MailModel.findOne({'_id': id}, callback);
+};
+
+
 /**
  * 根据 query 获取分页的邮件列表
  * @param query
