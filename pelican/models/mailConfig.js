@@ -14,7 +14,7 @@ var configScheam = new Schema({
     password: {type:String}
 });
 
-settingScheam.index[{messageId: 1}, {unique: true}];
+//settingScheam.index[{messageId: 1}, {unique: true}];
 
 mongoose.model('MailConfig', configScheam);
 
