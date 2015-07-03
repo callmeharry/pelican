@@ -3,6 +3,8 @@ var router = express.Router();
 
 var controller = require('../controllers');
 var userController = controller.user;
+var handlerController = require('../controllers/handler');
+var mailController = require('../controllers/mail');
 var mailConfigController = controller.mailConfig;
 var distributorController = controller.distributor;
 
@@ -58,6 +60,8 @@ router.post('/login', userController.login);
 router.get('distribution/handlers', userController.getAllHandlers);
 
 /*--------mail-------------*/
+router.get('/email/detail', mailController.getMailDetail);
+
 
 
 router.get("/admin/mailConfig",mailConfigController.mailConfig);
@@ -66,10 +70,16 @@ router.get('/distribution/getMailList', distributorController.getMailList);
 
 router.get('/distribution/distributeMail', distributorController.distribute);
 
+/* 邮件处理人员 */
+router.get('/email/list', handlerController.getEmailList);
+router.post('/email/reply', handlerController.replyEmail);
+router.post('/email/manage', handlerController.manageEmail);
+router.post('/email/send', handlerController.sendEmail);
 
 
 /*--------test-------------*/
 router.post('/test', testApi.testApi);
+
 
 
 
