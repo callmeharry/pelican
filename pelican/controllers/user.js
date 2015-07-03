@@ -42,3 +42,24 @@ exports.login = function (req, res, next) {
 
     });
 };
+
+
+exports.getAllHandlers = function (req, tes, next) {
+    if (req.user.role !== ROLE.DISTRIBUTION) {
+        res.reply(101, "没有权限");
+        return;
+    }
+
+    UserProxy.findUsersByRole(ROLE.HANDLER, function (err, users) {
+        if (err) {
+            return next(err);
+        } else {
+
+            var data = {};
+            data.count = users.size;
+            data.users = users;
+
+            res.reply(0, "获取成功", data);
+        }
+    });
+};

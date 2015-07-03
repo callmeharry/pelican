@@ -8,7 +8,7 @@ var ROLE = require('../models/user').ROLE;
 
 exports.getMailList = function (req, res, next) {
     if (req.user.role !== ROLE.DISTRIBUTION) {
-        res.reply();
+        res.reply(101, "邮件列表获取失败");
         return;
     }
 

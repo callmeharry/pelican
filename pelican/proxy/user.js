@@ -70,6 +70,19 @@ exports.findUsersByNames = function (names, callback) {
 
 
 /**
+ * 根据用户角色查找用户
+ * @param role 用户角色
+ * @param callback
+ */
+exports.findUsersByRole = function (role, callback) {
+
+    UserModel.find()
+        .where('role').equals(role)
+        .exec(callback);
+};
+
+
+/**
  * 根据关键字，获取一组用户
  * Callback:
  * - err, 数据库异常
