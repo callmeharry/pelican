@@ -7,6 +7,8 @@ var distributorController = controller.distributor;
 
 var testApi = require('../test/api');
 
+var jwt = require('jsonwebtoken');
+
 /* GET TEST page. */
 router.get('/', function (req, res, next) {
     res.render('index', {title: 'Express'});
@@ -27,7 +29,7 @@ router.use(function (req, res, next) {
     if (token) {
 
         // verifies secret and checks exp
-        jwt.verify(token, app.get('superSecret'), function (err, decoded) {
+        jwt.verify(token, req.app.get('superSecret'), function (err, decoded) {
             if (err) {
                 return res.reply(1, 'Failed to authenticate token.');
             } else {
@@ -49,7 +51,6 @@ router.use(function (req, res, next) {
 
 
 /*---------user------------*/
-router.get('/user', userController.helloUser);
 
 router.post('/login', userController.login);
 

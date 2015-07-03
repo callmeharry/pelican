@@ -16,12 +16,12 @@ exports.login = function (req, res, next) {
 
         if (err) return next(err);
 
-        console.log(user.toString());
-
         if (!user) {
-            res.reply(101, "用户不存在");
+            res.reply(101, "用户名或密码错误");
             return;
         }
+
+        console.log(user.toString());
 
         if (user.password != password) {
             res.reply(101, "用户名或密码错误");
