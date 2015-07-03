@@ -18,7 +18,7 @@ exports.getEmailList = function(req, res ,next) {
         data.pageCount = pageCount;
         var list = new Array();
         for(var i = 0; i < data.length; i++) {
-            list[i] = {mailId:data.messageId,
+            list[i] = {mailId:data._id,
                 title: data.subject,
                 senderName: data.from.name,
                 receiveTime:data.receiveTime};
@@ -30,7 +30,7 @@ exports.getEmailList = function(req, res ,next) {
 };
 
 exports.replyEmail = function(req, res, next) {
-    var content = req.body.content;
+    var content = validator.trim(req.body.content);
     MailProxy.newAndSave(content, function (err, message) {
         if(err) {
             res.reply(101,'邮件未存储到数据库');
@@ -57,10 +57,10 @@ exports.manageEmail = function(req, res, next) {
     })
 };
 
-exports.sendEmail = function(res, res, next) {
-    var content = res.body.content;
-    var receiver = res.body.receiver;
-    var subject = res.body.title;
+exports.sendEmail = function(req, res, next) {
+    var content = validator.trim(req.body.content);
+    var receiver = req.body.receiver;
+    var subject = req.body.title;
     MailProxy.newAndSave(content, function (err, message) {
         if(err) {
             res.reply(101,'邮件未存储到数据库');

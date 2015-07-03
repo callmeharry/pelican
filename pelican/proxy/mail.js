@@ -18,7 +18,7 @@ exports.newAndSave = function (mail, callback) {
 };
 
 exports.findMailById = function (id, callback) {
-    MailModel.findOne({'_id': id}, callback);
+    MailModel.findOne({'_id':id}, callback);
 };
 
 
@@ -43,7 +43,7 @@ function getMailList(query, page, limit, callback) {
         },
         callback
     );
-}
+};
 /**
  * 获取邮件处理人员待处理邮件列表
  * @param id
@@ -52,16 +52,7 @@ function getMailList(query, page, limit, callback) {
  */
 exports.findHandlerNewMailList = function (id, page, callback) {
     return getMailList({handler: id, isHandled:false}, page, 10, callback);
-}
-
-/**
- * 通过id获取邮件内容
- * @param id
- * @param callback
- */
-exports.getMailContent = function (id, callback) {
-    MailModel.findOne({messageId: id}, callback);
-}
+};
 
 /**
  * 获取所有的邮件列表，分页显示
@@ -90,4 +81,4 @@ exports.handleMail = function (id, callback) {
         mail.isHandled = true;
         mail.save(callback);
     })
-}
+};

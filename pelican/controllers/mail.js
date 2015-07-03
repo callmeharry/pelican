@@ -3,7 +3,7 @@
  * 邮件controller 不分用户类型
  */
 var MailModel = require('../proxy').Mail;
-
+var validator = require('validator');
 var ROLE = require('../models/user').ROLE;
 
 /**
@@ -13,19 +13,22 @@ var ROLE = require('../models/user').ROLE;
  * @param next
  */
 exports.getMailDetail = function(req, res, next) {
-    var id = req.body.mailid;
+    var id = validator.trim(req.query.mailId);
 
-
-
-    MailModel.getMailContent(id, function (err, mail) {
+    MailModel.findMailById(id, function (err, mail) {
         if(err) {
             res.reply(101, '获取失败');
             return;
         }
+        if(!mail) {
+            res.reply(101,'邮件不存在');
+            return;
+        }
+
         //判断是否有阅读权限
         if (req.user.role == ROLE.DISTRIBUTOR ||
             req.user._id == mail.handler ||
-            mail.reader.indexOf(req.user._id)) {
+            mail.readers.indexOf(req.user._id)) {
             res.reply(0,'success', mail);
         } else {
             res.reply(101, '没有权限')
