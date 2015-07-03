@@ -9,7 +9,7 @@ var validator = require('validator');
 
 
 exports.getMailList = function (req, res, next) {
-    if (req.user.role !== ROLE.DISTRIBUTION) {
+    if (req.user.role !== ROLE.DISTRIBUTOR) {
         res.reply(101, "邮件列表获取失败");
         return;
     }
@@ -32,7 +32,7 @@ exports.getMailList = function (req, res, next) {
 
 
 exports.distribute = function (req, res, next) {
-    if (req.user.role !== ROLE.DISTRIBUTION) {
+    if (req.user.role !== ROLE.DISTRIBUTOR) {
         res.reply(101, "没有权限");
         return;
     }

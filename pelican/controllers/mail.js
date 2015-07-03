@@ -23,7 +23,7 @@ exports.getMailDetail = function(req, res, next) {
             return;
         }
         //判断是否有阅读权限
-        if (req.user.role == ROLE.DISTRIBUTION ||
+        if (req.user.role == ROLE.DISTRIBUTOR ||
             req.user._id == mail.handler ||
             mail.reader.indexOf(req.user._id)) {
             res.reply(0,'success', mail);

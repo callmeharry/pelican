@@ -9,7 +9,7 @@ var Schema = mongoose.Schema;
 var ROLE = {
     ADMIN: 'admin',
     HANDLER: 'handler',
-    DISTRIBUTION: 'distributor',
+    DISTRIBUTOR: 'distributor',
     CHECKER: 'checker'
 };
 

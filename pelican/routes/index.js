@@ -57,7 +57,7 @@ router.use(function (req, res, next) {
 
 router.post('/login', userController.login);
 
-router.get('distribution/handlers', userController.getAllHandlers);
+router.get('/distribution/handlers', userController.getAllHandlers);
 
 /*--------mail-------------*/
 router.get('/email/detail', mailController.getMailDetail);
@@ -67,6 +67,8 @@ router.get('/email/detail', mailController.getMailDetail);
 router.get("/admin/mailConfig",mailConfigController.mailConfig);
 
 router.get('/distribution/getMailList', distributorController.getMailList);
+
+router.get('/distribution/getMailInfo', mailController.getMailDetail);
 
 router.get('/distribution/distributeMail', distributorController.distribute);
 

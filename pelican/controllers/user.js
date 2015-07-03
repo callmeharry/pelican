@@ -6,6 +6,8 @@ var validator = require('validator');
 var Log = require('../common').LogHelper;
 var jwt = require('jsonwebtoken');
 
+var ROLE = require('../models/user').ROLE;
+
 exports.login = function (req, res, next) {
     var username = validator.trim(req.body.username);
     var password = validator.trim(req.body.password);
@@ -46,8 +48,8 @@ exports.login = function (req, res, next) {
     });
 };
 
-exports.getAllHandlers = function (req, tes, next) {
-    if (req.user.role !== ROLE.DISTRIBUTION) {
+exports.getAllHandlers = function (req, res, next) {
+    if (req.user.role !== ROLE.DISTRIBUTOR) {
         res.reply(101, "没有权限");
         return;
     }
@@ -58,8 +60,16 @@ exports.getAllHandlers = function (req, tes, next) {
         } else {
 
             var data = {};
-            data.count = users.size;
-            data.users = users;
+            data.count = users.length;
+            data.users = [users.length];
+
+            for (var i = 0; i < users.length; ++i) {
+                var resUser = {
+                    id: users[i]._id,
+                    username: users[i].username
+                };
+                data.users[i] = resUser;
+            }
 
             res.reply(0, "获取成功", data);
         }
