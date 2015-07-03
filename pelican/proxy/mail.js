@@ -1,9 +1,6 @@
 var moment = require('moment');
 var MailModel = require('../models').Mail;
 
-var MailSchema = require('../models/mail').MailSchema;
-
-
 exports.newAndSave = function (mail, callback) {
 
     var mailModel = new MailModel();
@@ -34,7 +31,7 @@ exports.findMailById = function (id, callback) {
  */
 function getMailList(query, page, limit, callback) {
     var resultsPerPage = limit || 10;
-    MailSchema.paginate(
+    MailModel.paginate(
         query,
         {
             page: page,

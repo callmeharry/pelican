@@ -21,7 +21,8 @@ exports.getMailList = function (req, res, next) {
             next(err);
         } else {
             var data = {};
-            data.count = itemCount;
+            data.page = pageCount;
+            data.count = itemCount.length;
             data.items = results;
 
             res.reply(0, '邮件列表获取成功', data);

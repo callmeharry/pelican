@@ -19,6 +19,8 @@ var config = {
     log: {
         "out": "/var/log/pelican/out.log",
         "err": "/var/log/pelican/err.log"
+        //"out": "/Users/VincentBel/Project/Node/pelican/out.log",
+        //"err": "/Users/VincentBel/Project/Node/pelican/err.log"
     }
 };
 

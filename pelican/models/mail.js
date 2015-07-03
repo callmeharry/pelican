@@ -51,9 +51,8 @@ var MailSchema = new Schema({
 
 MailSchema.plugin(mongoosePaginate);
 
+
 MailSchema.index[{messageId: 1}, {unique: true}];
 
 mongoose.model('Mail', MailSchema);
-
-exports.MailSchema = MailSchema;
 
