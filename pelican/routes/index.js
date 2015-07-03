@@ -31,7 +31,7 @@ router.use(function (req, res, next) {
                 return res.reply(1, 'Failed to authenticate token.');
             } else {
                 // if everything is good, save to request for use in other routes
-                req.decoded = decoded;
+                req.user = decoded;
                 next();
             }
         });
