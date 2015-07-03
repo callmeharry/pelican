@@ -1,5 +1,7 @@
 /*---User Model Schema----*/
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate');
+
 var Schema = mongoose.Schema;
 
 var MailSchema = new Schema({
@@ -35,12 +37,23 @@ var MailSchema = new Schema({
         checksum: {type: String},
         length: {type: String},
         content: {type: Buffer}
-    }]
+    }],
 
+    handler: {type: String},  // 处理这封邮件的人员
+    reader: [{  // 阅读这封邮件的所有人员
+        type: String
+    }],
+
+    isDistributed: {type: Boolean}, // 邮件是否已经分发
+    isHandled: {type: Boolean} // 邮件是否已经处理
 
 });
+
+MailSchema.plugin(mongoosePaginate);
 
 MailSchema.index[{messageId: 1}, {unique: true}];
 
 mongoose.model('Mail', MailSchema);
+
+exports.MailSchema = MailSchema;
 

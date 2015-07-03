@@ -3,3 +3,5 @@
  */
 exports.user = require('./user');
 exports.mailConfig =require("./mailConfig");
+exports.distributor = require('./distributor');
+
