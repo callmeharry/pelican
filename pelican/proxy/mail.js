@@ -41,7 +41,6 @@ function getMailList(query, page, limit, callback) {
         callback
     );
 }
-
 /**
  * 获取所有的邮件列表，分页显示
  * @param page 第几页

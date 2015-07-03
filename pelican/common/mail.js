@@ -12,15 +12,16 @@ var _searchFilter;
 var _mailbox;
 var _cb;
 var _imap;
+var _onerror;
 
 
 function mail(option) {
-    this.smtphost = option.smtphost || "";
-    this.smtpport = option.smtpport || "";
-    this.imaphost = option.imaphost || "";
-    this.imapport = option.imapport || "";
-    this.user = option.user || "";
-    this.pass = option.pass || "";
+    this.smtp = option.smtp || "";
+    this.smtpPort = option.smtpPort || "";
+    this.imap = option.imap || "";
+    this.imapPort = option.imapPort || "";
+    this.mailAddress = option.mailAddress || "";
+    this.password = option.password || "";
 
     this.transporter=undefined;
     this.imapconn=undefined;
@@ -36,22 +37,22 @@ function mail(option) {
 
     //当然你也可以直接通过变量获取
     mail.prototype.getMailOption = function(){
-        return {smtphost:this.smtphost,smtpport:this.smtpport,
-            imaphost:this.imaphost,imapport:this.imapport,
-            user:this.user,pass:this.pass};
+        return {smtp:this.smtp,smtpPort:this.smtpPort,
+            imap:this.imap,imapPort:this.imapPort,
+            mailAddress:this.mailAddress,password:this.password};
     };
 
     mail.prototype.startSMTPConnection = function(){
-        if(!this.smtphost||!this.smtpport||!this.user||!this.pass){
+        if(!this.smtp||!this.smtpPort||!this.mailAddress||!this.password){
             return {success:0,error:"Error,mail option is not enough"};
         }
         this.transporter = nodeMailer.createTransport("SMTP",{
-            host:this.smtphost,
-            port:this.smtpport,
+            host:this.smtp,
+            port:this.smtpPort,
             secureConnection:true,
             auth: {
-                user: this.user,
-                pass: this.pass
+                user: this.mailAddress,
+                pass: this.password
             }
         });
         return {success:1};
@@ -79,7 +80,7 @@ function mail(option) {
         this.transporter.sendMail(mailOptions,callback);
     };
 
-    this.stopSMTPConnection = function(){
+    mail.prototype.stopSMTPConnection = function(){
         if(this.transporter==null)
             return {success:0,error:"please start smtp again"};
         this.transporter.close();
@@ -138,38 +139,37 @@ function mail(option) {
          special_use_attrib: '\\Junk' },
       'Virus Items': { attribs: [], delimiter: '/', children: null, parent: null } }
         */
-     mail.prototype.openBox=function(mailbox,searchFilter,cb) {
+     mail.prototype.openBox=function(mailbox,searchFilter,cb,onerror) {
         _searchFilter=searchFilter;
         _cb =cb;
         _mailbox = mailbox;
+         _onerror = onerror;
         this.getImap();
+
      };
 
 
      mail.prototype.getImap = function(){
-        //改这里
-        var self = this;
+
 
         if(!this.imapconn){
 
-            if(!this.imaphost||!this.imaphost||!this.user||!this.pass){
+            if(!this.imap||!this.imapPort||!this.mailAddress||!this.password){
                 return {success:0,error:"Error,mail option is not enough"};
             }
 
             this.imapconn= new Imap({
-                user:this.user,
-                password:this.pass,
-                host:this.imaphost,
-                port:this.imapport,
+                user:this.mailAddress,
+                password:this.password,
+                host:this.imap,
+                port:this.imapPort,
                 tls: true,
                 tlsOptions: { rejectUnauthorized: false }
             });
 
 
 
-            this.imapconn.once('error', function(err) {
-                console.log(err);
-            });
+            this.imapconn.once('error', _onerror);
 
             this.imapconn.once('ready',function(){
                 console.log('ready');
@@ -210,14 +210,13 @@ function mail(option) {
                         //fs.writeFile('msg-' + seqno + '-body.html', mail.html, function (err) {
                         delete mail.headers;
                         delete mail.messageId;
-
-			/*
+			            /*
                         if(mail.attachments){
                             for(var i=0;i<mail.attachments.length;i++){
                                 delete mail.attachments[i].content;
                             }
                         }
-			*/	
+			            */
                         _cb(mail);
                     })
                 });
@@ -228,6 +227,36 @@ function mail(option) {
         });
      }
 
+
+    mail.prototype.imapTest =function(cb){
+
+        if(!this.imap||!this.imapPort||!this.mailAddress||!this.password){
+            return {success:0,error:"Error,mail option is not enough"};
+        }
+
+        conn= new Imap({
+            user:this.mailAddress,
+            password:this.password,
+            host:this.imap,
+            port:this.imapPort,
+            tls: true,
+            tlsOptions: { rejectUnauthorized: false },
+            connTimeout:1000
+        });
+
+
+        conn.once("error",function(){
+            cb(103,"无法连接到imap服务器");
+        });
+
+
+        conn.once('ready',function(){
+            cb(0,'success');
+        });
+
+        conn.connect();
+
+    };
 
 
     mail.prototype.getAll=function(cb){
