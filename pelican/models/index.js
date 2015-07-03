@@ -34,10 +34,10 @@ mongoose.connect(config.db, opts, function (err) {
 //models
 require("./user");
 require("./mail");
-
+require("./mailConfig");
 
 exports.User = mongoose.model("User");
 exports.Mail = mongoose.model("Mail");
-
+exports.MailConfig = mongoose.model("MailConfig");
 
 

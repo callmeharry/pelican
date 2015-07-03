@@ -10,6 +10,7 @@ exports.login = function (req, res, next) {
     var username = validator.trim(req.body.username);
     var password = validator.trim(req.body.password);
 
+
     console.error(username + " " + password);
 
     UserProxy.findUserByName(username, function (err, user) {
