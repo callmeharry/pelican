@@ -1,6 +1,8 @@
 var moment = require('moment');
 var MailModel = require('../models').Mail;
 
+var MailSchema = require('../models/mail').MailSchema;
+
 
 exports.newAndSave = function (mail, callback) {
 
@@ -31,7 +33,7 @@ function getMailList(query, page, limit, callback) {
         {
             page: page,
             limit: resultsPerPage,
-            columns: 'id subject receivedDate from',
+            columns: 'messageId subject receivedDate from isDistributed',
             sortBy: {
                 receivedDate: -1
             }
