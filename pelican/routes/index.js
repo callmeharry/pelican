@@ -17,10 +17,14 @@ router.get('/', function (req, res, next) {
     res.render('index', {title: 'Express'});
 });
 
-router.post('/login', userController.login);
 
+/*--------test-------------*/
 router.post('/test', testApi.testApi);
 
+router.get('/test/addMail', testApi.testMail);
+
+
+router.post('/login', userController.login);
 
 // route middleware to verify a token
 router.use(function (req, res, next) {
@@ -72,19 +76,13 @@ router.get('/distribution/getMailList', distributorController.getMailList);
 
 router.get('/distribution/getMailInfo', mailController.getMailDetail);
 
-router.get('/distribution/distributeMail', distributorController.distribute);
+router.post('/distribution/distributeMail', distributorController.distribute);
 
 /* 邮件处理人员 */
 router.get('/email/list', handlerController.getEmailList);
 router.post('/email/reply', handlerController.replyEmail);
 router.post('/email/manage', handlerController.manageEmail);
 router.post('/email/send', handlerController.sendEmail);
-
-
-/*--------test-------------*/
-router.post('/test', testApi.testApi);
-
-
 
 
 

@@ -3,14 +3,9 @@ var MailModel = require('../models').Mail;
 
 exports.newAndSave = function (mail, callback) {
 
-    var mailModel = new MailModel();
-
     if (mail) {
-        for (var index in mail) {
-            mailModel['index'] = mail[index];
-        }
+        var mailModel = new MailModel(mail);
         mailModel.save(callback);
-
     } else {
         return callback(null, null);
     }
@@ -83,4 +78,3 @@ exports.handleMail = function (id, callback) {
     })
 };
 
-exports.getMailFrom
