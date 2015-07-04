@@ -99,7 +99,7 @@ exports.mailConfig = function (req, res, next) {
                 }
             }
             else{
-                res.reply(err,msg);
+                res.reply(0,"修改成功");
             }
 
 

@@ -82,3 +82,5 @@ exports.handleMail = function (id, callback) {
         mail.save(callback);
     })
 };
+
+exports.getMailFrom
