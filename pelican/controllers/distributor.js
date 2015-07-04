@@ -4,7 +4,7 @@
 
 var MailProxy = require('../proxy').Mail;
 var ROLE = require('../models/user').ROLE;
-var Config = require("../porxy").MailConfig;
+var Config = require("../proxy").MailConfig;
 var validator = require('validator');
 var MailControl = require("../common/mail");
 
@@ -63,7 +63,7 @@ exports.distribute = function (req, res, next) {
 var timmer;
 function getOriginMail() {
 
-     MailProxy.getMailList(1,1,function (err, results, pageCount, itemCount) {
+    MailProxy.getAllMailList(1, function (err, results, pageCount, itemCount) {
         if (err) {
             next(err);
         } else {

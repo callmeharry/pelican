@@ -70,7 +70,7 @@ exports.getAllMailList = function (page, callback) {
  * @param callback
  */
 exports.handleMail = function (id, callback) {
-    this.getMailContent(id, function (err, mail) {
+    this.findMailById(id, function (err, mail) {
         if(err)
             return callback(err,null);
         mail.isHandled = true;

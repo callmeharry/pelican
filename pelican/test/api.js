@@ -33,7 +33,9 @@ exports.testMail = function (req, res, next) {
         from: [{address: 'gyxln@buaa.edu.cn', name: 'gyxln'}],
         to: [{address: 'gyxln@buaa.edu.cn', name: 'gyxln'},
             {address: '450024927@qq.com', name: '450024927'}],
-        date: Date.now()
+        date: Date.now(),
+        isDistribute: true,
+        handler: '559693a96c6456be45d9d74a'
     };
 
     MailProxy.newAndSave(mailContent, function (err, mail) {
