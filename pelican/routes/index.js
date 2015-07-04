@@ -66,6 +66,8 @@ router.get('/email/detail', mailController.getMailDetail);
 
 router.get("/admin/mailConfig",mailConfigController.mailConfig);
 
+router.post("/admin/mailConfig",mailConfigController.mailConfig);
+
 router.get('/distribution/getMailList', distributorController.getMailList);
 
 router.get('/distribution/getMailInfo', mailController.getMailDetail);

@@ -60,6 +60,7 @@ exports.distribute = function (req, res, next) {
 
 //定时获取邮件
 //两分钟一次
+var timmer;
 function getOriginMail() {
 
      MailProxy.getMailList(1,1,function (err, results, pageCount, itemCount) {
@@ -67,18 +68,21 @@ function getOriginMail() {
             next(err);
         } else {
             var config = Config.getConfig(function (err, data) {
-                var mailControl = new MailControl(data);
-                var timmer = setInterval(function () {
-                    mailControl.openBox("INBOX", ["SINCE", results[0].date], function (mail) {
-                        MailProxy.newAndSave(mail);
-                    }, null);
+                if(data) {
+                    var mailControl = new MailControl(data);
+                    timmer = setInterval(function () {
+                        mailControl.openBox("INBOX", ["SINCE", results[0].date], function (mail) {
+                            MailProxy.newAndSave(mail);
+                        }, function(err){
+                            clearInterval(timmer);
+                        });
 
-                }, 120000);
-
+                    }, 120000);
+                }
             });
         }
     });
 }
 
 
-getOriginMail();
+//getOriginMail();
