@@ -4,9 +4,9 @@
 
 var MailProxy = require('../proxy').Mail;
 var ROLE = require('../models/user').ROLE;
-
+var Config = require("../porxy").MailConfig;
 var validator = require('validator');
-
+var MailControl = require("../common/mail");
 
 exports.getMailList = function (req, res, next) {
     if (req.user.role !== ROLE.DISTRIBUTOR) {
@@ -56,3 +56,29 @@ exports.distribute = function (req, res, next) {
         res.reply(101, "邮件分发成功");
     });
 };
+
+
+//定时获取邮件
+//两分钟一次
+function getOriginMail() {
+
+     MailProxy.getMailList(1,1,function (err, results, pageCount, itemCount) {
+        if (err) {
+            next(err);
+        } else {
+            var config = Config.getConfig(function (err, data) {
+                var mailControl = new MailControl(data);
+                var timmer = setInterval(function () {
+                    mailControl.openBox("INBOX", ["SINCE", results[0].date], function (mail) {
+                        MailProxy.newAndSave(mail);
+                    }, null);
+
+                }, 120000);
+
+            });
+        }
+    });
+}
+
+
+getOriginMail();
