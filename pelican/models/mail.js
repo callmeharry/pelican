@@ -9,7 +9,7 @@ var MailSchema = new Schema({
     html: {type: String},
     text: {type: String},
     subject: {type: String},
-    messageId: {type: String},
+    //messageId: {type: String},
     priority: {type: String},
     from: {
         address: {type: String},
@@ -44,15 +44,15 @@ var MailSchema = new Schema({
         type: String
     }],
 
-    isDistributed: {type: Boolean}, // 邮件是否已经分发
-    isHandled: {type: Boolean} // 邮件是否已经处理
+    isDistributed: {type: Boolean, default: false}, // 邮件是否已经分发
+    isHandled: {type: Boolean, default: false} // 邮件是否已经处理
 
 });
 
 MailSchema.plugin(mongoosePaginate);
 
 
-MailSchema.index[{messageId: 1}, {unique: true}];
+//MailSchema.index({messageId: 1}, {unique: true});
 
 mongoose.model('Mail', MailSchema);
 
