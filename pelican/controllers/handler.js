@@ -9,7 +9,7 @@ exports.getEmailList = function(req, res ,next) {
     var id = validator.trim(req.user._id);
     var page = validator.trim(req.query.page);
 
-    MailProxy.findHandlerNewMailList(id, page, false, function (err, results, pageCount, itemCount) {
+    MailProxy.findHandlerNewMailList(id, page, function (err, results, pageCount, itemCount) {
         if(err) {
             res.reply(101, '获取邮件列表失败');
             return;
