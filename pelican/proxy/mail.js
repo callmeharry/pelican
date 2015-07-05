@@ -45,8 +45,8 @@ function getMailList(query, page, limit, callback) {
  * @param page
  * @param callback
  */
-exports.findHandlerNewMailList = function (id, page, callback) {
-    return getMailList({handler: id, isHandled: false}, page, 10, callback);
+exports.findHandlerMailList = function (id, page, ishandled, callback) {
+    return getMailList({handler: id, isHandled: ishandled}, page, 30, callback);
 };
 
 /**
@@ -76,5 +76,20 @@ exports.handleMail = function (id, callback) {
         mail.isHandled = true;
         mail.save(callback);
     })
+};
+
+exports.createEmail = function (content, receiver, subject, callback) {
+    var mailModel = new MailModel();
+    mailModel.html = content;
+    var receiverArray = new Array();
+    for (var i = 0; i < receiver.length; i++) {
+        receiverArray[i] = {
+            address: receiver[i],
+            name: 'noname'
+        }
+    }
+    mailModel.to = receiverArray;
+    mailModel.subject = subject;
+    mailModel.save(callback);
 };
 

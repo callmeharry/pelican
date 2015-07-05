@@ -82,6 +82,7 @@ router.get('/email/list', handlerController.getEmailList);
 router.post('/email/reply', handlerController.replyEmail);
 router.post('/email/manage', handlerController.manageEmail);
 router.post('/email/send', handlerController.sendEmail);
+router.get('/email/managed', handlerController.getManagedEmailList);
 
 
 
