@@ -53,6 +53,7 @@ exports.distribute = function (req, res, next) {
 
 //定时获取邮件
 //两分钟一次
+/*
 var timmer;
 function getOriginMail() {
 
@@ -85,8 +86,8 @@ function getOriginMail() {
         }
     });
 }
+*/
 
-
-exports.getOriginMail = getOriginMail;
+//exports.getOriginMail = getOriginMail;
 
 
