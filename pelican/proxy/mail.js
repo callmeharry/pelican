@@ -13,7 +13,7 @@ exports.newAndSave = function (mail, callback) {
 };
 
 exports.clear = function(callback){
-    
+
     MailModel.remove({});
 };
 

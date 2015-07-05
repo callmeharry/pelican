@@ -9,6 +9,7 @@ var mailFs = require('../common/mailFs');
 var Mail = require("../proxy").Mail;
 
 
+var distributor = require("../controller/distributor");
 
 exports.getConfig = function (callback) {
 
@@ -46,13 +47,14 @@ exports.setConfig =function(config,callback) {
                         if (err) callback(-1, "internal error");
 
                         callback(0, 'success');
-
                         Mail.clear();
                         mailControl.openBox("INBOX", ["ALL"], function (mail) {
                             Mail.newAndSave(mail);
                         },function(err){
                             console.log(err);
                         });
+
+
                     });
                 }
             });
