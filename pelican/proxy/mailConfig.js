@@ -1,20 +1,23 @@
 /**
  * Created by GYX on 15/7/3.
  */
-var ConfigModel = require('../models').MailConfig;
 
 var MailControl = require("../common/mail");
 
-function getConfig(callback){
+var mailFs = require('../common/mailFs');
+
+var Mail = require("../proxy").Mail;
 
 
-    ConfigModel.findOne({}, callback);
 
-}
+exports.getConfig = function (callback) {
 
-exports.getConfig =getConfig;
+        mailFs.readMailConfig(callback);
 
-exports.setConfig =function(config,callback){
+};
+
+
+exports.setConfig =function(config,callback) {
 
     var mailControl = new MailControl(config);
     mailControl.startSMTPConnection();
@@ -27,37 +30,31 @@ exports.setConfig =function(config,callback){
         text: 'Hello world ', // plaintext body
         html: '<b>Hello world </b>' // html body
     };
-    var onerror =function(error, info){
-        if(error){
-            callback(104,"无法连接到smtp服务器");
+    var onerror = function (error, info) {
+        if (error) {
+            callback(104, "无法连接到smtp服务器");
             mailControl.stopSMTPConnection();
-        }else{
+        } else {
             //测试IMAP
             mailControl.stopSMTPConnection();
-            mailControl.imapTest(function(err,msg){
-                if(err!=0) {
+            mailControl.imapTest(function (err, msg) {
+                if (err != 0) {
                     callback(err, msg);
                 }
-                else{
-                    //修改数据库中的值
-                    var configModel = new ConfigModel();
-                    getConfig(function(err,data){
-                        if(data){
+                else {
+                    mailFs.writeMailConfig(config, function (err) {
+                        if (err) callback(-1, "internal error");
 
-                            var object ;
-                            for(var index in config){
-                                object[index] = config[index];
-                            }
-                            configModel.update(object, {safe:true}, callback);
+                        callback(0, 'success');
+                        Mail.clear();
+                        mailControl.openBox("INBOX", [], function (mail) {
+                            console.log(mail);
+                            Mail.newAndSave(mail);
+                        },function(err){
+                            console.log(err);
+                        });
 
-                        }
-                        else if (config) {
-                            for (var index in mail) {
-                                configModel[index] = config[index];
-                            }
-                            configModel.save(callback);
 
-                        }
                     });
                 }
             });
@@ -65,9 +62,6 @@ exports.setConfig =function(config,callback){
     };
 
     mailControl.sendMail(mailOptions,onerror);
-
-
-
 };
 
 

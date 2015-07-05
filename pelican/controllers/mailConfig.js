@@ -11,42 +11,6 @@ var ConfigProxy = require('../proxy').MailConfig;
 var validator = require('validator');
 var jwt = require('jsonwebtoken');
 
-exports.login = function (req, res, next) {
-    var username = validator.trim(req.body.username);
-    var password = validator.trim(req.body.password);
-
-    console.error(username + " " + password);
-
-    UserProxy.findUserByName(username, function (err, user) {
-
-        if (err) return next(err);
-
-        console.log(user.toString());
-
-        if (!user) {
-            res.reply(101, "用户不存在");
-            return;
-        }
-
-        if (user.password != password) {
-            res.reply(101, "用户名或密码错误");
-            return;
-        }
-
-        // create a token
-        var token = jwt.sign(user, req.app.get('superSecret'), {
-            expiresInMinutes: 1440 // expires in 24 hours
-        });
-
-        var data = {};
-        data.username = user.username;
-        data.role = user.role;
-        data.token = token;
-
-        res.reply(0, "success", data);
-
-    });
-};
 
 exports.getMailConfig = function (req, res, next) {
     if (req.user.role != "admin") {
@@ -54,7 +18,9 @@ exports.getMailConfig = function (req, res, next) {
         return;
     }
     ConfigProxy.getConfig(function (err, data) {
+        if (err) next(err);
 
+        data = JSON.parse(data);
         res.reply(0, "success", data);
 
     });
@@ -93,10 +59,10 @@ exports.setMailConfig = function (req, res, next) {
         password: password
     };
 
-    ConfigProxy.setConfig(config, function (err, data) {
+    ConfigProxy.setConfig(config, function (err, message) {
         if (err) {
             if (err == 103 || err == 104) {
-                res.reply(err, data);
+                res.reply(err, message);
             }
         }
         else {

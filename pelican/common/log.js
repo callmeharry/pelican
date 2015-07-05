@@ -30,7 +30,7 @@ var Logger = bunyan.createLogger({
             return {
                 method: req.method,
                 url: req.url,
-                headers: req.headers,
+                //headers: req.headers,
                 remoteAddress: req.ip,
                 query: req.query || '',
                 body: req.body || ''
@@ -51,5 +51,7 @@ exports.d = function () {
     Logger.info.apply(Logger, arguments);
 };
 exports.e = function () {
-    LoggerS.error.apply(LoggerS, arguments);
+    //LoggerS.error.apply(LoggerS, arguments);
+
+    Logger.error.apply(Logger, arguments);
 };
