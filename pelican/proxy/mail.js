@@ -14,7 +14,7 @@ exports.newAndSave = function (mail, callback) {
 
 exports.clear = function(callback){
 
-    MailModel.remove({});
+    MailModel.remove();
 };
 
 exports.findMailById = function (id, callback) {
