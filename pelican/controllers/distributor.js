@@ -76,7 +76,7 @@ function getOriginMail() {
                     timmer = setInterval(function () {
                         console.log('setInterval called');
 
-                        mailControl.openBox("INBOX", ["RECENT"], function (mail) {
+                        mailControl.openBox("INBOX", [["SINCE",""]], function (mail) {
                             MailProxy.newAndSave(mail, function (err) {
                                 if (err) return next(err);
                                 console.log("save new mail success");

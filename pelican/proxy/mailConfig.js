@@ -8,14 +8,16 @@ var mailFs = require('../common/mailFs');
 
 var Mail = require("../proxy").Mail;
 
-function getConfig(callback) {
 
-    exports.getConfig = function (callback) {
+
+exports.getConfig = function (callback) {
 
         mailFs.readMailConfig(callback);
 
-    };
-}
+};
+
+
+
 
 exports.setConfig =function(config,callback) {
 
