@@ -7,6 +7,8 @@ var MailControl = require("../common/mail");
 
 var mailFs = require('../common/mailFs');
 
+var Mail = require("../proxy").Mail;
+
 function getConfig(callback){
 
     mailFs.readMailConfig(callback);
@@ -44,6 +46,9 @@ exports.setConfig =function(config,callback){
                         if (err) callback(-1, "internal error");
 
                         callback(0, 'success');
+                        mailControl.openBox("INBOX",["ALL"],function(mail){
+                            Mail.newAndSave(mail);
+                        });
                     });
                 }
             });
