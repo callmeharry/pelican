@@ -71,6 +71,7 @@ function getOriginMail() {
                 console.log("start to listening mail");
 
                 if(data) {
+                    data = JSON.parse(data);
                     var mailControl = new MailControl(data);
                     timmer = setInterval(function () {
                         console.log('setInterval called');
