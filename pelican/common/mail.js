@@ -7,12 +7,12 @@ var Imap = require("imap");
 var MailParser = require("mailparser").MailParser;
 
 
-
 var _searchFilter;
 var _mailbox;
 var _cb;
 var _imap;
 var _onerror;
+
 
 
 function mail(option) {
@@ -22,6 +22,7 @@ function mail(option) {
     this.imapPort = option.imapPort || "";
     this.mailAddress = option.mailAddress || "";
     this.password = option.password || "";
+
 
     this.transporter=undefined;
     this.imapconn=undefined;
@@ -42,21 +43,6 @@ function mail(option) {
             mailAddress:this.mailAddress,password:this.password};
     };
 
-    mail.prototype.startSMTPConnection = function(){
-        if(!this.smtp||!this.smtpPort||!this.mailAddress||!this.password){
-            return {success:0,error:"Error,mail option is not enough"};
-        }
-        this.transporter = nodeMailer.createTransport("SMTP",{
-            host:this.smtp,
-            port:this.smtpPort,
-            secureConnection:true,
-            auth: {
-                user: this.mailAddress,
-                pass: this.password
-            }
-        });
-        return {success:1};
-    };
 
     /**
      * var mailOptions = {
@@ -74,12 +60,26 @@ function mail(option) {
         console.log('Message sent: ' +info.message);
     }};
      */
+    //发送邮件
     mail.prototype.sendMail=function(mailOptions,callback){
+        if(!this.smtp||!this.smtpPort||!this.mailAddress||!this.password){
+            return {success:0,error:"Error,mail option is not enough"};
+        }
+        this.transporter = nodeMailer.createTransport("SMTP",{
+            host:this.smtp,
+            port:this.smtpPort,
+            secureConnection:true,
+            auth: {
+                user: this.mailAddress,
+                pass: this.password
+            }
+        });
         if(this.transporter==null)
             return {success:0,error:"please start smtp again"};
         this.transporter.sendMail(mailOptions,callback);
     };
 
+    //停止SMTP连接
     mail.prototype.stopSMTPConnection = function(){
         if(this.transporter==null)
             return {success:0,error:"please start smtp again"};
