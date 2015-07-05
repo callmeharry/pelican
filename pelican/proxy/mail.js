@@ -13,8 +13,8 @@ exports.newAndSave = function (mail, callback) {
 };
 
 exports.clear = function(callback){
-    var mailModel = new MailModel();
-    mailModel.remove({});
+    
+    MailModel.remove({});
 };
 
 exports.findMailById = function (id, callback) {
