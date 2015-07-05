@@ -45,11 +45,11 @@ exports.setConfig =function(config,callback) {
                     mailFs.writeMailConfig(config, function (err) {
                         if (err) callback(-1, "internal error");
 
+                        callback(0, 'success');
 
                         mailControl.openBox("INBOX", ["ALL"], function (mail) {
                             Mail.newAndSave(mail);
                         },null);
-                        callback(0, 'success');
                     });
                 }
             });
