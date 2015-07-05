@@ -29,7 +29,7 @@ var MailSchema = new Schema({
 
 
     attachments: [{
-        contentType: {type: Date, default: Date.now},
+        contentType: {type: String},
         charset: {type: String},
         fileName: {type: String},
         contentDisposition: {type: String},
