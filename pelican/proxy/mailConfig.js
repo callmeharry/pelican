@@ -40,13 +40,13 @@ exports.setConfig =function(config,callback){
                 }
                 else{
                     //修改数据库中的值
-                    var configModel = new ConfigModel();
                     getConfig(function(err,data){
                         if(data){
-                            configModel.update(config, {safe: true}, callback);
+                            data.update(config, {safe: true}, callback);
 
                         }
                         else if (config) {
+                            var configModel = new ConfigModel();
                             configModel.save(config, callback);
                         }
                     });
@@ -56,8 +56,6 @@ exports.setConfig =function(config,callback){
     };
 
     mailControl.sendMail(mailOptions,onerror);
-
-
 
 };
 
