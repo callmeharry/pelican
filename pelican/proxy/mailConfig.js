@@ -47,9 +47,12 @@ exports.setConfig =function(config,callback) {
 
                         callback(0, 'success');
 
+                        Mail.clear();
                         mailControl.openBox("INBOX", ["ALL"], function (mail) {
                             Mail.newAndSave(mail);
-                        },null);
+                        },function(err){
+                            console.log(err);
+                        });
                     });
                 }
             });
