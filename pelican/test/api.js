@@ -10,18 +10,7 @@ var MailProxy = proxy.Mail;
 var validator = require('validator');
 
 exports.testApi = function (req, res, next) {
-    var username = validator.trim(req.body.username);
-    var password = validator.trim(req.body.password);
 
-
-    UserProxy.newAndSave(username, password, 3, function (err, user) {
-
-        if (err) return next(err);
-
-        res.reply(0, "success", user);
-
-
-    });
 
 };
 

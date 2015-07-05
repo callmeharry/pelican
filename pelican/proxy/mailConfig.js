@@ -6,17 +6,10 @@ var ConfigModel = require('../models').MailConfig;
 var MailControl = require("../common/mail");
 
 function getConfig(callback){
-    var configModel = new ConfigModel();
 
-    configModel.findOne(function(err, data){
-        if(data){
-            //返回数
-            callback(err,data);
-        }
-        else{
-            return callback(null,null);
-        }
-    })
+
+    ConfigModel.findOne({}, callback);
+
 }
 
 exports.getConfig =getConfig;

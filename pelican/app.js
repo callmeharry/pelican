@@ -43,14 +43,8 @@ app.use(function (req, res, next) {
             message: message
         };
 
-        if (data) {
-            /**
-            for (var index in data) {
-                rep[index] = data[index];
-            }
-             **/
+        if (data)
             rep['data'] = data;
-        }
 
         res.jsonp(rep);
         res._content = rep;

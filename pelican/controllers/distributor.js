@@ -68,6 +68,8 @@ function getOriginMail() {
             next(err);
         } else {
             var config = Config.getConfig(function (err, data) {
+
+
                 if(data) {
                     var mailControl = new MailControl(data);
                     timmer = setInterval(function () {
@@ -84,5 +86,6 @@ function getOriginMail() {
     });
 }
 
+exports.getOriginMail = getOriginMail();
 
-//getOriginMail();
+
