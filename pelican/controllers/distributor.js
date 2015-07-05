@@ -49,11 +49,14 @@ exports.distribute = function (req, res, next) {
 
         mail.handler = handlerId;
         mail.readers = readerIds;
-        mail.save();
-
-        // Todo 分发给处理人员和阅读人员
-
-        res.reply(101, "邮件分发成功");
+        mail.isDistributed = true;
+        mail.save(function (err) {
+            if (err) {
+                next(err);
+            } else {
+                res.reply(101, "邮件分发成功");
+            }
+        });
     });
 };
 
