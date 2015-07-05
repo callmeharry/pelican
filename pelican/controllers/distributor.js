@@ -42,22 +42,12 @@ exports.distribute = function (req, res, next) {
     var handlerId = validator.trim(req.body.hadlderId);
     var readerIds = validator.trim(req.body.readerIds);
 
-    MailProxy.findMailById(mailId, function (err, mail) {
-        if (err) {
-            return next(err);
-        }
+    MailProxy.updateMailById(mailId, {handler: handlerId, readers: readerIds}, function (err) {
+        if (err) return next(err);
+        res.reply(101, "邮件分发成功");
 
-        mail.handler = handlerId;
-        mail.readers = readerIds;
-        mail.isDistributed = true;
-        mail.save(function (err) {
-            if (err) {
-                next(err);
-            } else {
-                res.reply(101, "邮件分发成功");
-            }
-        });
     });
+
 };
 
 
@@ -79,7 +69,7 @@ function getOriginMail() {
                     timmer = setInterval(function () {
                         console.log('setInterval called');
 
-                        mailControl.openBox("INBOX", ["RECENT"], function (mail) {
+                        mailControl.openBox("INBOX", [["SINCE",""]], function (mail) {
                             MailProxy.newAndSave(mail, function (err) {
                                 if (err) return next(err);
                                 console.log("save new mail success");

@@ -9,7 +9,9 @@ var MailSchema = new Schema({
     html: {type: String},
     text: {type: String},
     subject: {type: String},
-    //messageId: {type: String},
+    
+    messageId: {type: String},
+
     priority: {type: String},
     from: [{
         address: {type: String},

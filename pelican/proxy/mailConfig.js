@@ -1,21 +1,23 @@
 /**
  * Created by GYX on 15/7/3.
  */
-var ConfigModel = require('../models').MailConfig;
 
 var MailControl = require("../common/mail");
 
 var mailFs = require('../common/mailFs');
 
-function getConfig(callback){
+var Mail = require("../proxy").Mail;
 
-    mailFs.readMailConfig(callback);
 
-}
 
-exports.getConfig =getConfig;
+exports.getConfig = function (callback) {
 
-exports.setConfig =function(config,callback){
+        mailFs.readMailConfig(callback);
+
+};
+
+
+exports.setConfig =function(config,callback) {
 
     var mailControl = new MailControl(config);
     mailControl.startSMTPConnection();
@@ -28,22 +30,26 @@ exports.setConfig =function(config,callback){
         text: 'Hello world ', // plaintext body
         html: '<b>Hello world </b>' // html body
     };
-    var onerror =function(error, info){
-        if(error){
-            callback(104,"无法连接到smtp服务器");
+    var onerror = function (error, info) {
+        if (error) {
+            callback(104, "无法连接到smtp服务器");
             mailControl.stopSMTPConnection();
-        }else{
+        } else {
             //测试IMAP
             mailControl.stopSMTPConnection();
-            mailControl.imapTest(function(err,msg){
-                if(err!=0) {
+            mailControl.imapTest(function (err, msg) {
+                if (err != 0) {
                     callback(err, msg);
                 }
-                else{
+                else {
                     mailFs.writeMailConfig(config, function (err) {
                         if (err) callback(-1, "internal error");
 
                         callback(0, 'success');
+
+                        mailControl.openBox("INBOX", ["ALL"], function (mail) {
+                            Mail.newAndSave(mail);
+                        },null);
                     });
                 }
             });
@@ -51,7 +57,6 @@ exports.setConfig =function(config,callback){
     };
 
     mailControl.sendMail(mailOptions,onerror);
-
 };
 
 
