@@ -42,6 +42,8 @@ exports.setConfig =function(config,callback){
                 else{
                     mailFs.writeMailConfig(config, function (err) {
                         if (err) callback(-1, "internal error");
+
+                        callback(0, 'success');
                     });
                 }
             });

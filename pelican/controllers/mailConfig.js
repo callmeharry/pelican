@@ -95,10 +95,10 @@ exports.setMailConfig = function (req, res, next) {
         password: password
     };
 
-    ConfigProxy.setConfig(config, function (err, data) {
+    ConfigProxy.setConfig(config, function (err, message) {
         if (err) {
             if (err == 103 || err == 104) {
-                res.reply(err, data);
+                res.reply(err, message);
             }
         }
         else {

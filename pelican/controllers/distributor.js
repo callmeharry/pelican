@@ -84,7 +84,7 @@ function getOriginMail() {
                             clearInterval(timmer);
                         });
 
-                    }, 120000);
+                    }, 5000);
                 }
             });
         }
