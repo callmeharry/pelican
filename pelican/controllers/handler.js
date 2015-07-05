@@ -6,8 +6,8 @@ var validator = require('validator');
 var MailProxy = require('../proxy').Mail;
 
 exports.getEmailList = function(req, res ,next) {
-    var id = validator.trim(req.user);
-    var page = validator.trim(req.body.page);
+    var id = validator.trim(req.user._id);
+    var page = validator.trim(req.query.page);
 
     MailProxy.findHandlerNewMailList(id,page, function(err, results, pageCount, itemCount) {
         if(err) {
@@ -17,11 +17,11 @@ exports.getEmailList = function(req, res ,next) {
         var data = {};
         data.pageCount = pageCount;
         var list = new Array();
-        for(var i = 0; i < data.length; i++) {
-            list[i] = {mailId:data._id,
-                title: data.subject,
-                senderName: data.from.name,
-                receiveTime:data.receiveTime};
+        for(var i = 0; i < results.length; i++) {
+            list[i] = {mailId:results[i]._id,
+                title: results[i].subject,
+                senderName: '数据库里的邮件没这个字段 这个字段应该叫results.from.name',
+                receiveTime:results[i].receivedDate};
         }
         data.list = list;
         res.reply(0,'success',data);
@@ -52,7 +52,9 @@ exports.manageEmail = function(req, res, next) {
     var mailId = req.body.mailId;
     MailProxy.handleMail(mailId, function(err) {
         if(err) {
-            res.reply(101,"")
+            res.reply(101,'处理失败');
+        } else {
+            res.reply(0,'success');
         }
     })
 };

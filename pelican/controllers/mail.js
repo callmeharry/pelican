@@ -31,7 +31,7 @@ exports.getMailDetail = function(req, res, next) {
             mail.readers.indexOf(req.user._id)) {
             res.reply(0,'success', mail);
         } else {
-            res.reply(101, '没有权限')
+            res.reply(101, '没有权限');
         }
 
     });
