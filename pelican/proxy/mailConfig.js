@@ -1,19 +1,16 @@
 /**
  * Created by GYX on 15/7/3.
  */
-var ConfigModel = require('../models').MailConfig;
 
 var MailControl = require("../common/mail");
 
 var mailFs = require('../common/mailFs');
 
-function getConfig(callback){
+exports.getConfig = function (callback) {
 
     mailFs.readMailConfig(callback);
 
-}
-
-exports.getConfig =getConfig;
+};
 
 exports.setConfig =function(config,callback){
 
@@ -49,7 +46,6 @@ exports.setConfig =function(config,callback){
     };
 
     mailControl.sendMail(mailOptions,onerror);
-
 };
 
 
