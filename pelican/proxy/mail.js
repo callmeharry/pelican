@@ -46,7 +46,7 @@ function getMailList(query, page, limit, callback) {
  * @param callback
  */
 exports.findHandlerNewMailList = function (id, page, callback) {
-    return getMailList({isHandled:false}, page, 10, callback);
+    return getMailList({handler: id, isHandled: false}, page, 10, callback);
 };
 
 /**
