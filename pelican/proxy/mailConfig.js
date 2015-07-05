@@ -43,12 +43,7 @@ exports.setConfig =function(config,callback){
                     var configModel = new ConfigModel();
                     getConfig(function(err,data){
                         if(data){
-
-                            var object ;
-                            for(var index in config){
-                                object[index] = config[index];
-                            }
-                            configModel.update(object, {safe:true}, callback);
+                            configModel.update(config, {safe: true}, callback);
 
                         }
                         else if (config) {
