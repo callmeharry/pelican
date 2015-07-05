@@ -17,8 +17,6 @@ exports.getConfig = function (callback) {
 };
 
 
-
-
 exports.setConfig =function(config,callback) {
 
     var mailControl = new MailControl(config);
