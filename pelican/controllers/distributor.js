@@ -68,13 +68,16 @@ function getOriginMail() {
             next(err);
         } else {
             var config = Config.getConfig(function (err, data) {
-
+                console.log("start to listening mail");
 
                 if(data) {
                     var mailControl = new MailControl(data);
                     timmer = setInterval(function () {
                         mailControl.openBox("INBOX", ["SINCE", results[0].date], function (mail) {
-                            MailProxy.newAndSave(mail);
+                            MailProxy.newAndSave(mail, function (err) {
+                                if (err) return next(err);
+                                console.log("save new mail success");
+                            });
                         }, function(err){
                             clearInterval(timmer);
                         });
