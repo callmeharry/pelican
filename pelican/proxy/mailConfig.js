@@ -49,7 +49,9 @@ exports.setConfig =function(config,callback) {
                         //mail.clear();
                         mailControl.openBox("INBOX", ["ALL"], function (mail) {
                             console.log(mail);
-                            Mail.newAndSave(mail);
+                            Mail.newAndSave(mail, function (err) {
+                                return;
+                            });
                         },function(err){
                             console.log(err);
                         });
