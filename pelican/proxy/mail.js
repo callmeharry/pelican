@@ -13,8 +13,8 @@ exports.newAndSave = function (mail, callback) {
 };
 
 exports.clear = function(callback){
-    
-    MailModel.remove({});
+
+    MailModel.remove();
 };
 
 exports.findMailById = function (id, callback) {
@@ -51,7 +51,7 @@ function getMailList(query, page, limit, callback) {
  * @param callback
  */
 exports.findHandlerNewMailList = function (id, page, callback) {
-    return getMailList({handler: id, isHandled: false}, page, 30, callback);
+    return getMailList({handler: id, isHandled: false}, page, 10, callback);
 };
 
 /**
