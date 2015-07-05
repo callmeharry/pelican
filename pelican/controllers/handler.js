@@ -20,7 +20,7 @@ exports.getEmailList = function(req, res ,next) {
         for(var i = 0; i < results.length; i++) {
             list[i] = {mailId:results[i]._id,
                 title: results[i].subject,
-                senderName: '数据库里的邮件没这个字段 这个字段应该叫results.from.name',
+                senderName: results[i].from,
                 receiveTime:results[i].receivedDate};
         }
         data.list = list;
