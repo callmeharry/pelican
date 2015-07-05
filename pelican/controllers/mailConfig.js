@@ -54,7 +54,9 @@ exports.getMailConfig = function (req, res, next) {
         return;
     }
     ConfigProxy.getConfig(function (err, data) {
+        if (err) next(err);
 
+        data = JSON.parse(data);
         res.reply(0, "success", data);
 
     });

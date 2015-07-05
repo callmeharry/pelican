@@ -51,5 +51,7 @@ exports.d = function () {
     Logger.info.apply(Logger, arguments);
 };
 exports.e = function () {
-    LoggerS.error.apply(LoggerS, arguments);
+    //LoggerS.error.apply(LoggerS, arguments);
+
+    Logger.error.apply(Logger, arguments);
 };

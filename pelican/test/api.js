@@ -8,10 +8,30 @@ var proxy = require('../proxy');
 var UserProxy = proxy.User;
 var MailProxy = proxy.Mail;
 var validator = require('validator');
+var mailFs = require('../common/mailFs');
+
 
 exports.testApi = function (req, res, next) {
 
+    mailFs.writeMailConfig({host: "www.baidu.com", name: "hello world"}, function (err) {
+        if (err) return next(err);
 
+        console.log("success");
+        res.reply(0, "success");
+
+    });
+
+    //
+    //mailFs.readMailConfig(function(err, data){
+    //
+    //    if(err) return next(err);
+    //
+    //
+    //    var content = JSON.parse(data);
+    //
+    //    res.reply(0,"success",content);
+    //
+    //});
 };
 
 exports.testMail = function (req, res, next) {

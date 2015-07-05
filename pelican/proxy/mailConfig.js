@@ -5,10 +5,11 @@ var ConfigModel = require('../models').MailConfig;
 
 var MailControl = require("../common/mail");
 
+var mailFs = require('../common/mailFs');
+
 function getConfig(callback){
 
-
-    ConfigModel.findOne({}, callback);
+    mailFs.readMailConfig(callback);
 
 }
 
@@ -39,16 +40,8 @@ exports.setConfig =function(config,callback){
                     callback(err, msg);
                 }
                 else{
-                    //修改数据库中的值
-                    getConfig(function(err,data){
-                        if(data){
-                            data.update(config, {safe: true}, callback);
-
-                        }
-                        else if (config) {
-                            var configModel = new ConfigModel();
-                            configModel.save(config, callback);
-                        }
+                    mailFs.writeMailConfig(config, function (err) {
+                        if (err) callback(-1, "internal error");
                     });
                 }
             });
