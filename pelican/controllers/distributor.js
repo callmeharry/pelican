@@ -39,22 +39,15 @@ exports.distribute = function (req, res, next) {
 
 
     var mailId = validator.trim(req.body.mailId);
-    var handlerId = validator.trim(req.body.hadlderId);
+    var handlerId = validator.trim(req.body.handlerId);
     var readerIds = validator.trim(req.body.readerIds);
 
-    MailProxy.findMailById(mailId, function (err, mail) {
-        if (err) {
-            return next(err);
-        }
-
-        mail.handler = handlerId;
-        mail.readers = readerIds;
-        mail.save();
-
-        // Todo 分发给处理人员和阅读人员
-
+    MailProxy.updateMailById(mailId, {handler: handlerId, readers: readerIds}, function (err) {
+        if (err) return next(err);
         res.reply(101, "邮件分发成功");
+
     });
+
 };
 
 

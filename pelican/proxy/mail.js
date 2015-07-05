@@ -43,7 +43,7 @@ function getMailList(query, page, limit, callback) {
         },
         callback
     );
-};
+}
 /**
  * 获取邮件处理人员待处理邮件列表
  * @param id
@@ -81,5 +81,14 @@ exports.handleMail = function (id, callback) {
         mail.isHandled = true;
         mail.save(callback);
     })
+
+
+};
+
+
+exports.updateMailById = function (id, ups, callback) {
+
+    MailModel.update({_id: id}, {"$set": ups}, callback);
+
 };
 
