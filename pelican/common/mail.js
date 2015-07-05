@@ -27,12 +27,12 @@ function mail(option) {
     this.imapconn=undefined;
 }
     mail.prototype.setMailOption = function(otherOption){
-        this.smtphost=otherOption.smtphost||"";
-        this.smtpport=otherOption.smtpport||"";
-        this.imaphost=otherOption.imaphost||"";
-        this.imapport=otherOption.imapport||"";
-        this.user=otherOption.user||"";
-        this.pass=otherOption.pass||"";
+        this.smtp = otherOption.smtp || "";
+        this.smtpPort = otherOption.smtpPort || "";
+        this.imap = otherOption.imap || "";
+        this.imapPort = otherOption.imapPort || "";
+        this.mailAddress = otherOption.mailAddress || "";
+        this.password = otherOption.password || "";
     };
 
     //当然你也可以直接通过变量获取

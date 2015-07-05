@@ -52,11 +52,7 @@ exports.setConfig =function(config,callback){
 
                         }
                         else if (config) {
-                            for (var index in mail) {
-                                configModel[index] = config[index];
-                            }
-                            configModel.save(callback);
-
+                            configModel.save(config, callback);
                         }
                     });
                 }
