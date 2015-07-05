@@ -9,7 +9,6 @@ var mailFs = require('../common/mailFs');
 var Mail = require("../proxy").Mail;
 
 
-var distributor = require("../controller/distributor");
 
 exports.getConfig = function (callback) {
 
