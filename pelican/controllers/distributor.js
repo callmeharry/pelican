@@ -39,7 +39,7 @@ exports.distribute = function (req, res, next) {
 
 
     var mailId = validator.trim(req.body.mailId);
-    var handlerId = validator.trim(req.body.hadlderId);
+    var handlerId = validator.trim(req.body.handlerId);
     var readerIds = validator.trim(req.body.readerIds);
 
     MailProxy.updateMailById(mailId, {handler: handlerId, readers: readerIds}, function (err) {
