@@ -184,7 +184,7 @@ function mail(option) {
 
         }
         else{
-            self.imapconn.openBox(self._mailbox,false,self.parse);
+            this.imapconn.openBox(this._mailbox,false,this.parse);
         }
      };
 
@@ -200,6 +200,7 @@ function mail(option) {
         var self =this;
         console.log("open");
         var imap = self.imapconn;
+        console.log(imap);
         if (err) throw err;
         imap.search(self._searchFilter, function(err, results) {
             if (err) throw err;
