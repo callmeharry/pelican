@@ -7,7 +7,7 @@ var Imap = require("imap");
 var MailParser = require("mailparser").MailParser;
 
 
-
+var imapconn =null;
 
 
 function mail(option) {
@@ -20,7 +20,7 @@ function mail(option) {
 
 
     this.transporter=null;
-    this.imapconn=null;
+
 
 
 
@@ -155,13 +155,13 @@ function mail(option) {
      mail.prototype.getImap = function(){
         var self= this;
 
-        if(!this.imapconn){
+        if(!imapconn){
 
             if(!this.imap||!this.imapPort||!this.mailAddress||!this.password){
                 return {success:0,error:"Error,mail option is not enough"};
             }
 
-            this.imapconn= new Imap({
+            imapconn= new Imap({
                 user:this.mailAddress,
                 password:this.password,
                 host:this.imap,
@@ -172,97 +172,66 @@ function mail(option) {
 
 
 
-            this.imapconn.once('error', this._onerror);
+            imapconn.once('error', this._onerror);
 
-            this.imapconn.once('ready',function(){
+            imapconn.once('ready',function(){
                 console.log('ready');
-                self.imapconn.openBox(self._mailbox,false,function(err, box){
+                imapconn.openBox(self._mailbox,false,parse);
 
-                        console.log("open");
-                        var imap = this.imapconn;
-                        console.log(imap);
-                        if (err) throw err;
-                        imap.search(self._searchFilter, function(err, results) {
-                            if (err) throw err;
-                            var f = imap.fetch(results, { bodies: '' });
-                            f.on('message', function(msg) {
-                                var mailparser = new MailParser();
-                                msg.on('body', function(stream, info) {
-                                    stream.pipe( mailparser );
-                                    mailparser.on("end",function( mail ){
-                                        //fs.writeFile('msg-' + seqno + '-body.html', mail.html, function (err) {
-                                        delete mail.headers;
-                                        delete mail.messageId;
-                                        /*
-                                         if(mail.attachments){
-                                         for(var i=0;i<mail.attachments.length;i++){
-                                         delete mail.attachments[i].content;
-                                         }
-                                         }
-                                         */
-                                        self._cb(mail);
-                                    })
-                                });
-                            });
-                            f.once('error', function(err) {
-                                console.log('Fetch error: ' + err);
-                            });
-                        });
-                    }
-                );
+
             });
 
-            this.imapconn.connect();
+            imapconn.connect();
 
 
         }
-        else{
-            this.imapconn.openBox(this._mailbox,false,function(err, box){
-                    var self =mail;
-                    console.log("open");
-                    var imap = this.imapconn;
-                    console.log(imap);
-                    if (err) throw err;
-                    imap.search(self._searchFilter, function(err, results) {
-                        if (err) throw err;
-                        var f = imap.fetch(results, { bodies: '' });
-                        f.on('message', function(msg) {
-                            var mailparser = new MailParser();
-                            msg.on('body', function(stream, info) {
-                                stream.pipe( mailparser );
-                                mailparser.on("end",function( mail ){
-                                    //fs.writeFile('msg-' + seqno + '-body.html', mail.html, function (err) {
-                                    delete mail.headers;
-                                    delete mail.messageId;
-                                    /*
-                                     if(mail.attachments){
-                                     for(var i=0;i<mail.attachments.length;i++){
-                                     delete mail.attachments[i].content;
-                                     }
-                                     }
-                                     */
-                                    self._cb(mail);
-                                })
-                            });
-                        });
-                        f.once('error', function(err) {
-                            console.log('Fetch error: ' + err);
-                        });
-                    });
-                }
-            );
+        else
+        {
+            imapconn.openBox(this._mailbox, false, parse);
+
         }
+
      };
 
      mail.prototype.killImap= function(){
-        this.imapconn.end();
-        this.imapconn=undefined;
+        imapconn.end();
+        imapconn=undefined;
      };
 
 
 
 
-    mail.prototype.parse=
+    function parse(err, box){
+
+
+        if (err) throw err;
+        imapconn.search(self._searchFilter, function(err, results) {
+            if (err) throw err;
+            var f = imapconn.fetch(results, { bodies: '' });
+            f.on('message', function(msg) {
+                var mailparser = new MailParser();
+                msg.on('body', function(stream, info) {
+                    stream.pipe( mailparser );
+                    mailparser.on("end",function( mail ){
+                        //fs.writeFile('msg-' + seqno + '-body.html', mail.html, function (err) {
+                        delete mail.headers;
+                        delete mail.messageId;
+                        /*
+                         if(mail.attachments){
+                         for(var i=0;i<mail.attachments.length;i++){
+                         delete mail.attachments[i].content;
+                         }
+                         }
+                         */
+                        self._cb(mail);
+                    })
+                });
+            });
+            f.once('error', function(err) {
+                console.log('Fetch error: ' + err);
+            });
+        }
+}
 
     mail.prototype.imapTest =function(cb){
 
