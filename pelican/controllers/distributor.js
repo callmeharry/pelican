@@ -53,41 +53,56 @@ exports.distribute = function (req, res, next) {
 
 //定时获取邮件
 //两分钟一次
-/*
+
 var timmer;
 function getOriginMail() {
+    timmer = setInterval(function () {
+        MailProxy.getAllMailList(1, function (err, results, pageCount, itemCount) {
+            if (err) {
+                next(err);
+            } else {
+                var config = Config.getConfig(function (err, data) {
+                    console.log("start to listening mail");
 
-    MailProxy.getAllMailList(1, function (err, results, pageCount, itemCount) {
-        if (err) {
-            next(err);
-        } else {
-            var config = Config.getConfig(function (err, data) {
-                console.log("start to listening mail");
+                    if (data) {
+                        data = JSON.parse(data);
+                        var mailControl = new MailControl(data);
 
-                if(data) {
-                    data = JSON.parse(data);
-                    var mailControl = new MailControl(data);
-                    timmer = setInterval(function () {
                         console.log('setInterval called');
 
-
-                        mailControl.openBox("INBOX", [["SINCE",""]], function (mail) {
-                            MailProxy.newAndSave(mail, function (err) {
-                                if (err) return next(err);
-                                console.log("save new mail success");
+                        if (results.length == 0) {
+                            mailControl.openBox("INBOX", ["ALL"], function (mail) {
+                                MailProxy.newAndSave(mail, function (err) {
+                                    if (err) return next(err);
+                                    console.log("save new mail success");
+                                });
+                            }, function (err) {
+                                clearInterval(timmer);
                             });
-                        }, function(err){
-                            clearInterval(timmer);
-                        });
+                        }
+                        else {
+                            console.log(results[0].date);
+                            mailControl.openBox("INBOX", [["SINCE", results[0].date]], function (mail) {
+                                MailProxy.newAndSave(mail, function (err) {
+                                    if (err) return next(err);
+                                    console.log("save new mail success");
+                                });
+                            }, function (err) {
+                                clearInterval(timmer);
+                            });
+                        }
+                    }
+                    else{
+                        clearInterval(timmer);
+                    }
 
-                    }, 120000);
-                }
-            });
-        }
-    });
+                });
+            }
+        });
+    }, 120000);
 }
-*/
 
-//exports.getOriginMail = getOriginMail;
+
+exports.getOriginMail = getOriginMail();
 
 
