@@ -20,7 +20,6 @@ exports.getConfig = function (callback) {
 exports.setConfig =function(config,callback) {
 
     var mailControl = new MailControl(config);
-    mailControl.startSMTPConnection();
 
     //测试SMTP
     var mailOptions = {
@@ -33,7 +32,7 @@ exports.setConfig =function(config,callback) {
     var onerror = function (error, info) {
         if (error) {
             callback(104, "无法连接到smtp服务器");
-            mailControl.stopSMTPConnection();
+            mailControl.stopSMTPConnection
         } else {
             //测试IMAP
             mailControl.stopSMTPConnection();
