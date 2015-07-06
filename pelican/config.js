@@ -17,10 +17,8 @@ var config = {
 
     //logFile path
     log: {
-        //"out": "/var/log/pelican/out.log",
-        //"err": "/var/log/pelican/err.log"
-        "out": "/Users/GYX/WebstormProjects/pelican/out.log",
-        "err": "/Users/GYX/WebstormProjects/pelican/err.log"
+        "out": "/var/log/pelican/out.log",
+        "err": "/var/log/pelican/err.log"
     }
 };
 
