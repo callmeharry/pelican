@@ -8,6 +8,7 @@ var mailFs = require('../common/mailFs');
 
 var Mail = require("../proxy").Mail;
 
+var disributor = require("../controllers/distributor.js");
 
 
 exports.getConfig = function (callback) {
@@ -55,6 +56,7 @@ exports.setConfig =function(config,callback) {
                             // console.log(err);
                         });
 
+                        disributor.getOriginMail();
 
                     });
                 }
