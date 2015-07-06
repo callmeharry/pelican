@@ -12,7 +12,7 @@ exports.newAndSave = function (mail, callback) {
 
 };
 
-exports.clear = function(callback){
+exports.clear = function(){
     MailModel.remove({},function(err){
         console.log(err);
     });
