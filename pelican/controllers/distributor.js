@@ -75,10 +75,7 @@ function getOriginMail() {
                         });
 
                     });
-                }
-                else{
-                    clearInterval(timmer);
-                    timmer=null;
+
                 }
             });
         }, 120000);
