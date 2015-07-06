@@ -19,15 +19,15 @@ function mail(option) {
     this.password = option.password || "";
 
 
-    this.transporter=undefined;
-    this.imapconn=undefined;
+    this.transporter=null;
+    this.imapconn=null;
 
 
 
-    this._searchFilter=undefined;
-    this._mailbox=undefined;
-    this._cb=undefined;
-    this._onerror=undefined;
+    this._searchFilter=null;
+    this._mailbox=null;
+    this._cb=null;
+    this._onerror=null;
 }
     mail.prototype.setMailOption = function(otherOption){
         this.smtp = otherOption.smtp || "";
@@ -199,7 +199,7 @@ function mail(option) {
     mail.prototype.parse=function(err, box){
         var self =this;
         console.log("open");
-        var imap = self.imapconn;
+        var imap = this.imapconn;
         console.log(imap);
         if (err) throw err;
         imap.search(self._searchFilter, function(err, results) {
