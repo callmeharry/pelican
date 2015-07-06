@@ -42,21 +42,7 @@ function mail(option) {
             mailAddress:this.mailAddress,password:this.password};
     };
 
-    mail.prototype.startSMTPConnection = function(){
-        if(!this.smtp||!this.smtpPort||!this.mailAddress||!this.password){
-            return {success:0,error:"Error,mail option is not enough"};
-        }
-        this.transporter = nodeMailer.createTransport("SMTP",{
-            host:this.smtp,
-            port:this.smtpPort,
-            secureConnection:true,
-            auth: {
-                user: this.mailAddress,
-                pass: this.password
-            }
-        });
-        return {success:1};
-    };
+
 
     /**
      * var mailOptions = {
@@ -75,6 +61,18 @@ function mail(option) {
     }};
      */
     mail.prototype.sendMail=function(mailOptions,callback){
+        if(!this.smtp||!this.smtpPort||!this.mailAddress||!this.password){
+            return {success:0,error:"Error,mail option is not enough"};
+        }
+        this.transporter = nodeMailer.createTransport("SMTP",{
+            host:this.smtp,
+            port:this.smtpPort,
+            secureConnection:true,
+            auth: {
+                user: this.mailAddress,
+                pass: this.password
+            }
+        });
         if(this.transporter==null)
             return {success:0,error:"please start smtp again"};
         this.transporter.sendMail(mailOptions,callback);
