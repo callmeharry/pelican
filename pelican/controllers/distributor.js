@@ -65,7 +65,7 @@ function getOriginMail() {
                     console.log("start to listening mail");
 
                     if (data) {
-                        console.log(data);
+                        console.log("ori："+data);
                         data = JSON.parse(data);
                         console.log(data);
                         var mailControl = new MailControl(data);
