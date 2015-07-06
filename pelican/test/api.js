@@ -9,17 +9,35 @@ var UserProxy = proxy.User;
 var MailProxy = proxy.Mail;
 var validator = require('validator');
 var mailFs = require('../common/mailFs');
+var moment = require('moment');
 
 
 exports.testApi = function (req, res, next) {
 
-    mailFs.writeMailConfig({host: "www.baidu.com", name: "hello world"}, function (err) {
-        if (err) return next(err);
+    //var nowDate = Date.now();
+    //
+    //var receiveDate = moment();
+    //
+    //console.log({date:receiveDate.toLocaleString()});
+    //
+    //console.log()
+    //
+    //res.reply(0,"success");
+    //
 
-        console.log("success");
-        res.reply(0, "success");
+    var id = "559a4241f1dccecc331f392a";
+    /**
+     MailProxy.findMailById(id, function(err, mail){
+        if(err) return next(err);
+
+        var receivedDate = mail.receivedDate;
+        console.log(receivedDate.toLocaleString());
+
+        res.reply(0, 'succcess', mail);
 
     });
+     **/
+    res.reply(0, "success");
 
     //
     //mailFs.readMailConfig(function(err, data){
