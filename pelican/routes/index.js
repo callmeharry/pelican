@@ -80,6 +80,7 @@ router.get('/distribution/getMailInfo', mailController.getMailDetail);
 router.post('/distribution/distributeMail', distributorController.distribute);
 
 router.get('/mailTag', mailTagController.getAllMailTags);
+router.post('/mailTag/add', mailTagController.addMailTag);
 
 
 /* 邮件处理人员 */

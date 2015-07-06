@@ -26,21 +26,23 @@ exports.getAllMailTags = function (req, res, next) {
 };
 
 
-exports.distribute = function (req, res, next) {
+exports.addMailTag = function (req, res, next) {
     if (req.user.role !== ROLE.DISTRIBUTOR) {
         res.reply(101, "没有权限");
         return;
     }
 
+    var tagName = validator.trim(req.body.tagName);
 
-    var mailId = validator.trim(req.body.mailId);
-    var handlerId = validator.trim(req.body.handlerId);
-    var readerIds = validator.trim(req.body.readerIds);
-
-    MailProxy.updateMailById(mailId, {handler: handlerId, readers: readerIds, isDistributed: true}, function (err) {
-        if (err) return next(err);
-        res.reply(101, "邮件分发成功");
-
+    MailTagProxy.findOrNew(tagName, function (err, mailTag) {
+        if (err) {
+            next(err);
+        } else {
+            var data = {};
+            data.id = mailTag._id;
+            data.tagName = mailTag.name;
+            res.reply(0, "添加成功", data)
+        }
     });
 
 };

@@ -17,6 +17,26 @@ exports.newAndSave = function (tagName, callback) {
     mailTagModel.save(callback);
 };
 
+/**
+ * 根据tagName 寻找tag，
+ * 如果tag存在，则返回错误信息
+ * 如果tag不存在，则新建一个tag
+ *
+ * @param tagName
+ * @param callback
+ */
+exports.findOrNew = function (tagName, callback) {
+
+    // Todo 没有callback
+
+    MailTagModel.findOneAndUpdate(
+        {name: tagName},
+        {name: tagName},
+        {upsert: true, new: false},
+        callback
+    );
+};
+
 
 /**
  * 根据邮件标签的id查找
@@ -25,6 +45,10 @@ exports.newAndSave = function (tagName, callback) {
  */
 exports.findMailTagById = function (id, callback) {
     MailTagModel.findOne({'_id': id}, callback);
+};
+
+exports.findMailTagByName = function (tagName, callback) {
+    MailTagModel.findOne({'name': tagName}, callback);
 };
 
 exports.findAllMailTags = function (callback) {
