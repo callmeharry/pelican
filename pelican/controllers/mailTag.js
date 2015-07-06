@@ -38,10 +38,14 @@ exports.addMailTag = function (req, res, next) {
         if (err) {
             next(err);
         } else {
-            var data = {};
-            data.id = mailTag._id;
-            data.tagName = mailTag.name;
-            res.reply(0, "添加成功", data)
+            if (!mailTag.isNew) {
+                res.reply(101, "邮件标签已存在");
+            } else {
+                var data = {};
+                data.id = mailTag._id;
+                data.tagName = mailTag.name;
+                res.reply(0, "添加成功", data);
+            }
         }
     });
 
