@@ -4,9 +4,7 @@
 
 var MailProxy = require('../proxy').Mail;
 var ROLE = require('../models/user').ROLE;
-var MailConfig = require("../proxy").MailConfig;
 var validator = require('validator');
-var MailControl = require("../common/mail");
 
 exports.getMailList = function (req, res, next) {
     if (req.user.role !== ROLE.DISTRIBUTOR) {

@@ -91,6 +91,8 @@ function getOriginMail() {
                             console.log("save new mail success");
                         });
 
+                    },function(error){
+                        console.log(error);
                     });
 
                 }
