@@ -17,10 +17,8 @@ var config = {
 
     //logFile path
     log: {
-        //"out": "/var/log/pelican/out.log",
-        //"err": "/var/log/pelican/err.log"
-        "out": "/Users/lijie/out.log",
-        "err": "/Users/lijie/err.log"
+        "out": "/var/log/pelican/out.log",
+        "err": "/var/log/pelican/err.log"
     }
 };
 

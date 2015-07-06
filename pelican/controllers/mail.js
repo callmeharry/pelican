@@ -29,6 +29,9 @@ exports.getMailDetail = function(req, res, next) {
         if (req.user.role == ROLE.DISTRIBUTOR ||
             req.user._id == mail.handler ||
             mail.readers.indexOf(req.user._id)) {
+
+            console.log(mail['']);
+
             res.reply(0,'success', mail);
         } else {
             res.reply(101, '没有权限');

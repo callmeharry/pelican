@@ -1,5 +1,6 @@
 var moment = require('moment');
 var MailModel = require('../models').Mail;
+var MailConfig = require("../proxy").MailConfig;
 
 exports.newAndSave = function (mail, callback) {
 
@@ -12,9 +13,10 @@ exports.newAndSave = function (mail, callback) {
 
 };
 
-exports.clear = function(callback){
-
-    MailModel.remove({});
+exports.clear = function(){
+    MailModel.remove({},function(err){
+        console.log(err);
+    });
 };
 
 exports.findMailById = function (id, callback) {
@@ -96,4 +98,6 @@ exports.returnMail = function (id, callback) {
         mail.save(callback);
     })
 };
+
+
 

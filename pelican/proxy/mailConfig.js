@@ -10,17 +10,17 @@ var Mail = require("../proxy").Mail;
 
 
 
-exports.getConfig = function (callback) {
+function getConfig(callback) {
 
         mailFs.readMailConfig(callback);
 
-};
+}
 
+exports.getConfig= getConfig;
 
 exports.setConfig =function(config,callback) {
 
     var mailControl = new MailControl(config);
-    mailControl.startSMTPConnection();
 
     //测试SMTP
     var mailOptions = {
@@ -33,7 +33,7 @@ exports.setConfig =function(config,callback) {
     var onerror = function (error, info) {
         if (error) {
             callback(104, "无法连接到smtp服务器");
-            mailControl.stopSMTPConnection();
+            mailControl.stopSMTPConnection
         } else {
             //测试IMAP
             mailControl.stopSMTPConnection();
@@ -46,16 +46,15 @@ exports.setConfig =function(config,callback) {
                         if (err) callback(-1, "internal error");
 
                         callback(0, 'success');
-                        Mail.clear();
+                        //Mail.clear();
                         mailControl.openBox("INBOX", ["ALL"], function (mail) {
-                            console.log(mail);
+                            //console.log(mail);
                             Mail.newAndSave(mail, function (err) {
                                 console.log(err);
                             });
                         },function(err){
                             // console.log(err);
                         });
-
 
                     });
                 }
@@ -67,3 +66,38 @@ exports.setConfig =function(config,callback) {
 };
 
 
+
+
+//定时获取邮件
+//两分钟一次
+
+var timmer=null;
+function getOriginMail() {
+    if(!timmer) {
+        timmer = setInterval(function () {
+            var now = new Date();
+            var since = new Date(Date.parse(now)-120000);
+            getConfig(function (err, data) {
+                console.log("start to listening mail");
+                if (data) {
+                    data = JSON.parse(data);
+                    var mailControl = new MailControl(data);
+
+                    console.log('setInterval called');
+
+                    mailControl.openBox("INBOX", [["SINCE",since]], function (mail) {
+                        MailProxy.newAndSave(mail, function (err) {
+                            if (err) return next(err);
+                            console.log("save new mail success");
+                        });
+
+                    });
+
+                }
+            });
+        }, 120000);
+    }
+}
+
+
+exports.getOriginMail = getOriginMail();
