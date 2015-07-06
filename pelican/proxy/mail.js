@@ -30,7 +30,7 @@ exports.findMailById = function (id, callback) {
  * @param callback
  */
 function getMailList(query, page, limit, callback) {
-    var resultsPerPage = limit || 10;
+    var resultsPerPage = limit || 200;
     MailModel.paginate(
         query,
         {
@@ -51,7 +51,7 @@ function getMailList(query, page, limit, callback) {
  * @param callback
  */
 exports.findHandlerNewMailList = function (id, page, callback) {
-    return getMailList({handler: id, isHandled: false}, page, 10, callback);
+    return getMailList({handler: id, isHandled: false}, page,200, callback);
 };
 
 /**
@@ -64,7 +64,7 @@ exports.getAllMailList = function (page, callback) {
     return getMailList(
         {},
         page,
-        10,
+        30,
         callback
     );
 };

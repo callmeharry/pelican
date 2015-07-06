@@ -47,15 +47,13 @@ exports.setConfig =function(config,callback) {
 
                         callback(0, 'success');
                         Mail.clear();
-                        mailControl.openBox("INBOX", ["UNSEEN"], function (mail) {
+                        mailControl.openBox("INBOX", ["ALL"], function (mail) {
                             console.log(mail);
-                            Mail.newAndSave(mail, function(err){
-                                if(err) return;
-                                console.log('save successfully');
-
+                            Mail.newAndSave(mail, function (err) {
+                                console.log(err);
                             });
                         },function(err){
-                            console.log(err);
+                            // console.log(err);
                         });
 
 

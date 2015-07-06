@@ -7,12 +7,12 @@ var Imap = require("imap");
 var MailParser = require("mailparser").MailParser;
 
 
-
 var _searchFilter;
 var _mailbox;
 var _cb;
 var _imap;
 var _onerror;
+
 
 
 function mail(option) {
@@ -22,6 +22,7 @@ function mail(option) {
     this.imapPort = option.imapPort || "";
     this.mailAddress = option.mailAddress || "";
     this.password = option.password || "";
+
 
     this.transporter=undefined;
     this.imapconn=undefined;
@@ -46,11 +47,11 @@ function mail(option) {
 
     /**
      * var mailOptions = {
-        from: 'Fred Foo ✔ <foo@blurdybloop.com>', // sender address
+        from: 'Fred Foo  <foo@blurdybloop.com>', // sender address
         to: 'bar@blurdybloop.com, baz@blurdybloop.com', // list of receivers
-        subject: 'Hello ✔', // Subject line
-        text: 'Hello world ✔', // plaintext body
-        html: '<b>Hello world ✔</b>' // html body
+        subject: 'Hello ', // Subject line
+        text: 'Hello world ', // plaintext body
+        html: '<b>Hello world </b>' // html body
     };
      callback =function(error, info){
     if(error){
@@ -60,6 +61,7 @@ function mail(option) {
         console.log('Message sent: ' +info.message);
     }};
      */
+    //发送邮件
     mail.prototype.sendMail=function(mailOptions,callback){
         if(!this.smtp||!this.smtpPort||!this.mailAddress||!this.password){
             return {success:0,error:"Error,mail option is not enough"};
@@ -78,6 +80,7 @@ function mail(option) {
         this.transporter.sendMail(mailOptions,callback);
     };
 
+    //停止SMTP连接
     mail.prototype.stopSMTPConnection = function(){
         if(this.transporter==null)
             return {success:0,error:"please start smtp again"};
