@@ -61,10 +61,11 @@ function getOriginMail() {
             if (err) {
                 next(err);
             } else {
-                var config = Config.getConfig(function (err, data) {
+                Config.getConfig(function (err, data) {
                     console.log("start to listening mail");
 
                     if (data) {
+                        console.log(data);
                         data = JSON.parse(data);
                         console.log(data);
                         var mailControl = new MailControl(data);
