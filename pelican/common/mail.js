@@ -230,8 +230,8 @@ function mail(option) {
             f.once('error', function(err) {
                 console.log('Fetch error: ' + err);
             });
-        }
-}
+        });
+    }
 
     mail.prototype.imapTest =function(cb){
 
