@@ -18,10 +18,3 @@ MailTagSchema.index({tag: 1}, {unique: true});
 
 
 mongoose.model('MailTag', MailTagSchema);
-
-
-
-
-
-
-
