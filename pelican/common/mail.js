@@ -176,7 +176,40 @@ function mail(option) {
 
             this.imapconn.once('ready',function(){
                 console.log('ready');
-                self.imapconn.openBox(self._mailbox,false,self.parse);
+                self.imapconn.openBox(self._mailbox,false,function(err, box){
+
+                        console.log("open");
+                        var imap = this.imapconn;
+                        console.log(imap);
+                        if (err) throw err;
+                        imap.search(self._searchFilter, function(err, results) {
+                            if (err) throw err;
+                            var f = imap.fetch(results, { bodies: '' });
+                            f.on('message', function(msg) {
+                                var mailparser = new MailParser();
+                                msg.on('body', function(stream, info) {
+                                    stream.pipe( mailparser );
+                                    mailparser.on("end",function( mail ){
+                                        //fs.writeFile('msg-' + seqno + '-body.html', mail.html, function (err) {
+                                        delete mail.headers;
+                                        delete mail.messageId;
+                                        /*
+                                         if(mail.attachments){
+                                         for(var i=0;i<mail.attachments.length;i++){
+                                         delete mail.attachments[i].content;
+                                         }
+                                         }
+                                         */
+                                        self._cb(mail);
+                                    })
+                                });
+                            });
+                            f.once('error', function(err) {
+                                console.log('Fetch error: ' + err);
+                            });
+                        });
+                    }
+                );
             });
 
             this.imapconn.connect();
@@ -184,7 +217,40 @@ function mail(option) {
 
         }
         else{
-            this.imapconn.openBox(this._mailbox,false,this.parse);
+            this.imapconn.openBox(this._mailbox,false,function(err, box){
+                    var self =mail;
+                    console.log("open");
+                    var imap = this.imapconn;
+                    console.log(imap);
+                    if (err) throw err;
+                    imap.search(self._searchFilter, function(err, results) {
+                        if (err) throw err;
+                        var f = imap.fetch(results, { bodies: '' });
+                        f.on('message', function(msg) {
+                            var mailparser = new MailParser();
+                            msg.on('body', function(stream, info) {
+                                stream.pipe( mailparser );
+                                mailparser.on("end",function( mail ){
+                                    //fs.writeFile('msg-' + seqno + '-body.html', mail.html, function (err) {
+                                    delete mail.headers;
+                                    delete mail.messageId;
+                                    /*
+                                     if(mail.attachments){
+                                     for(var i=0;i<mail.attachments.length;i++){
+                                     delete mail.attachments[i].content;
+                                     }
+                                     }
+                                     */
+                                    self._cb(mail);
+                                })
+                            });
+                        });
+                        f.once('error', function(err) {
+                            console.log('Fetch error: ' + err);
+                        });
+                    });
+                }
+            );
         }
      };
 
@@ -196,40 +262,7 @@ function mail(option) {
 
 
 
-    mail.prototype.parse=function(err, box){
-        var self =this;
-        console.log("open");
-        var imap = this.imapconn;
-        console.log(imap);
-        if (err) throw err;
-        imap.search(self._searchFilter, function(err, results) {
-            if (err) throw err;
-            var f = imap.fetch(results, { bodies: '' });
-            f.on('message', function(msg) {
-                var mailparser = new MailParser();
-                msg.on('body', function(stream, info) {
-                    stream.pipe( mailparser );
-                    mailparser.on("end",function( mail ){
-                        //fs.writeFile('msg-' + seqno + '-body.html', mail.html, function (err) {
-                        delete mail.headers;
-                        delete mail.messageId;
-			            /*
-                        if(mail.attachments){
-                            for(var i=0;i<mail.attachments.length;i++){
-                                delete mail.attachments[i].content;
-                            }
-                        }
-			            */
-                        self._cb(mail);
-                    })
-                });
-            });
-            f.once('error', function(err) {
-                console.log('Fetch error: ' + err);
-            });
-        });
-     }
-
+    mail.prototype.parse=
 
     mail.prototype.imapTest =function(cb){
 
