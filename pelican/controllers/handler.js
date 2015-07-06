@@ -142,7 +142,7 @@ function getEmailListByQuery(query, page, res) {
                 title: results[i].subject,
                 senderName: results[i].from,
                 receiveTime: results[i].receivedDate,
-                formNow: moment(results[i].receivedDate).locale('zh-cn').toNow()
+                fromNow: moment(results[i].receivedDate).locale('zh-cn').toNow()
             };
         }
         data.list = list;
