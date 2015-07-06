@@ -4,7 +4,7 @@
 
 var MailProxy = require('../proxy').Mail;
 var ROLE = require('../models/user').ROLE;
-var Config = require("../proxy").MailConfig;
+var MailConfig = require("../proxy").MailConfig;
 var validator = require('validator');
 var MailControl = require("../common/mail");
 
@@ -51,38 +51,5 @@ exports.distribute = function (req, res, next) {
 };
 
 
-//定时获取邮件
-//两分钟一次
-
-var timmer=null;
-function getOriginMail() {
-    if(!timmer) {
-        timmer = setInterval(function () {
-            var now = new Date();
-            var since = new Date(Date.parse(now)-120000);
-            Config.getConfig(function (err, data) {
-                console.log("start to listening mail");
-                if (data) {
-                    data = JSON.parse(data);
-                    var mailControl = new MailControl(data);
-
-                    console.log('setInterval called');
-
-                    mailControl.openBox("INBOX", [["SINCE",since]], function (mail) {
-                        MailProxy.newAndSave(mail, function (err) {
-                            if (err) return next(err);
-                            console.log("save new mail success");
-                        });
-
-                    });
-
-                }
-            });
-        }, 120000);
-    }
-}
-
-
-exports.getOriginMail = getOriginMail();
 
 

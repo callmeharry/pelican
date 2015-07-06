@@ -55,8 +55,6 @@ exports.setConfig =function(config,callback) {
                             // console.log(err);
                         });
 
-
-
                     });
                 }
             });
