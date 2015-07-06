@@ -25,7 +25,7 @@ function mail(option) {
 
 
     this._searchFilter=undefined;
-    this.mailbox=undefined;
+    this._mailbox=undefined;
     this._cb=undefined;
     this._onerror=undefined;
 }
@@ -144,9 +144,9 @@ function mail(option) {
         */
      mail.prototype.openBox=function(mailbox,searchFilter,cb,onerror) {
          this._searchFilter=searchFilter;
-         this.__cb =cb;
-         this.__mailbox = mailbox;
-         this.__onerror = onerror;
+         this._cb =cb;
+         this._mailbox = mailbox;
+         this._onerror = onerror;
          this.getImap();
 
      };
@@ -176,7 +176,7 @@ function mail(option) {
 
             this.imapconn.once('ready',function(){
                 console.log('ready');
-                this.openBox(_mailbox,false,parse);
+                this.openBox(this._mailbox,false,parse);
             });
 
             this.imapconn.connect();
@@ -184,7 +184,7 @@ function mail(option) {
 
         }
         else{
-            this.imapconn.openBox(_mailbox,false,parse);
+            this.imapconn.openBox(this._mailbox,false,parse);
         }
      };
 
