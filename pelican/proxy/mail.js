@@ -13,8 +13,9 @@ exports.newAndSave = function (mail, callback) {
 };
 
 exports.clear = function(callback){
-
-    MailModel.remove({});
+    MailModel.remove({},function(err){
+        console.log(err);
+    });
 };
 
 exports.findMailById = function (id, callback) {
