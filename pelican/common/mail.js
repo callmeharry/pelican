@@ -176,7 +176,7 @@ function mail(option) {
 
             this.imapconn.once('ready',function(){
                 console.log('ready');
-                self.imapconn.openBox(self._mailbox,false,parse);
+                self.imapconn.openBox(self._mailbox,false,self.parse);
             });
 
             this.imapconn.connect();
@@ -184,7 +184,7 @@ function mail(option) {
 
         }
         else{
-            self.imapconn.openBox(self._mailbox,false,parse);
+            self.imapconn.openBox(self._mailbox,false,self.parse);
         }
      };
 
@@ -196,8 +196,8 @@ function mail(option) {
 
 
 
-     function parse(err, box){
-        var self =mail;
+    mail.prototype.parse=function(err, box){
+        var self =this;
         console.log("open");
         var imap = self.imapconn;
         if (err) throw err;
