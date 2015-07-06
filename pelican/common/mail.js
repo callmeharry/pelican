@@ -7,11 +7,6 @@ var Imap = require("imap");
 var MailParser = require("mailparser").MailParser;
 
 
-var _searchFilter;
-var _mailbox;
-var _cb;
-var _imap;
-var _onerror;
 
 
 
@@ -26,6 +21,13 @@ function mail(option) {
 
     this.transporter=undefined;
     this.imapconn=undefined;
+
+
+
+    this._searchFilter=undefined;
+    this.mailbox=undefined;
+    this._cb=undefined;
+    this._onerror=undefined;
 }
     mail.prototype.setMailOption = function(otherOption){
         this.smtp = otherOption.smtp || "";
@@ -141,11 +143,11 @@ function mail(option) {
       'Virus Items': { attribs: [], delimiter: '/', children: null, parent: null } }
         */
      mail.prototype.openBox=function(mailbox,searchFilter,cb,onerror) {
-        _searchFilter=searchFilter;
-        _cb =cb;
-        _mailbox = mailbox;
-         _onerror = onerror;
-        this.getImap();
+         this._searchFilter=searchFilter;
+         this.__cb =cb;
+         this.__mailbox = mailbox;
+         this.__onerror = onerror;
+         this.getImap();
 
      };
 
@@ -170,7 +172,7 @@ function mail(option) {
 
 
 
-            this.imapconn.once('error', _onerror);
+            this.imapconn.once('error', this._onerror);
 
             this.imapconn.once('ready',function(){
                 console.log('ready');
@@ -178,7 +180,7 @@ function mail(option) {
             });
 
             this.imapconn.connect();
-            _imap=this.imapconn;
+
 
         }
         else{
@@ -189,7 +191,6 @@ function mail(option) {
      mail.prototype.killImap= function(){
         this.imapconn.end();
         this.imapconn=undefined;
-        _imap=undefined;
      };
 
 
@@ -198,9 +199,9 @@ function mail(option) {
      function parse(err, box){
         var self =mail;
         console.log("open");
-        var imap = _imap;
+        var imap = self.imapconn;
         if (err) throw err;
-        imap.search(_searchFilter, function(err, results) {
+        imap.search(self._searchFilter, function(err, results) {
             if (err) throw err;
             var f = imap.fetch(results, { bodies: '' });
             f.on('message', function(msg) {
@@ -218,7 +219,7 @@ function mail(option) {
                             }
                         }
 			            */
-                        _cb(mail);
+                        self._cb(mail);
                     })
                 });
             });
