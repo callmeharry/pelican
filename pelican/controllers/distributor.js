@@ -66,6 +66,7 @@ function getOriginMail() {
 
                     if (data) {
                         data = JSON.parse(data);
+                        console.log(data);
                         var mailControl = new MailControl(data);
 
                         console.log('setInterval called');

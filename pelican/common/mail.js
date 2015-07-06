@@ -171,7 +171,7 @@ function mail(option) {
             imapconn.once('error', this._onerror);
 
             imapconn.once('ready',function(){
-                console.log('ready');
+
                 imapconn.openBox(self._mailbox,false,
                     function(err, box){
                         if (err) throw err;
