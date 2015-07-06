@@ -72,8 +72,3 @@ exports.setMailConfig = function (req, res, next) {
 
     })
 };
-
-exports.setSetting = function (req, res, next) {
-
-
-};
