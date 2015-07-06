@@ -57,19 +57,16 @@ exports.distribute = function (req, res, next) {
 var timmer;
 function getOriginMail() {
     timmer = setInterval(function () {
-        MailProxy.getAllMailList(1, function (err, results, pageCount, itemCount) {
+        MailProxy.getAllMailList({},1,1, function (err, results, pageCount, itemCount) {
             if (err) {
                 next(err);
             } else {
                 Config.getConfig(function (err, data) {
                     console.log("start to listening mail");
-
                     if (data) {
-                        console.log("ori："+data);
                         data = JSON.parse(data);
-                        console.log(data);
                         var mailControl = new MailControl(data);
-
+                        console.log(results);
                         console.log('setInterval called');
 
                         if (results.length == 0) {
