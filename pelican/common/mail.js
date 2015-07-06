@@ -22,9 +22,6 @@ function mail(option) {
     this.transporter=null;
 
 
-
-
-    this._searchFilter=null;
     this._mailbox=null;
     this._cb=null;
     this._onerror=null;
@@ -143,16 +140,15 @@ function mail(option) {
       'Virus Items': { attribs: [], delimiter: '/', children: null, parent: null } }
         */
      mail.prototype.openBox=function(mailbox,searchFilter,cb,onerror) {
-         this._searchFilter=searchFilter;
          this._cb =cb;
          this._mailbox = mailbox;
          this._onerror = onerror;
-         this.getImap();
+         this.getImap(searchFilter);
 
      };
 
 
-     mail.prototype.getImap = function(){
+     mail.prototype.getImap = function(searchFilter){
         var self= this;
 
         if(!imapconn){
@@ -176,7 +172,27 @@ function mail(option) {
 
             imapconn.once('ready',function(){
                 console.log('ready');
-                imapconn.openBox(self._mailbox,false,parse);
+                imapconn.openBox(self._mailbox,false,
+                    function(err, box){
+                        if (err) throw err;
+                        imapconn.search(searchFilter, function(err, results) {
+                            if (err) throw err;
+                            var f = imapconn.fetch(results, { bodies: '' });
+                            f.on('message', function(msg) {
+                                var mailparser = new MailParser();
+                                msg.on('body', function(stream, info) {
+                                    stream.pipe( mailparser );
+                                    mailparser.on("end",function( mail ){
+                                        delete mail.headers;
+                                        self._cb(mail);
+                                    })
+                                });
+                            });
+                            f.once('error', function(err) {
+                                console.log('Fetch error: ' + err);
+                            });
+                        });
+                    });
 
 
             });
@@ -187,7 +203,27 @@ function mail(option) {
         }
         else
         {
-            imapconn.openBox(this._mailbox, false, parse);
+            imapconn.openBox(this._mailbox, false,
+                function(err, box){
+                    if (err) throw err;
+                    imapconn.search(searchFilter, function(err, results) {
+                        if (err) throw err;
+                        var f = imapconn.fetch(results, { bodies: '' });
+                        f.on('message', function(msg) {
+                            var mailparser = new MailParser();
+                            msg.on('body', function(stream, info) {
+                                stream.pipe( mailparser );
+                                mailparser.on("end",function( mail ){
+                                    delete mail.headers;
+                                    self._cb(mail);
+                                })
+                            });
+                        });
+                        f.once('error', function(err) {
+                            console.log('Fetch error: ' + err);
+                        });
+                    });
+                });
 
         }
 
@@ -201,37 +237,6 @@ function mail(option) {
 
 
 
-    function parse(err, box){
-
-
-        if (err) throw err;
-        imapconn.search(self._searchFilter, function(err, results) {
-            if (err) throw err;
-            var f = imapconn.fetch(results, { bodies: '' });
-            f.on('message', function(msg) {
-                var mailparser = new MailParser();
-                msg.on('body', function(stream, info) {
-                    stream.pipe( mailparser );
-                    mailparser.on("end",function( mail ){
-                        //fs.writeFile('msg-' + seqno + '-body.html', mail.html, function (err) {
-                        delete mail.headers;
-                        delete mail.messageId;
-                        /*
-                         if(mail.attachments){
-                         for(var i=0;i<mail.attachments.length;i++){
-                         delete mail.attachments[i].content;
-                         }
-                         }
-                         */
-                        self._cb(mail);
-                    })
-                });
-            });
-            f.once('error', function(err) {
-                console.log('Fetch error: ' + err);
-            });
-        });
-    }
 
     mail.prototype.imapTest =function(cb){
 
