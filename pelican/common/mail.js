@@ -153,7 +153,7 @@ function mail(option) {
 
 
      mail.prototype.getImap = function(){
-
+        var self= mail;
 
         if(!this.imapconn){
 
@@ -176,7 +176,7 @@ function mail(option) {
 
             this.imapconn.once('ready',function(){
                 console.log('ready');
-                this.openBox(this._mailbox,false,parse);
+                self.imapconn.openBox(self._mailbox,false,parse);
             });
 
             this.imapconn.connect();
@@ -184,7 +184,7 @@ function mail(option) {
 
         }
         else{
-            this.imapconn.openBox(this._mailbox,false,parse);
+            self.imapconn.openBox(self._mailbox,false,parse);
         }
      };
 
