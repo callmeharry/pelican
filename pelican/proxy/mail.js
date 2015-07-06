@@ -50,8 +50,8 @@ function getMailList(query, page, limit, callback) {
  * @param page
  * @param callback
  */
-exports.findHandlerNewMailList = function (id, page, callback) {
-    return getMailList({handler: id, isHandled: false}, page,200, callback);
+exports.findHandlerMailList = function (query, page, callback) {
+    return getMailList(query, page, 15, callback);
 };
 
 /**
@@ -81,14 +81,19 @@ exports.handleMail = function (id, callback) {
         mail.isHandled = true;
         mail.save(callback);
     })
-
-
 };
 
 
 exports.updateMailById = function (id, ups, callback) {
-
     MailModel.update({_id: id}, {"$set": ups}, callback);
+};
 
+exports.returnMail = function (id, callback) {
+    this.findMailById(id, function (err, mail) {
+        if (err)
+            return callback(err, null);
+        mail.isHandled = false;
+        mail.save(callback);
+    })
 };
 
