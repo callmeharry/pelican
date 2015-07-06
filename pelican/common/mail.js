@@ -44,13 +44,14 @@ function mail(option) {
     };
 
 
+
     /**
      * var mailOptions = {
-        from: 'Fred Foo ✔ <foo@blurdybloop.com>', // sender address
+        from: 'Fred Foo  <foo@blurdybloop.com>', // sender address
         to: 'bar@blurdybloop.com, baz@blurdybloop.com', // list of receivers
-        subject: 'Hello ✔', // Subject line
-        text: 'Hello world ✔', // plaintext body
-        html: '<b>Hello world ✔</b>' // html body
+        subject: 'Hello ', // Subject line
+        text: 'Hello world ', // plaintext body
+        html: '<b>Hello world </b>' // html body
     };
      callback =function(error, info){
     if(error){
@@ -63,6 +64,7 @@ function mail(option) {
     //发送邮件
     mail.prototype.sendMail=function(mailOptions,callback){
         if(!this.smtp||!this.smtpPort||!this.mailAddress||!this.password){
+
             return {success:0,error:"Error,mail option is not enough"};
         }
         this.transporter = nodeMailer.createTransport("SMTP",{
