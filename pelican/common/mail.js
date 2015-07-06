@@ -153,7 +153,7 @@ function mail(option) {
 
 
      mail.prototype.getImap = function(){
-        var self= mail;
+        var self= this;
 
         if(!this.imapconn){
 
