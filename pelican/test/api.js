@@ -25,51 +25,59 @@ exports.testApi = function (req, res, next) {
     //res.reply(0,"success");
     //
 
-    var id = "559a674b0544dff55abc6a33";
-
-     MailProxy.findMailById(id, function(err, mail){
-         if (err) return next(err);
-
-         if (mail) {
-             var receivedDate = mail['receivedDate'];
-
-
-             var time = moment(receivedDate);
-             console.log(time.toLocaleString());
-
-             var change = time.locale('zh-cn').toNow();
-
-
-             console.log(change);
-
-             res.reply(0, "success", mail);
-
-         } else {
-             res.reply(0, 'no such mail');
-         }
-
-
-
-    });
+    //var id = "559a674b0544dff55abc6a33";
+    //
+    // MailProxy.findMailById(id, function(err, mail){
+    //     if (err) return next(err);
+    //
+    //     if (mail) {
+    //         var receivedDate = mail['receivedDate'];
+    //
+    //
+    //         var time = moment(receivedDate);
+    //         console.log(time.toLocaleString());
+    //
+    //         var change = time.locale('zh-cn').toLocaleString();
+    //
+    //
+    //         console.log(change);
+    //
+    //         res.reply(0, "success", mail);
+    //
+    //     } else {
+    //         res.reply(0, 'no such mail');
+    //     }
+    //
+    //
+    //
+    //});
     //res.reply(0, "success");
+    //
+    //
+    //var content = {
+    //    "smtp": "smtp.buaa.edu.cn",
+    //    "smtpPort": "465",
+    //    "imap": "mail.buaa.edu.cn",
+    //    "imapPort": "993",
+    //    "mailAddress": "gyxln@buaa.edu.cn",
+    //    "password": "69568440"
+    //};
+    //
+    //
+    //mailFs.writeMailConfig(content, function (err) {
+    //    if (err) return next(err);
+    //
+    //    res.reply(0, 'success');
+    //
+    //});
 
 
-    var content = {
-        "smtp": "smtp.buaa.edu.cn",
-        "smtpPort": "465",
-        "imap": "mail.buaa.edu.cn",
-        "imapPort": "993",
-        "mailAddress": "gyxln@buaa.edu.cn",
-        "password": "69568440"
-    };
+    var time = moment();
+    console.log(time.toLocaleString());
 
+    var change = time.locale('zh-cn').format('llll');
 
-    mailFs.writeMailConfig(content, function (err) {
-        if (err) return next(err);
-
-        res.reply(0, 'success');
-
-    });
+    res.reply(0, 'success', {change: change.toLocaleString()});
 };
 
 exports.testMail = function (req, res, next) {
