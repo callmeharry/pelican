@@ -53,7 +53,7 @@ exports.getCheckedList = function (req, res, next) {
     var user = req.user;
     var page = req.query.page;
 
-    var query = {checkMan: user._id, isHanded: true, isChecked: {"$in": ['checked', 'returned']}};
+    var query = {checkMan: user._id, isChecked: {"$in": ['checked', 'returned']}};
 
     MailProxy.getCheckMailList(query, page, function (err, results, pageCount, itemCount) {
         if (err) return next(err);
@@ -63,7 +63,7 @@ exports.getCheckedList = function (req, res, next) {
             res.reply(101, '没有邮件');
             return;
         }
-
+        console.log(results);
         var data = {};
         data['pageCount'] = pageCount;
 
