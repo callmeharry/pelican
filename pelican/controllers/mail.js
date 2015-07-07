@@ -39,7 +39,12 @@ exports.getMailDetail = function(req, res, next) {
                 var mailControl = new MailControl(data);
 
                 mailControl.getFullMail("INBOX",mail.messageId,function(mail){
+
                     res.reply(0,'success', mail);
+                    MailModel.updateMailById(id,mail,function (err) {
+                        if (err)
+                        console.log(err);
+                    });
                 }, function(err){
                     if(err)
                     res.reply(101, '获取失败');
