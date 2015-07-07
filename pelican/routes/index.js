@@ -64,6 +64,7 @@ router.post('/test', testApi.testApi);
 
 router.post('/admin/user/create', userController.addUser);
 router.post('/admin/user/delete', userController.deleteUser);
+router.get('/admin/users', userController.getAllUsers);
 
 router.post('/login', userController.login);
 
