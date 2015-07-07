@@ -7,7 +7,8 @@ var Schema = mongoose.Schema;
 var DISTRIBUTE_STATUS = {
     NEW: 'new',
     DISTRIBUTED: 'distributed',
-    RETURNED: 'returned'
+    RETURNED: 'returned',
+    NONE: 'none',
 };
 
 var CHECKED_STATUS = {
@@ -25,7 +26,7 @@ var MailSchema = new Schema({
     text: {type: String},
     subject: {type: String},
     
-    messageId: {type: String},
+    messageId: {type: String, unique: true},
 
     priority: {type: String},
     from: [{
@@ -83,3 +84,4 @@ MailSchema.plugin(mongoosePaginate);
 mongoose.model('Mail', MailSchema);
 
 exports.DISTRIBUTE_STATUS = DISTRIBUTE_STATUS;
+exports.CHECKED_STATUS = CHECKED_STATUS;

@@ -75,3 +75,37 @@ exports.getAllHandlers = function (req, res, next) {
         }
     });
 };
+
+
+/**
+ * 邮件处理人员获取审核人员列表
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.getAllChecker = function (req, res, next) {
+    if (req.user.role !== ROLE.HANDLER) {
+        res.reply(101, "没有权限");
+        return;
+    }
+    UserProxy.findUsersByRole(ROLE.CHECKER, function (err, users) {
+        if (err) {
+            return next(err);
+        } else {
+
+            var data = {};
+            data.count = users.length;
+            data.users = [users.length];
+
+            for (var i = 0; i < users.length; ++i) {
+                var resUser = {
+                    id: users[i]._id,
+                    username: users[i].username
+                };
+                data.users[i] = resUser;
+            }
+
+            res.reply(0, "获取成功", data);
+        }
+    });
+};

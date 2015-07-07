@@ -33,7 +33,7 @@ exports.getMailDetail = function(req, res, next) {
             mail.readers.indexOf(req.user._id) || req.user.role == ROLE.CHECKER) {
 
 
-            if (!mail.html && !mail.text) {
+            if (mail.html!=undefined || mail.text!=undefined) {
                 res.reply(0, 'success', mail);
 
 

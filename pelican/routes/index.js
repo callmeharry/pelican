@@ -86,12 +86,16 @@ router.post('/mailTag/delete', mailTagController.deleteMailTag);
 
 
 /* 邮件处理人员 */
-router.get('/email/list', handlerController.getEmailList);
-router.post('/email/reply', handlerController.replyOrSendEmail);
-router.post('/email/manage', handlerController.manageEmail);
-router.post('/email/send', handlerController.replyOrSendEmail);
-router.get('/email/managed', handlerController.getManagedEmailList);
-router.post('/email/return', handlerController.returnEmail);
+router.get('/handler/unseen', handlerController.getUnseenEmailList);
+router.post('/handler/reply', handlerController.sendEmail);
+router.post('/handler/manage', handlerController.manageEmail);
+router.post('/handler/send', handlerController.sendEmail);
+router.get('/handler/managed', handlerController.getManagedEmailList);
+router.post('/handler/return', handlerController.returnEmail);
+router.get('/handler/checker', userController.getAllChecker);
+router.get('/handler/returned', handlerController.getReturnedEmailList);
+router.get('/handler/checking', handlerController.getCheckingEmailList);
+router.get('/handler/sent', handlerController.getSentEmailList);
 
 
 /*邮件审核人员*/

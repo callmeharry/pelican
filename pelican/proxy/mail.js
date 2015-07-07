@@ -6,18 +6,17 @@ var MailConfig = require("../proxy").MailConfig;
 exports.newAndSave = function (mail, callback) {
 
     if (mail) {
-        MailModel.findOne({'messageId':mail.messageId},function(err,data){
-
-            console.log(data);
-            if(err||(data.length!=undefined&&data.length>0)){
-                callback(null,null);
+        MailModel.findOne({'messageId': mail.messageId}, function (err, data) {
+            if (err || data != undefined || data.length > 0) {
+                return;
             }
-            else{
+            else {
                 var mailModel = new MailModel(mail);
                 mailModel.save(callback);
             }
         });
-    } else {
+    }
+    else {
         return callback(null, null);
     }
 
@@ -64,7 +63,7 @@ function getMailList(query, page, limit, columns, callback) {
  * @param callback
  */
 exports.findHandlerMailList = function (query, page, callback) {
-    return getMailList(query, page, 15, 'messageId subject receivedDate from isHandled', callback);
+    return getMailList(query, page, 15, 'messageId subject date from isHandled', callback);
 };
 
 /**
