@@ -98,6 +98,31 @@ exports.addUser = function (req, res, next) {
     });
 };
 
+
+exports.deleteUser = function (req, res, next) {
+    if (req.user.role !== ROLE.ADMIN) {
+        res.reply(101, "没有权限");
+        return;
+    }
+
+    var id = validator.trim(req.body.id);
+    if (!id) {
+        res.reply(102, "invaid input");
+    }
+
+    UserProxy.deleteUserById(id, function (err, user) {
+        if (err) {
+            next(err);
+        } else {
+            if (user) {
+                res.reply(0, "删除成功");
+            } else {
+                res.reply(101, "用户不存在");
+            }
+        }
+    });
+};
+
 exports.getAllHandlers = function (req, res, next) {
     if (req.user.role !== ROLE.DISTRIBUTOR) {
         res.reply(101, "没有权限");

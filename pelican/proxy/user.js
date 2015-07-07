@@ -95,6 +95,7 @@ exports.getUsersByQuery = function (query, opt, callback) {
     UserModel.find(query, '', opt, callback);
 };
 
-
-
+exports.deleteUserById = function (id, callback) {
+    UserModel.findOneAndRemove({'_id': id}, callback);
+};
 
