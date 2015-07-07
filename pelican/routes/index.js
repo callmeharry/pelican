@@ -3,11 +3,13 @@ var router = express.Router();
 
 var controller = require('../controllers');
 var userController = controller.user;
-var handlerController = require('../controllers/handler');
-var mailController = require('../controllers/mail');
+var handlerController = controller.handler;
+var mailController = controller.mail;
 var mailConfigController = controller.mailConfig;
 var distributorController = controller.distributor;
 var mailTagController = controller.mailTag;
+var checkController = controller.check;
+
 
 var testApi = require('../test/api');
 
@@ -94,7 +96,10 @@ router.post('/email/return', handlerController.returnEmail);
 
 
 /*邮件审核人员*/
-
+router.get('/check/unCheckList', checkController.getUnCheckList);
+router.get('/check/checkedList', checkController.getCheckedList);
+router.get('/check/getMailInfo', mailController.getMailDetail);
+router.post('check/setCheckStatus', checkController.setCheckStatus);
 
 
 module.exports = router;

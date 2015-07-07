@@ -7,4 +7,5 @@ exports.mail = require('./mail');
 exports.mailConfig =require("./mailConfig");
 exports.mailTag = require("./mailTag");
 exports.distributor = require('./distributor');
+exports.check = require('./check');
 
