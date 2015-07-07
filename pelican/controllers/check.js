@@ -71,8 +71,8 @@ exports.getCheckedList = function (req, res, next) {
                 mailId: item._id,
                 title: item.subject,
                 receiveName: item.from,
-                receiveTime: item.receivedDate,
-                fromNow: moment(results[i].receivedDate).locale('zh-cn').toNow(),
+                receiveTime: item.date,
+                fromNow: moment(item.date).locale('zh-cn').toNow(),
                 isChecked: item.isChecked
             });
         }
