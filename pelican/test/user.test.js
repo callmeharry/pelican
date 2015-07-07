@@ -27,8 +27,7 @@ describe("user", function () {
             })
             .end(function (err, res) {
                 should.not.exists(err);
-                // res.body.message.should.eql('success');
-                //   console.log(res.body.data);
+
                 done();
             });
     });
