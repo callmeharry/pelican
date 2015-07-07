@@ -6,6 +6,7 @@
 var proxy = require('../proxy');
 var MailProxy = proxy.Mail;
 var moment = require('moment');
+var validator = require('validator');
 
 
 exports.getUnCheckList = function (req, res, next) {
@@ -81,4 +82,36 @@ exports.getCheckedList = function (req, res, next) {
 
 };
 
+exports.setCheckStatus = function (req, res, next) {
+    var mailId = req.body.mailId;
+    var check = req.body.check;
 
+    if (check == 'passed') {  //审核通过
+        MailProxy.updateMailById(mailId, {isChecked: "checked"}, function (err) {
+            if (err) return next(err);
+
+            //todo 发送邮件
+
+            res.reply(0, "发送成功")
+
+        });
+
+
+    } else if (check == 'failed') {    //审核未通过
+
+        var checkContent = validator.trim(req.body.checkContent) || '';
+
+        var ups = {isChecked: "returned"};
+
+        if (checkContent) ups['checkContent'] = checkContent;
+
+
+        MailProxy.updateMailById(mailId, ups, function (err) {
+            if (err) return next(err);
+            res.reply(0, '退回成功');
+
+        });
+
+    }
+
+};
