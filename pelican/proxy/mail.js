@@ -56,7 +56,7 @@ function getMailList(query, page, limit, columns, callback) {
  * @param callback
  */
 exports.findHandlerMailList = function (query, page, callback) {
-    return getMailList(query, page, 15, 'messageId subject receivedDate from isHandled', callback);
+    return getMailList(query, page, 15, 'messageId subject date from isHandled', callback);
 };
 
 /**
