@@ -40,8 +40,17 @@ exports.distribute = function (req, res, next) {
     var mailId = validator.trim(req.body.mailId);
     var handlerId = validator.trim(req.body.handlerId);
     var readerIds = validator.trim(req.body.readerIds);
+    var handleDeadline = validator.trim(req.body.deadline);
 
-    MailProxy.updateMailById(mailId, {handler: handlerId, readers: readerIds, isDistributed: true}, function (err) {
+    MailProxy.updateMailById(
+        mailId,
+        {
+            handler: handlerId,
+            readers: readerIds,
+            isDistributed: true,
+            handleDeadline: new Date(handleDeadline)
+        },
+        function (err) {
         if (err) return next(err);
         res.reply(101, "邮件分发成功");
 
