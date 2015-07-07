@@ -34,19 +34,26 @@ exports.addMailTag = function (req, res, next) {
 
     var tagName = validator.trim(req.body.tagName);
 
-    MailTagProxy.findOrNew(tagName, function (err, mailTag) {
+    MailTagProxy.findMailTagByName(tagName, function (err, mailTag) {
         if (err) {
-            next(err);
-        } else {
-            if (!mailTag.isNew) {
-                res.reply(101, "邮件标签已存在");
-            } else {
-                var data = {};
-                data.id = mailTag._id;
-                data.tagName = mailTag.name;
-                res.reply(0, "添加成功", data);
-            }
+            return next(err);
         }
+
+        if (mailTag) {
+            res.reply(101, "邮件标签已存在");
+            return;
+        }
+
+        MailTagProxy.newAndSave(tagName, function (err, mailTag) {
+            if (err) {
+                return next(err);
+            }
+
+            var data = {};
+            data.id = mailTag._id;
+            data.tagName = mailTag.name;
+            res.reply(0, "添加成功", data);
+        });
     });
 
 };
