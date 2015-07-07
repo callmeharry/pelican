@@ -5,6 +5,7 @@
 
 var proxy = require('../proxy');
 var MailProxy = proxy.Mail;
+var moment = require('moment');
 
 
 exports.getCheckList = function (req, res, next) {
@@ -15,6 +16,21 @@ exports.getCheckList = function (req, res, next) {
 
     MailProxy.getCheckMailList(query, page, function (err, results, pageCount, itemCount) {
         if (err) return next(err);
+
+        var data = {};
+        data[pageCount] = pageCount;
+
+        var list = [];
+
+        for (var item in results) {
+            list.push({
+                mailId: item._id,
+                title: item.subject,
+                senderName: item.from,
+                receiveTime: item.receivedDate,
+                fromNow: moment(results[i].receivedDate).locale('zh-cn').toNow()
+            });
+        }
 
     });
 
