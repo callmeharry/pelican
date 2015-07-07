@@ -82,6 +82,7 @@ function getOriginMail() {
         timmer = setInterval(function () {
             var now = new Date();
             var since = new Date(Date.parse(now)-120000);
+            console.log(since);
             getConfig(function (err, data) {
                 console.log("start to listening mail");
                 if (data) {

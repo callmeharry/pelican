@@ -7,6 +7,8 @@ exports.newAndSave = function (mail, callback) {
 
     if (mail) {
         MailModel.findOne({'messageId':mail.messageId},function(err,data){
+            console.log(err);
+            console.log(data);
             if(err||(data&&data.length>0)){
 
             }
@@ -49,7 +51,7 @@ function getMailList(query, page, limit, columns, callback) {
             limit: resultsPerPage,
             columns: columns,
             sortBy: {
-                receivedDate: -1
+                date: -1
             }
         },
         callback

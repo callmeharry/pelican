@@ -6,6 +6,7 @@ var MailProxy = require('../proxy').Mail;
 var ROLE = require('../models/user').ROLE;
 var DISTRIBUTE_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
 var validator = require('validator');
+var moment = require('moment');
 
 exports.getMailList = function (req, res, next) {
     if (req.user.role !== ROLE.DISTRIBUTOR) {
@@ -22,6 +23,9 @@ exports.getMailList = function (req, res, next) {
         if (err) {
             next(err);
         } else {
+            for(var i=0;i<results.length;i++){
+                results[i].date=moment(results[i].date).locale('zh-cn').toNow();
+            }
             var data = {};
             data.page = pageCount;
             data.pageCount = pageCount;
