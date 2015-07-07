@@ -11,7 +11,7 @@ exports.newAndSave = function (mail, callback) {
             console.log(data);
             console.log(data.length);
             console.log(data==true);
-            if(err||data.length>0){
+            if(err||data.length!=undefined&&data.length>0){
                 callback(null,null);
             }
             else{
