@@ -62,6 +62,8 @@ router.use(function (req, res, next) {
 
 /*---------user------------*/
 
+router.post('/admin/user/create', userController.addUser);
+
 router.post('/login', userController.login);
 
 router.get('/distribution/handlers', userController.getAllHandlers);
