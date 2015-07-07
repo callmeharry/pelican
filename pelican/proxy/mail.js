@@ -69,7 +69,7 @@ exports.getAllMailList = function (page, callback) {
         {},
         page,
         30,
-        'messageId subject receivedDate from distributeStatus',
+        'messageId subject date from distributeStatus',
         callback
     );
 };
