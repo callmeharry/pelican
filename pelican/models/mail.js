@@ -65,7 +65,7 @@ var MailSchema = new Schema({
     }],
 
     // 邮件分发状态，有3类：new:待分发；distributed: 已分发；returned: 已退回
-    distributeStatus: {type: String, default: 'new'},
+    distributeStatus: {type: String, default: DISTRIBUTE_STATUS.NEW},
 
     isHandled: {type: Boolean, default: false}, // 邮件是否已经处理
 

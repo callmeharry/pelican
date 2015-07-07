@@ -48,6 +48,81 @@ exports.login = function (req, res, next) {
     });
 };
 
+exports.addUser = function (req, res, next) {
+    if (req.user.role !== ROLE.ADMIN) {
+        res.reply(101, "没有权限");
+        return;
+    }
+
+    var username = validator.trim(req.body.username);
+    var password = validator.trim(req.body.password);
+    var role = validator.trim(req.body.role);
+
+
+    // 判断发送的 role 参数是否合法
+
+    var isRoleValid = false;
+    for (var property in ROLE) {
+        if (ROLE.hasOwnProperty(property) && role == ROLE[property]) {
+            isRoleValid = true;
+            break;
+        }
+    }
+
+    if (!isRoleValid) {
+        res.reply(103, "不存在的用户角色");
+        return;
+    }
+
+    UserProxy.findUserByName(username, function (err, user) {
+        if (err) {
+            return next(err);
+        }
+
+        if (user) {
+            res.reply(102, "用户名已存在");
+            return;
+        }
+
+        UserProxy.newAndSave(username, password, role, function (err, user) {
+            if (err) {
+                return next(err);
+            }
+
+            var data = {};
+            data.id = user._id;
+            data.username = user.username;
+            data.role = user.role;
+            res.reply(0, "添加成功", data);
+        });
+    });
+};
+
+
+exports.deleteUser = function (req, res, next) {
+    if (req.user.role !== ROLE.ADMIN) {
+        res.reply(101, "没有权限");
+        return;
+    }
+
+    var id = validator.trim(req.body.id);
+    if (!id) {
+        res.reply(102, "invaid input");
+    }
+
+    UserProxy.deleteUserById(id, function (err, user) {
+        if (err) {
+            next(err);
+        } else {
+            if (user) {
+                res.reply(0, "删除成功");
+            } else {
+                res.reply(101, "用户不存在");
+            }
+        }
+    });
+};
+
 exports.getAllHandlers = function (req, res, next) {
     if (req.user.role !== ROLE.DISTRIBUTOR) {
         res.reply(101, "没有权限");

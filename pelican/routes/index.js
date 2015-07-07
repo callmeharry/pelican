@@ -62,6 +62,10 @@ router.post('/test', testApi.testApi);
 
 /*---------user------------*/
 
+router.post('/admin/user/create', userController.addUser);
+router.post('/admin/user/delete', userController.deleteUser);
+
+router.post('/login', userController.login);
 
 router.get('/distribution/handlers', userController.getAllHandlers);
 
