@@ -80,7 +80,7 @@ exports.sendEmail = function (req, res, next) {
         mail.distributedStatus = DISTRIBUTED_STATUS.NONE;
         mail.messageId = Date.now().toLocaleString() + '@pelican';
         mail.isHandled = true;
-        if (checker != '')
+        if (checker != '0')
             mail.isChecked = CHECK_STATUS.UNCHECKED;
         else
             mail.isChecked = CHECK_STATUS.CHECKED;
