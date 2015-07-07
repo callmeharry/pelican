@@ -47,7 +47,12 @@ var MailSchema = new Schema({
     }],
 
     isDistributed: {type: Boolean, default: false}, // 邮件是否已经分发
-    isHandled: {type: Boolean, default: false} // 邮件是否已经处理
+    isHandled: {type: Boolean, default: false}, // 邮件是否已经处理
+
+    isChecked: {type: Boolean, default: false},    //邮件是否已经审核
+
+    checkMan: {type: String},
+    checkContent: {type: String}
 
 });
 

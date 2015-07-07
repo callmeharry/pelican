@@ -25,19 +25,33 @@ exports.testApi = function (req, res, next) {
     //res.reply(0,"success");
     //
 
-    var id = "559a4241f1dccecc331f392a";
-    /**
+    var id = "559a674b0544dff55abc6a33";
+
      MailProxy.findMailById(id, function(err, mail){
-        if(err) return next(err);
+         if (err) return next(err);
 
-        var receivedDate = mail.receivedDate;
-        console.log(receivedDate.toLocaleString());
+         if (mail) {
+             var receivedDate = mail['receivedDate'];
 
-        res.reply(0, 'succcess', mail);
+
+             var time = moment(receivedDate);
+             console.log(time.toLocaleString());
+
+             var change = time.locale('zh-cn').toNow();
+
+
+             console.log(change);
+
+             res.reply(0, "success", mail);
+
+         } else {
+             res.reply(0, 'no such mail');
+         }
+
+
 
     });
-     **/
-    res.reply(0, "success");
+
 
     //
     //mailFs.readMailConfig(function(err, data){
