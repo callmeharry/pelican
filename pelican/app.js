@@ -13,7 +13,9 @@ var app = express();
 
 var jwt = require('jsonwebtoken');
 
-//app.set('env', 'development');
+app.set('env', 'development');
+//app.set('env', 'production');
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
