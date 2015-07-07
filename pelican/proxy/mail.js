@@ -59,17 +59,30 @@ exports.findHandlerMailList = function (query, page, callback) {
 };
 
 /**
- * 获取所有的邮件列表，分页显示
+ * 获取邮件分发人员的邮件列表，分页显示
+ * @param type
  * @param page 第几页
  * @param callback
  * @returns {*}
  */
-exports.getAllMailList = function (page, callback) {
+exports.getDistributorMailListByType = function (type, page, callback) {
     return getMailList(
-        {},
+        {distributeStatus: type},
         page,
-        30,
-        'messageId subject date from distributeStatus',
+        15,
+        'messageId subject date from',
+        callback
+    );
+};
+
+exports.getDistributorOutDatedMailList = function (page, callback) {
+    return getMailList(
+        {
+            handleDeadline: {$gt: Date.now()}
+        },
+        page,
+        15,
+        'messageId subject date from',
         callback
     );
 };
@@ -83,7 +96,7 @@ exports.getAllMailList = function (page, callback) {
  */
 
 exports.getCheckMailList = function (query, page, callback) {
-    return getMailList(query, page, 30, 'messageId subject receivedDate from isChecked', callback);
+    return getMailList(query, page, 30, 'messageId subject date from', callback);
 };
 
 
