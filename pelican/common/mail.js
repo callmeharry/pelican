@@ -157,14 +157,14 @@ function mail(option) {
             });
             imapconn.once('error', this._onerror);
             imapconn.once('ready',function(){
-                this._openbox(searchFilter);
+                self._openbox(searchFilter);
 
             });
             imapconn.connect();
          }
          else
          {
-            this._openbox(searchFilter);
+             self._openbox(searchFilter);
          }
      };
 
@@ -188,14 +188,14 @@ function mail(option) {
             });
             imapconn.once('error', this._onerror);
             imapconn.once('ready',function(){
-                this._getFullMail(messageId);
+                self._getFullMail(messageId);
 
             });
             imapconn.connect();
         }
         else
         {
-            this._getFullMail(messageId);
+            self._getFullMail(messageId);
         }
     };
 
@@ -206,6 +206,7 @@ function mail(option) {
 
 
     mail.prototype._openbox =function(searchFilter){
+        var self = this;
         imapconn.openBox(this._mailbox, false,
             function(err, box){
                 if (err) throw err;
@@ -231,6 +232,7 @@ function mail(option) {
     };
 
     mail.prototype._getFullMail=function(messageId){
+        var self = this;
         imapconn.openBox(this._mailbox, false,
             function(err, box){
                 if (err) throw err;
