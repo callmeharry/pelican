@@ -24,7 +24,7 @@ var MailSchema = new Schema({
     text: {type: String},
     subject: {type: String},
     
-    messageId: {type: String},
+    messageId: {type: String, unique: true},
 
     priority: {type: String},
     from: [{
