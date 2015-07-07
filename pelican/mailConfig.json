@@ -1,8 +1,0 @@
-{
-  "smtp": "smtp.buaa.edu.cn",
-  "smtpPort": "465",
-  "imap": "mail.buaa.edu.cn",
-  "imapPort": "993",
-  "mailAddress": "gyxln@buaa.edu.cn",
-  "password": "69568440"
-}
