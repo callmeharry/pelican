@@ -101,4 +101,4 @@ function getOriginMail() {
 }
 
 
-exports.getOriginMail = getOriginMail;
+exports.getOriginMail = getOriginMail();
