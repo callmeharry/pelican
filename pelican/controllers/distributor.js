@@ -14,8 +14,11 @@ exports.getMailList = function (req, res, next) {
     }
 
     var page = req.query.page || 1;
+    var type = validator.trim(req.query.type) || DISTRIBUTE_STATUS.NEW;
 
-    MailProxy.getAllMailList(page, function (err, results, pageCount, itemCount) {
+    var query = {};
+
+    function callback(err, results, pageCount, itemCount) {
         if (err) {
             next(err);
         } else {
@@ -27,7 +30,18 @@ exports.getMailList = function (req, res, next) {
 
             res.reply(0, '邮件列表获取成功', data);
         }
-    });
+    }
+
+
+    if (type == 'outdated') {
+        MailProxy.getDistributorOutDatedMailList(page, callback);
+    } else {
+        if (!DISTRIBUTE_STATUS.hasOwnProperty(type)) {
+            // 若果type不合法，默认获取未分发的邮件
+            type = DISTRIBUTE_STATUS.NEW;
+        }
+        MailProxy.getDistributorMailListByType(type, page, callback);
+    }
 };
 
 
