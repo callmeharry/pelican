@@ -212,7 +212,7 @@ function mail(option) {
                 if (err) throw err;
                 imapconn.search(searchFilter, function(err, results) {
                     if (err) throw err;
-                    var f = imapconn.fetch(results, { bodies: ''});
+                    var f = imapconn.fetch(results, { bodies: 'HEADER'});
                     f.on('message', function(msg) {
                         var mailparser = new MailParser();
                         msg.on('body', function(stream, info) {
@@ -238,7 +238,7 @@ function mail(option) {
                 if (err) throw err;
                 imapconn.search(["header","message-id",messageId], function(err, results) {
                     if (err) throw err;
-                    var f = imapconn.fetch(results, { bodies: 'HEADER' });
+                    var f = imapconn.fetch(results, { bodies: '' });
                     f.on('message', function(msg) {
                         var mailparser = new MailParser();
                         msg.on('body', function(stream, info) {
