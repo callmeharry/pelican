@@ -212,21 +212,23 @@ function mail(option) {
                 if (err) throw err;
                 imapconn.search(searchFilter, function(err, results) {
                     if (err) throw err;
-                    var f = imapconn.fetch(results, { bodies: 'HEADER'});
-                    f.on('message', function(msg) {
-                        var mailparser = new MailParser();
-                        msg.on('body', function(stream, info) {
-                            stream.pipe( mailparser );
-                            mailparser.on("end",function( mail ){
-                                mail.messageId=mail.headers["message-id"];
-                                delete mail.headers;
-                                self._cb(mail);
-                            })
+                    if(results.length>0) {
+                        var f = imapconn.fetch(results, {bodies: 'HEADER'});
+                        f.on('message', function (msg) {
+                            var mailparser = new MailParser();
+                            msg.on('body', function (stream, info) {
+                                stream.pipe(mailparser);
+                                mailparser.on("end", function (mail) {
+                                    mail.messageId = mail.headers["message-id"];
+                                    delete mail.headers;
+                                    self._cb(mail);
+                                })
+                            });
                         });
-                    });
-                    f.once('error', function(err) {
-                        console.log('Fetch error: ' + err);
-                    });
+                        f.once('error', function (err) {
+                            console.log('Fetch error: ' + err);
+                        });
+                    }
                 });
             });
     };
@@ -238,22 +240,24 @@ function mail(option) {
                 if (err) throw err;
                 imapconn.search([["header","message-id",messageId]], function(err, results) {
                     if (err) throw err;
-                    var f = imapconn.fetch(results, { bodies: '' });
-                    f.on('message', function(msg) {
-                        var mailparser = new MailParser();
-                        msg.on('body', function(stream, info) {
-                            stream.pipe( mailparser );
-                            mailparser.on("end",function( mail ){
-                                mail.messageId=mail.headers["message-id"];
-                                delete mail.headers;
-                                self._cb(mail);
-                                console.log(mail);
-                            })
+                    if(results.length>0){
+                        var f = imapconn.fetch(results, { bodies: '' });
+                        f.on('message', function(msg) {
+                            var mailparser = new MailParser();
+                            msg.on('body', function(stream, info) {
+                                stream.pipe( mailparser );
+                                mailparser.on("end",function( mail ){
+                                    mail.messageId=mail.headers["message-id"];
+                                    delete mail.headers;
+                                    self._cb(mail);
+                                    console.log(mail);
+                                })
+                            });
                         });
-                    });
-                    f.once('error', function(err) {
-                        console.log('Fetch error: ' + err);
-                    });
+                        f.once('error', function(err) {
+                            console.log('Fetch error: ' + err);
+                        });
+                    }
                 });
             });
     };
