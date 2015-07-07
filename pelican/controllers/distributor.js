@@ -6,6 +6,7 @@ var MailProxy = require('../proxy').Mail;
 var ROLE = require('../models/user').ROLE;
 var DISTRIBUTE_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
 var validator = require('validator');
+var moment = require('moment');
 
 exports.getMailList = function (req, res, next) {
     if (req.user.role !== ROLE.DISTRIBUTOR) {
