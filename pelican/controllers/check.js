@@ -17,8 +17,13 @@ exports.getCheckList = function (req, res, next) {
     MailProxy.getCheckMailList(query, page, function (err, results, pageCount, itemCount) {
         if (err) return next(err);
 
+        if (!results) {
+            res.reply(101, '没有邮件');
+            return;
+        }
+
         var data = {};
-        data[pageCount] = pageCount;
+        data['pageCount'] = pageCount;
 
         var list = [];
 
@@ -31,13 +36,17 @@ exports.getCheckList = function (req, res, next) {
                 fromNow: moment(results[i].receivedDate).locale('zh-cn').toNow()
             });
         }
+        data.list = list;
+
+        res.reply(0, 'success', data);
 
     });
 
-
-
-
 };
+
+
+
+
 
 
 
