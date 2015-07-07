@@ -206,6 +206,7 @@ function mail(option) {
 
 
     mail.prototype._openbox =function(searchFilter){
+        var self = this;
         imapconn.openBox(this._mailbox, false,
             function(err, box){
                 if (err) throw err;
@@ -231,6 +232,7 @@ function mail(option) {
     };
 
     mail.prototype._getFullMail=function(messageId){
+        var self = this;
         imapconn.openBox(this._mailbox, false,
             function(err, box){
                 if (err) throw err;
