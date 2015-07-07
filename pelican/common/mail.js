@@ -157,14 +157,14 @@ function mail(option) {
             });
             imapconn.once('error', this._onerror);
             imapconn.once('ready',function(){
-                this._openbox(searchFilter);
+                self._openbox(searchFilter);
 
             });
             imapconn.connect();
          }
          else
          {
-            this._openbox(searchFilter);
+             self._openbox(searchFilter);
          }
      };
 
@@ -188,14 +188,14 @@ function mail(option) {
             });
             imapconn.once('error', this._onerror);
             imapconn.once('ready',function(){
-                this._getFullMail(messageId);
+                self._getFullMail(messageId);
 
             });
             imapconn.connect();
         }
         else
         {
-            this._getFullMail(messageId);
+            self._getFullMail(messageId);
         }
     };
 
