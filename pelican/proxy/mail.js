@@ -8,7 +8,7 @@ exports.newAndSave = function (mail, callback) {
     if (mail) {
         MailModel.findOne({'messageId':mail.messageId},function(err,data){
             if(err||(data&&data.length>0)){
-                return ;
+
             }
             else{
                 var mailModel = new MailModel(mail);
@@ -103,7 +103,7 @@ exports.getDistributorOutDatedMailList = function (page, callback) {
  */
 
 exports.getCheckMailList = function (query, page, callback) {
-    return getMailList(query, page, 30, 'messageId subject date from', callback);
+    return getMailList(query, page, 30, 'messageId subject date from isChecked', callback);
 };
 
 
