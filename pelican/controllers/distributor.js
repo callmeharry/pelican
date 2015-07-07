@@ -17,23 +17,29 @@ exports.getMailList = function (req, res, next) {
     var page = req.query.page || 1;
     var type = validator.trim(req.query.type) || DISTRIBUTE_STATUS.NEW;
 
-    var query = {};
 
     function callback(err, results, pageCount, itemCount) {
         if (err) {
             next(err);
         } else {
-            var re = results;
-            for(var i=0;i<re.length;i++){
-                var d = re[i].date;
-                re[i].date= d.getYear()+"年"+ d.getMonth()+"月"+ d.getDate()+"日 "+ d.getHours()+":"+ d.getMinutes()+":"+ d.getSeconds();
+            var items = new Array(results.length);
+            for (var i = 0; i < results.length; i++) {
+                var item = {};
+
+                item.date = moment(results[i].date).locale('zh-cn').format('lll');
+                item._id = results[i]._id;
+                item.subject = results[i].subject;
+                item.messageId = results[i].messageId;
+                item.from = results[i].from;
+
+                items[i] = item;
             }
 
             var data = {};
             data.page = pageCount;
             data.pageCount = pageCount;
             data.count = itemCount.length;
-            data.items = re;
+            data.items = items;
 
             res.reply(0, '邮件列表获取成功', data);
         }
@@ -73,10 +79,10 @@ exports.distribute = function (req, res, next) {
             handleDeadline: new Date(handleDeadline)
         },
         function (err) {
-        if (err) return next(err);
-        res.reply(101, "邮件分发成功");
+            if (err) return next(err);
+            res.reply(101, "邮件分发成功");
 
-    });
+        });
 
 };
 
