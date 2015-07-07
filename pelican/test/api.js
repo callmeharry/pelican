@@ -75,7 +75,7 @@ exports.testApi = function (req, res, next) {
     var time = moment();
     console.log(time.toLocaleString());
 
-    var change = time.locale('zh-cn').format('llll');
+    var change = time.locale('zh-cn').format('ll');
 
     res.reply(0, 'success', {change: change.toLocaleString()});
 };
