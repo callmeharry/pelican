@@ -9,6 +9,7 @@ var moment = require('moment');
 var validator = require('validator');
 
 
+
 exports.getUnCheckList = function (req, res, next) {
     var user = req.user;
     var page = req.query.page;
@@ -32,9 +33,9 @@ exports.getUnCheckList = function (req, res, next) {
             list.push({
                 mailId: item._id,
                 title: item.subject,
-                senderName: item.from,
-                receiveTime: item.receivedDate,
-                fromNow: moment(results[i].receivedDate).locale('zh-cn').toNow()
+                receiver: item.to,
+                receiveTime: item.date,
+                fromNow: moment(item.date).locale('zh-cn').toNow()
             });
         }
         data.list = list;
@@ -71,7 +72,8 @@ exports.getCheckedList = function (req, res, next) {
                 title: item.subject,
                 receiveName: item.from,
                 receiveTime: item.receivedDate,
-                fromNow: moment(results[i].receivedDate).locale('zh-cn').toNow()
+                fromNow: moment(results[i].receivedDate).locale('zh-cn').toNow(),
+                isChecked: item.isChecked
             });
         }
 
