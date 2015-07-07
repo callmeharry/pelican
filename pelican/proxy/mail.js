@@ -94,10 +94,10 @@ exports.returnMail = function (id, callback) {
     this.findMailById(id, function (err, mail) {
         if (err)
             return callback(err, null);
-        mail.isHandled = false;
+        mail.isDistributed = false;
+        mail.handler = '';
         mail.save(callback);
     })
 };
-
 
 

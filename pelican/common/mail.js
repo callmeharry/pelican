@@ -74,8 +74,6 @@ function mail(option) {
                 pass: this.password
             }
         });
-        if(this.transporter==null)
-            return {success:0,error:"please start smtp again"};
         this.transporter.sendMail(mailOptions,callback);
     };
 
