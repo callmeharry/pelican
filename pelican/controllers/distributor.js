@@ -20,6 +20,7 @@ exports.getMailList = function (req, res, next) {
         } else {
             var data = {};
             data.page = pageCount;
+            data.pageCount = pageCount;
             data.count = itemCount.length;
             data.items = results;
 

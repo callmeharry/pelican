@@ -74,8 +74,6 @@ function mail(option) {
                 pass: this.password
             }
         });
-        if(this.transporter==null)
-            return {success:0,error:"please start smtp again"};
         this.transporter.sendMail(mailOptions,callback);
     };
 
@@ -143,97 +141,119 @@ function mail(option) {
          this._cb =cb;
          this._mailbox = mailbox;
          this._onerror = onerror;
-         this.getImap(searchFilter);
-
-     };
-
-
-     mail.prototype.getImap = function(searchFilter){
-        var self= this;
-
-        if(!imapconn){
-
+         var self= this;
+         if(!imapconn){
             if(!this.imap||!this.imapPort||!this.mailAddress||!this.password){
                 return {success:0,error:"Error,mail option is not enough"};
             }
-
             imapconn= new Imap({
                 user:this.mailAddress,
                 password:this.password,
                 host:this.imap,
                 port:this.imapPort,
                 tls: true,
-                tlsOptions: { rejectUnauthorized: false }
+                tlsOptions: { rejectUnauthorized: false },
+                attachments:false
             });
-
-
-
             imapconn.once('error', this._onerror);
-
             imapconn.once('ready',function(){
-
-                imapconn.openBox(self._mailbox,false,
-                    function(err, box){
-                        if (err) throw err;
-                        imapconn.search(searchFilter, function(err, results) {
-                            if (err) throw err;
-                            var f = imapconn.fetch(results, { bodies: '' });
-                            f.on('message', function(msg) {
-                                var mailparser = new MailParser();
-                                msg.on('body', function(stream, info) {
-                                    stream.pipe( mailparser );
-                                    mailparser.on("end",function( mail ){
-                                        delete mail.headers;
-                                        self._cb(mail);
-                                    })
-                                });
-                            });
-                            f.once('error', function(err) {
-                                console.log('Fetch error: ' + err);
-                            });
-                        });
-                    });
-
+                this._openbox(searchFilter);
 
             });
-
             imapconn.connect();
+         }
+         else
+         {
+            this._openbox(searchFilter);
+         }
+     };
 
+    mail.prototype.getFullMail=function(mailbox,messageId,cb,onerror) {
+        this._cb =cb;
+        this._mailbox = mailbox;
+        this._onerror = onerror;
+        var self= this;
+        if(!imapconn){
+            if(!this.imap||!this.imapPort||!this.mailAddress||!this.password){
+                return {success:0,error:"Error,mail option is not enough"};
+            }
+            imapconn= new Imap({
+                user:this.mailAddress,
+                password:this.password,
+                host:this.imap,
+                port:this.imapPort,
+                tls: true,
+                tlsOptions: { rejectUnauthorized: false },
+                attachments:false
+            });
+            imapconn.once('error', this._onerror);
+            imapconn.once('ready',function(){
+                this._getFullMail(messageId);
 
+            });
+            imapconn.connect();
         }
         else
         {
-            imapconn.openBox(this._mailbox, false,
-                function(err, box){
-                    if (err) throw err;
-                    imapconn.search(searchFilter, function(err, results) {
-                        if (err) throw err;
-                        var f = imapconn.fetch(results, { bodies: '' });
-                        f.on('message', function(msg) {
-                            var mailparser = new MailParser();
-                            msg.on('body', function(stream, info) {
-                                stream.pipe( mailparser );
-                                mailparser.on("end",function( mail ){
-                                    delete mail.headers;
-                                    self._cb(mail);
-                                })
-                            });
-                        });
-                        f.once('error', function(err) {
-                            console.log('Fetch error: ' + err);
-                        });
-                    });
-                });
-
+            this._getFullMail(messageId);
         }
-
-     };
+    };
 
      mail.prototype.killImap= function(){
         imapconn.end();
         imapconn=undefined;
      };
 
+
+    mail.prototype._openbox =function(searchFilter){
+        imapconn.openBox(this._mailbox, false,
+            function(err, box){
+                if (err) throw err;
+                imapconn.search(searchFilter, function(err, results) {
+                    if (err) throw err;
+                    var f = imapconn.fetch(results, { bodies: ''});
+                    f.on('message', function(msg) {
+                        var mailparser = new MailParser();
+                        msg.on('body', function(stream, info) {
+                            stream.pipe( mailparser );
+                            mailparser.on("end",function( mail ){
+                                mail.messageId=mail.headers["message-id"];
+                                delete mail.headers;
+                                self._cb(mail);
+                            })
+                        });
+                    });
+                    f.once('error', function(err) {
+                        console.log('Fetch error: ' + err);
+                    });
+                });
+            });
+    };
+
+    mail.prototype._getFullMail=function(messageId){
+        imapconn.openBox(this._mailbox, false,
+            function(err, box){
+                if (err) throw err;
+                imapconn.search(["header","message-id",messageId], function(err, results) {
+                    if (err) throw err;
+                    var f = imapconn.fetch(results, { bodies: 'HEADER' });
+                    f.on('message', function(msg) {
+                        var mailparser = new MailParser();
+                        msg.on('body', function(stream, info) {
+                            stream.pipe( mailparser );
+                            mailparser.on("end",function( mail ){
+                                mail.messageId=mail.headers["message-id"];
+                                delete mail.headers;
+                                self._cb(mail);
+                            })
+                        });
+                    });
+                    f.once('error', function(err) {
+                        console.log('Fetch error: ' + err);
+                    });
+                });
+            });
+    };
 
 
 

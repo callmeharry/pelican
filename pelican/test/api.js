@@ -52,18 +52,25 @@ exports.testApi = function (req, res, next) {
 
     });
 
+    //res.reply(0, "success");
 
-    //
-    //mailFs.readMailConfig(function(err, data){
-    //
-    //    if(err) return next(err);
-    //
-    //
-    //    var content = JSON.parse(data);
-    //
-    //    res.reply(0,"success",content);
-    //
-    //});
+
+    var content = {
+        "smtp": "smtp.buaa.edu.cn",
+        "smtpPort": "465",
+        "imap": "mail.buaa.edu.cn",
+        "imapPort": "993",
+        "mailAddress": "gyxln@buaa.edu.cn",
+        "password": "69568440"
+    };
+
+
+    mailFs.writeMailConfig(content, function (err) {
+        if (err) return next(err);
+
+        res.reply(0, 'success');
+
+    });
 };
 
 exports.testMail = function (req, res, next) {

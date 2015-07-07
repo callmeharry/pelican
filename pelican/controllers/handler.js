@@ -52,11 +52,10 @@ exports.replyOrSendEmail = function (req, res, next) {
     var mail = new MailModel();
     MailConfigProxy.getConfig(function (err, data) {
         if (err) {
-            next(err);
+            res.reply(101, '获取企业邮箱信息失败');
+            return;
         }
         data = JSON.parse(data);
-        res.reply(0, 'success', data);
-        return;
         mail.subject = subject;
         mail.text = text;
         mail.html = html;
@@ -64,26 +63,25 @@ exports.replyOrSendEmail = function (req, res, next) {
         for (var i = 0; i < to.length; i++) {
             mail.to[i] = {name: 'noname', address: validator.trim(to[i])}
         }
-        MailProxy.newAndSave(function (err, data) {
+        MailProxy.newAndSave(mail, function (err, data2) {
             if (err) {
                 res.reply(101, '邮件未存储到数据库');
                 return;
             }
             var mailOptions = {
-                from: senderName + ' <' + data.mailAddress + '>',
-                to: to,
-                subject: subject,
-                text: text,
-                html: html
+                from: data.mailAddress, // sender address
+                to: to, // list of receivers
+                subject: subject, // Subject line
+                text: text, // plaintext body
+                html: html // html body
             };
             var mailSender = new MailSender(data);
             mailSender.sendMail(mailOptions, function (err, info) {
                 if (err) {
-                    res.reply(104, '无法连接到smtp服务器');
+                    res.reply(104, err);
                 } else {
-                    req.reply(0, 'success');
+                    res.reply(0, 'success');
                 }
-
             });
         });
     });
@@ -142,7 +140,7 @@ function getEmailListByQuery(query, page, res) {
                 title: results[i].subject,
                 senderName: results[i].from,
                 receiveTime: results[i].receivedDate,
-                fromNow: moment(results[i].receivedDate).locale('zh-cn').toNow()
+                formNow: moment(results[i].receivedDate).locale('zh-cn').toNow()
             };
         }
         data.list = list;
@@ -150,6 +148,11 @@ function getEmailListByQuery(query, page, res) {
     });
 }
 
+/**
+ * 邮件处理人员退回邮件
+ * @param id
+ * @param callback
+ */
 exports.returnEmail = function (req, res, next) {
     var mailId = req.body.mailId;
     MailProxy.returnMail(mailId, function (err) {
@@ -159,4 +162,15 @@ exports.returnEmail = function (req, res, next) {
             res.reply(0, 'success');
         }
     })
-}
+};
+
+
+/**
+ * 邮件处理人员获取审核人员列表
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.getAllChecker = function (req, res, next) {
+
+};
