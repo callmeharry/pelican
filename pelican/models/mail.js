@@ -10,6 +10,13 @@ var DISTRIBUTE_STATUS = {
     RETURNED: 'returned'
 };
 
+var CHECKED_STATUS = {
+    NONE: 'none',
+    UNCHECKED: 'unchecked',
+    CHECKED: 'checked',
+    RETURNED: 'returned'
+};
+
 
 var MailSchema = new Schema({
 
@@ -60,7 +67,7 @@ var MailSchema = new Schema({
 
     isHandled: {type: Boolean, default: false}, // 邮件是否已经处理
 
-    isChecked: {type: Boolean, default: false},    //邮件是否已经审核
+    isChecked: {type: String, default: CHECKED_STATUS.NONE},    //邮件是否已经审核
 
     checkMan: {type: String},
     checkContent: {type: String}

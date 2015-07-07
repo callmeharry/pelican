@@ -5,6 +5,8 @@
 var MailModel = require('../proxy').Mail;
 var validator = require('validator');
 var ROLE = require('../models/user').ROLE;
+var MailControl = require('../common/mail.js');
+var MailConfig = require('../proxy').MailConfig;
 
 /**
  * 获取单个邮件详情
@@ -30,9 +32,28 @@ exports.getMailDetail = function(req, res, next) {
             req.user._id == mail.handler ||
             mail.readers.indexOf(req.user._id)) {
 
+            MailConfig.getConfig(function(err, data) {
+                if (err) next(err);
+                data = JSON.parse(data);
+
+                var mailControl = new MailControl(data);
+
+                mailControl.getFullMail("INBOX",mail.messageId,function(mail){
+
+                    res.reply(0,'success', mail);
+                    MailModel.updateMailById(id,mail,function (err) {
+                        if (err)
+                        console.log(err);
+                    });
+                }, function(err){
+                    if(err)
+                    res.reply(101, '获取失败');
+                });
+
+            });
             console.log(mail['']);
 
-            res.reply(0,'success', mail);
+
         } else {
             res.reply(101, '没有权限');
         }

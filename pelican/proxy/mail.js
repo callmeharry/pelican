@@ -96,7 +96,7 @@ exports.getDistributorOutDatedMailList = function (page, callback) {
  */
 
 exports.getCheckMailList = function (query, page, callback) {
-    return getMailList(query, page, 30, 'messageId subject receivedDate from isChecked', callback);
+    return getMailList(query, page, 30, 'messageId subject receivedDate from', callback);
 };
 
 
