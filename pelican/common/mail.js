@@ -236,7 +236,7 @@ function mail(option) {
         imapconn.openBox(this._mailbox, false,
             function(err, box){
                 if (err) throw err;
-                imapconn.search(["header","message-id",messageId], function(err, results) {
+                imapconn.search([["header","message-id",messageId]], function(err, results) {
                     if (err) throw err;
                     var f = imapconn.fetch(results, { bodies: '' });
                     f.on('message', function(msg) {
