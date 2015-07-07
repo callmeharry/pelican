@@ -46,7 +46,7 @@ exports.setConfig =function(config,callback) {
                         if (err) callback(-1, "internal error");
 
                         callback(0, 'success');
-                        //Mail.clear();
+                        Mail.clear();
                         mailControl.openBox("INBOX", ["ALL"], function (mail) {
                             //console.log(mail);
                             Mail.newAndSave(mail, function (err) {
@@ -90,7 +90,6 @@ function getOriginMail() {
                             if (err) return next(err);
                             console.log("save new mail success");
                         });
-
                     },function(error){
                         console.log(error);
                     });
@@ -102,4 +101,4 @@ function getOriginMail() {
 }
 
 
-exports.getOriginMail = getOriginMail();
+exports.getOriginMail = getOriginMail;
