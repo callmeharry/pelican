@@ -31,14 +31,14 @@ exports.findMailById = function (id, callback) {
  * @param limit 每页数量
  * @param callback
  */
-function getMailList(query, page, limit, callback) {
+function getMailList(query, page, limit, columns, callback) {
     var resultsPerPage = limit || 200;
     MailModel.paginate(
         query,
         {
             page: page,
             limit: resultsPerPage,
-            columns: 'messageId subject receivedDate from isDistributed',
+            columns: columns,
             sortBy: {
                 receivedDate: -1
             }
@@ -53,7 +53,7 @@ function getMailList(query, page, limit, callback) {
  * @param callback
  */
 exports.findHandlerMailList = function (query, page, callback) {
-    return getMailList(query, page, 15, callback);
+    return getMailList(query, page, 15, 'messageId subject receivedDate from isHandled', callback);
 };
 
 /**
@@ -67,9 +67,24 @@ exports.getAllMailList = function (page, callback) {
         {},
         page,
         30,
+        'messageId subject receivedDate from isDistributed',
         callback
     );
 };
+
+/**
+ * 获取审核邮件列表
+ * @param query  查询条件
+ * @param page   第几页
+ * @param callback
+ * @returns {*}
+ */
+
+exports.getCheckMailList = function (query, page, callback) {
+    return getMailList(query, page, 30, 'messageId subject receivedDate from isChecked', callback);
+};
+
+
 
 /**
  * 通过id将邮件已处理信息置为true

@@ -8,9 +8,18 @@ var MailProxy = proxy.Mail;
 
 
 exports.getCheckList = function (req, res, next) {
-    var mailId = req.body.mailId;
-    var page = req.body.mailId;
-    
+    var user = req.body.user;
+    var page = req.body.page;
+
+    var query = {checkMan: user._id, isHandled: true};
+
+    MailProxy.getCheckMailList(query, page, function (err, results, pageCount, itemCount) {
+        if (err) return next(err);
+
+    });
+
+
+
 
 };
 
