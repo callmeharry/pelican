@@ -26,8 +26,7 @@ exports.getMailList = function (req, res, next) {
             var re = results;
             for(var i=0;i<re.length;i++){
                 var d = re[i].date;
-                re[i].date= d.toString();
-                console.log(re[i].date);
+                re[i].date= d.getYear()+"年"+ d.getMonth()+"月"+ d.getDate()+"日 "+ d.getHours()+":"+ d.getMinutes()+":"+ d.getSeconds();
             }
 
             var data = {};
