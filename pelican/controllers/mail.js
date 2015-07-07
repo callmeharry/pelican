@@ -7,7 +7,7 @@ var validator = require('validator');
 var ROLE = require('../models/user').ROLE;
 var MailControl = require('../common/mail.js');
 var MailConfig = require('../proxy').MailConfig;
-
+var moment = require('moment');
 /**
  * 获取单个邮件详情
  * @param req
@@ -49,7 +49,7 @@ exports.getMailDetail = function(req, res, next) {
                     var mailControl = new MailControl(data);
 
                     mailControl.getFullMail("INBOX", mail.messageId, function (mail) {
-
+                        mail.date=moment(mail.date).locale('zh-cn').toNow();
                         res.reply(0, 'success', mail);
                         MailModel.updateMailById(id, mail, function (err) {
                             if (err)

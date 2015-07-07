@@ -49,7 +49,7 @@ function getMailList(query, page, limit, columns, callback) {
             limit: resultsPerPage,
             columns: columns,
             sortBy: {
-                receivedDate: -1
+                date: -1
             }
         },
         callback
