@@ -71,6 +71,7 @@ exports.sendEmail = function (req, res, next) {
             return;
         }
         data = JSON.parse(data);
+        mail.handler = validator.trim(req.user._id);
         mail.subject = subject;
         mail.text = text;
         mail.html = html;
@@ -107,7 +108,7 @@ exports.sendEmail = function (req, res, next) {
                 if (err) {
                     res.reply(104, err);
                 } else {
-                    res.reply(0, '邮件回复成功');
+                    res.reply(0, '邮件已发送');
                 }
             });
         });
