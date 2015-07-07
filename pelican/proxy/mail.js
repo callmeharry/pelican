@@ -7,10 +7,12 @@ exports.newAndSave = function (mail, callback) {
 
     if (mail) {
         MailModel.findOne({'messageId':mail.messageId},function(err,data){
-            console.log(err);
+
             console.log(data);
-            if(err||(data&&data.length>0)){
-                return ;
+            console.log(data.length);
+            console.log(data==true);
+            if(err||data.length>0){
+                callback(null,null);
             }
             else{
                 var mailModel = new MailModel(mail);
