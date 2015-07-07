@@ -4,6 +4,7 @@
 
 var MailProxy = require('../proxy').Mail;
 var ROLE = require('../models/user').ROLE;
+var DISTRIBUTE_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
 var validator = require('validator');
 
 exports.getMailList = function (req, res, next) {
@@ -40,8 +41,17 @@ exports.distribute = function (req, res, next) {
     var mailId = validator.trim(req.body.mailId);
     var handlerId = validator.trim(req.body.handlerId);
     var readerIds = validator.trim(req.body.readerIds);
+    var handleDeadline = validator.trim(req.body.deadline);
 
-    MailProxy.updateMailById(mailId, {handler: handlerId, readers: readerIds, isDistributed: true}, function (err) {
+    MailProxy.updateMailById(
+        mailId,
+        {
+            handler: handlerId,
+            readers: readerIds,
+            distributeStatus: DISTRIBUTE_STATUS.DISTRIBUTED,
+            handleDeadline: new Date(handleDeadline)
+        },
+        function (err) {
         if (err) return next(err);
         res.reply(101, "邮件分发成功");
 

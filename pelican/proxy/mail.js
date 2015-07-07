@@ -1,5 +1,6 @@
 var moment = require('moment');
 var MailModel = require('../models').Mail;
+var DISTRIBUTE_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
 var MailConfig = require("../proxy").MailConfig;
 
 exports.newAndSave = function (mail, callback) {
@@ -29,6 +30,7 @@ exports.findMailById = function (id, callback) {
  * @param query
  * @param page 第几页
  * @param limit 每页数量
+ * @param columns
  * @param callback
  */
 function getMailList(query, page, limit, columns, callback) {
@@ -48,7 +50,7 @@ function getMailList(query, page, limit, columns, callback) {
 }
 /**
  * 获取邮件处理人员待处理邮件列表
- * @param id
+ * @param query
  * @param page
  * @param callback
  */
@@ -67,7 +69,7 @@ exports.getAllMailList = function (page, callback) {
         {},
         page,
         30,
-        'messageId subject receivedDate from isDistributed',
+        'messageId subject receivedDate from distributeStatus',
         callback
     );
 };
@@ -109,7 +111,7 @@ exports.returnMail = function (id, callback) {
     this.findMailById(id, function (err, mail) {
         if (err)
             return callback(err, null);
-        mail.isDistributed = false;
+        mail.distributeStatus = DISTRIBUTE_STATUS.RETURNED;
         mail.handler = '';
         mail.save(callback);
     })

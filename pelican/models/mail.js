@@ -4,6 +4,13 @@ var mongoosePaginate = require('mongoose-paginate');
 
 var Schema = mongoose.Schema;
 
+var DISTRIBUTE_STATUS = {
+    NEW: 'new',
+    DISTRIBUTED: 'distributed',
+    RETURNED: 'returned'
+};
+
+
 var MailSchema = new Schema({
 
     html: {type: String},
@@ -42,11 +49,15 @@ var MailSchema = new Schema({
     }],
 
     handler: {type: String},  // 处理这封邮件的人员
+    handleDeadline: {type: Date}, // 处理人员处理这封邮件的时限
+
     readers: [{  // 阅读这封邮件的所有人员
         type: String
     }],
 
-    isDistributed: {type: Boolean, default: false}, // 邮件是否已经分发
+    // 邮件分发状态，有3类：new:待分发；distributed: 已分发；returned: 已退回
+    distributeStatus: {type: String, default: 'new'},
+
     isHandled: {type: Boolean, default: false}, // 邮件是否已经处理
 
     isChecked: {type: Boolean, default: false},    //邮件是否已经审核
@@ -63,3 +74,4 @@ MailSchema.plugin(mongoosePaginate);
 
 mongoose.model('Mail', MailSchema);
 
+exports.DISTRIBUTE_STATUS = DISTRIBUTE_STATUS;
