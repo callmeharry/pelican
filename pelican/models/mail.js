@@ -7,7 +7,8 @@ var Schema = mongoose.Schema;
 var DISTRIBUTE_STATUS = {
     NEW: 'new',
     DISTRIBUTED: 'distributed',
-    RETURNED: 'returned'
+    RETURNED: 'returned',
+    NONE: 'none',
 };
 
 var CHECKED_STATUS = {
@@ -83,3 +84,4 @@ MailSchema.plugin(mongoosePaginate);
 mongoose.model('Mail', MailSchema);
 
 exports.DISTRIBUTE_STATUS = DISTRIBUTE_STATUS;
+exports.CHECKED_STATUS = CHECKED_STATUS;
