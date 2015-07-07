@@ -30,28 +30,42 @@ exports.getMailDetail = function(req, res, next) {
         //判断是否有阅读权限
         if (req.user.role == ROLE.DISTRIBUTOR ||
             req.user._id == mail.handler ||
-            mail.readers.indexOf(req.user._id)) {
+            mail.readers.indexOf(req.user._id) || req.user.role == ROLE.CHECKER) {
 
-            MailConfig.getConfig(function(err, data) {
-                if (err) next(err);
-                data = JSON.parse(data);
 
-                var mailControl = new MailControl(data);
+            if (!mail.html && !mail.text) {
+                res.reply(0, 'success', mail);
 
-                mailControl.getFullMail("INBOX",mail.messageId,function(mail){
 
-                    res.reply(0,'success', mail);
-                    MailModel.updateMailById(id,mail,function (err) {
+            } else {
+
+
+                //邮件里面没有正文进行下载
+
+                MailConfig.getConfig(function (err, data) {
+                    if (err) next(err);
+                    data = JSON.parse(data);
+
+                    var mailControl = new MailControl(data);
+
+                    mailControl.getFullMail("INBOX", mail.messageId, function (mail) {
+
+                        res.reply(0, 'success', mail);
+                        MailModel.updateMailById(id, mail, function (err) {
+                            if (err)
+                                console.log(err);
+                        });
+                    }, function (err) {
                         if (err)
-                        console.log(err);
+                            res.reply(101, '获取失败');
                     });
-                }, function(err){
-                    if(err)
-                    res.reply(101, '获取失败');
+
                 });
 
-            });
-            console.log(mail['']);
+                console.log(mail['']);
+
+
+            }
 
 
         } else {

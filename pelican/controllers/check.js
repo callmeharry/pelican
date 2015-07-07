@@ -9,8 +9,8 @@ var moment = require('moment');
 
 
 exports.getUnCheckList = function (req, res, next) {
-    var user = req.body.user;
-    var page = req.body.page;
+    var user = req.user;
+    var page = req.query.page;
 
     var query = {checkMan: user._id, isHandled: true, isChecked: 'unchecked'};
 
@@ -45,10 +45,10 @@ exports.getUnCheckList = function (req, res, next) {
 };
 
 exports.getCheckedList = function (req, res, next) {
-    var user = req.body.user;
-    var page = req.body.page;
+    var user = req.user;
+    var page = req.query.page;
 
-    var query = {checkMan: user._id, isHanded: true, isChecked: 'checked'};
+    var query = {checkMan: user._id, isHanded: true, isChecked: {"$in": ['checked', 'returned']}};
 
     MailProxy.getCheckMailList(query, page, function (err, results, pageCount, itemCount) {
         if (err) return next(err);
@@ -81,6 +81,4 @@ exports.getCheckedList = function (req, res, next) {
 
 };
 
-
-exports.get;
 
