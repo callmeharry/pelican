@@ -14,7 +14,8 @@ var CHECKED_STATUS = {
     NONE: 'none',
     UNCHECKED: 'unchecked',
     CHECKED: 'checked',
-    RETURNED: 'returned'
+    RETURNED: 'returned',
+    SEND: 'send'
 };
 
 
