@@ -26,7 +26,7 @@ exports.getMailList = function (req, res, next) {
             var re = results;
             for(var i=0;i<re.length;i++){
                 var d = re[i].date;
-                re[i].date=moment(d).toLocaleString();
+                re[i]=moment(d).toLocaleString();
             }
             var data = {};
             data.page = pageCount;
