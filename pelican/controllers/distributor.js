@@ -4,6 +4,7 @@
 
 var MailProxy = require('../proxy').Mail;
 var ROLE = require('../models/user').ROLE;
+var DISTRIBUTE_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
 var validator = require('validator');
 
 exports.getMailList = function (req, res, next) {
@@ -47,7 +48,7 @@ exports.distribute = function (req, res, next) {
         {
             handler: handlerId,
             readers: readerIds,
-            isDistributed: true,
+            distributeStatus: DISTRIBUTE_STATUS.DISTRIBUTED,
             handleDeadline: new Date(handleDeadline)
         },
         function (err) {
