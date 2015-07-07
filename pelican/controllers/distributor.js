@@ -25,6 +25,7 @@ exports.getMailList = function (req, res, next) {
         } else {
             for(var i=0;i<results.length;i++){
                 results[i].date=moment(results[i].date).locale('zh-cn').toNow();
+                console.log(results[i].date);
             }
             var data = {};
             data.page = pageCount;
