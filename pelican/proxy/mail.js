@@ -70,7 +70,7 @@ exports.getDistributorMailListByType = function (type, page, callback) {
         {distributeStatus: type},
         page,
         15,
-        'messageId subject receivedDate from',
+        'messageId subject date from',
         callback
     );
 };
@@ -82,7 +82,7 @@ exports.getDistributorOutDatedMailList = function (page, callback) {
         },
         page,
         15,
-        'messageId subject receivedDate from',
+        'messageId subject date from',
         callback
     );
 };
@@ -96,7 +96,7 @@ exports.getDistributorOutDatedMailList = function (page, callback) {
  */
 
 exports.getCheckMailList = function (query, page, callback) {
-    return getMailList(query, page, 30, 'messageId subject receivedDate from', callback);
+    return getMailList(query, page, 30, 'messageId subject date from', callback);
 };
 
 

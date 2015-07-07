@@ -42,21 +42,26 @@ exports.setConfig =function(config,callback) {
                     callback(err, msg);
                 }
                 else {
-                    mailFs.writeMailConfig(config, function (err) {
-                        if (err) callback(-1, "internal error");
+                    getConfig(function(err,data){
+                        if(data!=config){
+                            mailFs.writeMailConfig(config, function (err) {
+                                if (err) callback(-1, "internal error");
 
-                        callback(0, 'success');
-                        Mail.clear();
-                        mailControl.openBox("INBOX", ["ALL"], function (mail) {
-                            //console.log(mail);
-                            Mail.newAndSave(mail, function (err) {
-                                console.log(err);
+                                callback(0, 'success');
+                                Mail.clear();
+                                mailControl.openBox("INBOX", ["ALL"], function (mail) {
+                                    //console.log(mail);
+                                    Mail.newAndSave(mail, function (err) {
+                                        console.log(err);
+                                    });
+                                },function(err){
+                                    // console.log(err);
+                                });
+
                             });
-                        },function(err){
-                            // console.log(err);
-                        });
-
+                        }
                     });
+
                 }
             });
         }
