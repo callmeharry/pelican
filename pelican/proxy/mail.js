@@ -6,9 +6,16 @@ var MailConfig = require("../proxy").MailConfig;
 exports.newAndSave = function (mail, callback) {
 
     if (mail) {
+        MailModel.findOne({'messageId': mail.messageId}, function (err, data) {
+            if (err || data != undefined) {
+                return;
+            }
+            else {
                 var mailModel = new MailModel(mail);
                 mailModel.save(callback);
-        }
+            }
+        });
+    }
     else {
         return callback(null, null);
     }
@@ -97,7 +104,7 @@ exports.getDistributorOutDatedMailList = function (page, callback) {
  */
 
 exports.getCheckMailList = function (query, page, callback) {
-    return getMailList(query, page, 30, 'messageId subject date from isChecked', callback);
+    return getMailList(query, page, 30, 'messageId subject date from to isChecked', callback);
 };
 
 

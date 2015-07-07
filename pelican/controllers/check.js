@@ -14,7 +14,7 @@ exports.getUnCheckList = function (req, res, next) {
     var user = req.user;
     var page = req.query.page;
 
-    var query = {checkMan: user._id, isHandled: true, isChecked: 'unchecked'};
+    var query = {checkMan: user._id, isChecked: 'unchecked'};
 
     MailProxy.getCheckMailList(query, page, function (err, results, pageCount, itemCount) {
         if (err) return next(err);
@@ -28,8 +28,11 @@ exports.getUnCheckList = function (req, res, next) {
         data['pageCount'] = pageCount;
 
         var list = [];
+        console.log(results);
+        for (var i = 0; i < results.length; i++) {
+            var item = results[i];
 
-        for (var item in results) {
+            console.log(item);
             list.push({
                 mailId: item._id,
                 title: item.subject,
@@ -50,7 +53,7 @@ exports.getCheckedList = function (req, res, next) {
     var user = req.user;
     var page = req.query.page;
 
-    var query = {checkMan: user._id, isHanded: true, isChecked: {"$in": ['checked', 'returned']}};
+    var query = {checkMan: user._id, isChecked: {"$in": ['checked', 'returned']}};
 
     MailProxy.getCheckMailList(query, page, function (err, results, pageCount, itemCount) {
         if (err) return next(err);
@@ -60,17 +63,20 @@ exports.getCheckedList = function (req, res, next) {
             res.reply(101, '没有邮件');
             return;
         }
-
+        console.log(results);
         var data = {};
         data['pageCount'] = pageCount;
 
         var list = [];
 
-        for (var item in results) {
+        for (var i = 0; i < results.length; i++) {
+
+            var item = results[i];
+
             list.push({
                 mailId: item._id,
                 title: item.subject,
-                receiveName: item.from,
+                receiver: item.from,
                 receiveTime: item.date,
                 fromNow: moment(item.date).locale('zh-cn').toNow(),
                 isChecked: item.isChecked

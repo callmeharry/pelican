@@ -23,14 +23,16 @@ exports.getMailList = function (req, res, next) {
         if (err) {
             next(err);
         } else {
-            for(var i=0;i<results.length;i++){
-                console.log(moment(results[i].date).locale('zh-cn').toNow());
+            var re = results;
+            for(var i=0;i<re.length;i++){
+                var d = re[i].date;
+                re[i].date=moment(d).toLocaleString();
             }
             var data = {};
             data.page = pageCount;
             data.pageCount = pageCount;
             data.count = itemCount.length;
-            data.items = results;
+            data.items = re;
 
             res.reply(0, '邮件列表获取成功', data);
         }
