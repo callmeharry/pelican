@@ -57,3 +57,36 @@ exports.addMailTag = function (req, res, next) {
     });
 
 };
+
+
+exports.deleteMailTag = function (req, res, next) {
+    if (req.user.role !== ROLE.DISTRIBUTOR) {
+        res.reply(101, "没有权限");
+        return;
+    }
+
+    var tagId = validator.trim(req.body.tagId);
+
+    function callback(err, mailTag) {
+        if (err) {
+            next(err);
+        } else {
+            if (mailTag) {
+                res.reply(0, "删除成功");
+            } else {
+                res.reply(101, "标签不存在");
+            }
+        }
+    }
+
+    if (tagId) {
+        MailTagProxy.deleteMailTagById(tagId, callback);
+    } else {
+
+        var tagName = validator.trim(req.body.tagName);
+
+        MailTagProxy.deleteMailTagByName(tagName, callback);
+
+    }
+
+};

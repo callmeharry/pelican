@@ -81,6 +81,7 @@ router.post('/distribution/distributeMail', distributorController.distribute);
 
 router.get('/mailTag', mailTagController.getAllMailTags);
 router.post('/mailTag/add', mailTagController.addMailTag);
+router.post('/mailTag/delete', mailTagController.deleteMailTag);
 
 
 /* 邮件处理人员 */
