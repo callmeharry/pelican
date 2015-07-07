@@ -26,22 +26,21 @@ describe("user", function () {
     //链接mongodb
     before(function (done) {
 
-        //mongoose.connect(config.db, config.dbOpts, function (err) {
-        //    if (err) {
-        //        console.error('connect to %s error: ', config.db, err.message);
-        //        process.exit(1);
-        //    }
-        //
-        //
-        //    console.log('connect to mongodb successfully');
-        //    done();
-        //
-        //});
+        mongoose.connect(config.db, config.dbOpts, function (err) {
+            if (err) {
+                console.error('connect to %s error: ', config.db, err.message);
+                process.exit(1);
+            }
 
-        token = jwt.sign({username: 'checker', password: '123456'}, app.get('superSecret'), {
-            expiresInMinutes: 1440 // expires in 24 hours
+            token = jwt.sign({username: 'checker', password: '123456'}, app.get('superSecret'), {
+                expiresInMinutes: 1440 // expires in 24 hours
+            });
+
+            console.log('connect to mongodb successfully');
+            done();
+
         });
-        done();
+
 
     });
 
