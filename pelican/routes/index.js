@@ -92,7 +92,7 @@ router.post('/handler/manage', handlerController.manageEmail);
 router.post('/handler/send', handlerController.sendEmail);
 router.get('/handler/managed', handlerController.getManagedEmailList);
 router.post('/handler/return', handlerController.returnEmail);
-router.get('/handler/checker', userController.getAllChecker);
+router.get('/handler/checkers', userController.getAllChecker);
 router.get('/handler/returned', handlerController.getReturnedEmailList);
 router.get('/handler/checking', handlerController.getCheckingEmailList);
 router.get('/handler/sent', handlerController.getSentEmailList);
