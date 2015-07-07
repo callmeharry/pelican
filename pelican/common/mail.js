@@ -220,7 +220,6 @@ function mail(option) {
                             mailparser.on("end",function( mail ){
                                 mail.messageId=mail.headers["message-id"];
                                 delete mail.headers;
-                                console.log(mail);
                                 self._cb(mail);
                             })
                         });
@@ -248,6 +247,7 @@ function mail(option) {
                                 mail.messageId=mail.headers["message-id"];
                                 delete mail.headers;
                                 self._cb(mail);
+                                console.log(mail);
                             })
                         });
                     });
