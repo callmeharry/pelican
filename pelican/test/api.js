@@ -79,11 +79,12 @@ exports.testMail = function (req, res, next) {
         subject: 'hi',
         priority: 'normal',
         from: [{address: 'gyxln@buaa.edu.cn', name: 'gyxln'}],
-        to: [{address: 'gyxln@buaa.edu.cn', name: 'gyxln'},
+        to: [{address: 'lewisbuaa2012@163.com', name: 'lewiskit'},
             {address: '450024927@qq.com', name: '450024927'}],
         date: Date.now(),
         isDistribute: true,
-        handler: '559693a96c6456be45d9d74a'
+        handler: '559693a96c6456be45d9d74a',
+        isChecked: 'unchecked',
     };
 
     MailProxy.newAndSave(mailContent, function (err, mail) {

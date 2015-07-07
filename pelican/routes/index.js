@@ -22,7 +22,6 @@ router.get('/', function (req, res, next) {
 
 
 /*--------test-------------*/
-router.post('/test', testApi.testApi);
 
 router.get('/test/addMail', testApi.testMail);
 
@@ -59,10 +58,10 @@ router.use(function (req, res, next) {
 
 /*---------以下的接口都需要提供token-----------*/
 
+router.post('/test', testApi.testApi);
 
 /*---------user------------*/
 
-router.post('/login', userController.login);
 
 router.get('/distribution/handlers', userController.getAllHandlers);
 
@@ -99,7 +98,7 @@ router.post('/email/return', handlerController.returnEmail);
 router.get('/check/unCheckList', checkController.getUnCheckList);
 router.get('/check/checkedList', checkController.getCheckedList);
 router.get('/check/getMailInfo', mailController.getMailDetail);
-router.post('check/setCheckStatus', checkController.setCheckStatus);
+router.post('/check/setCheckStatus', checkController.setCheckStatus);
 
 
 module.exports = router;
