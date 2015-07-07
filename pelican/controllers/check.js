@@ -12,7 +12,7 @@ exports.getUnCheckList = function (req, res, next) {
     var user = req.body.user;
     var page = req.body.page;
 
-    var query = {checkMan: user._id, isHandled: true, isChecked: false};
+    var query = {checkMan: user._id, isHandled: true, isChecked: 'unchecked'};
 
     MailProxy.getCheckMailList(query, page, function (err, results, pageCount, itemCount) {
         if (err) return next(err);
@@ -48,6 +48,39 @@ exports.getCheckedList = function (req, res, next) {
     var user = req.body.user;
     var page = req.body.page;
 
-    var query = {checkMan: user._id, isHanded: true, isChecked: true};
+    var query = {checkMan: user._id, isHanded: true, isChecked: 'checked'};
+
+    MailProxy.getCheckMailList(query, page, function (err, results, pageCount, itemCount) {
+        if (err) return next(err);
+
+
+        if (!results) {
+            res.reply(101, '没有邮件');
+            return;
+        }
+
+        var data = {};
+        data['pageCount'] = pageCount;
+
+        var list = [];
+
+        for (var item in results) {
+            list.push({
+                mailId: item._id,
+                title: item.subject,
+                receiveName: item.from,
+                receiveTime: item.receivedDate,
+                fromNow: moment(results[i].receivedDate).locale('zh-cn').toNow()
+            });
+        }
+
+        data.list = list;
+
+        res.reply(0, 'success', data);
+    });
 
 };
+
+
+exports.get;
+
