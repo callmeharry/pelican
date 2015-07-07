@@ -56,8 +56,6 @@ exports.replyOrSendEmail = function (req, res, next) {
             return;
         }
         data = JSON.parse(data);
-        res.reply(0, 'success', data);
-        return;
         mail.subject = subject;
         mail.text = text;
         mail.html = html;
