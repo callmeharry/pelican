@@ -22,7 +22,7 @@ exports.getMailList = function (req, res, next) {
         if (err) {
             next(err);
         } else {
-            for(var i=0;i<results.length;i+=){
+            for(var i=0;i<results.length;i++){
                 results[i].date=moment(results[i].date).locale('zh-cn').toNow();
             }
             var data = {};
