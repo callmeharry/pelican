@@ -6,8 +6,15 @@ var MailConfig = require("../proxy").MailConfig;
 exports.newAndSave = function (mail, callback) {
 
     if (mail) {
-        var mailModel = new MailModel(mail);
-        mailModel.save(callback);
+        MailModel.findOne({'messageId':mail.messageId},function(err,data){
+            if(err||(data&&data.length>0)){
+                return ;
+            }
+            else{
+                var mailModel = new MailModel(mail);
+                mailModel.save(callback);
+            }
+        });
     } else {
         return callback(null, null);
     }
