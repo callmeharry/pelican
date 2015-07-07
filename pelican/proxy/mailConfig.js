@@ -90,7 +90,6 @@ function getOriginMail() {
                             if (err) return next(err);
                             console.log("save new mail success");
                         });
-
                     },function(error){
                         console.log(error);
                     });
