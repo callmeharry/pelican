@@ -33,7 +33,7 @@ exports.setConfig =function(config,callback) {
     var onerror = function (error, info) {
         if (error) {
             callback(104, "无法连接到smtp服务器");
-            mailControl.stopSMTPConnection
+            mailControl.stopSMTPConnection();
         } else {
             //测试IMAP
             mailControl.stopSMTPConnection();
@@ -86,11 +86,13 @@ function getOriginMail() {
                     console.log('setInterval called');
 
                     mailControl.openBox("INBOX", [["SINCE",since]], function (mail) {
-                        MailProxy.newAndSave(mail, function (err) {
+                        Mail.newAndSave(mail, function (err) {
                             if (err) return next(err);
                             console.log("save new mail success");
                         });
 
+                    },function(error){
+                        console.log(error);
                     });
 
                 }

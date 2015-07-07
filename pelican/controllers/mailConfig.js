@@ -20,6 +20,11 @@ exports.getMailConfig = function (req, res, next) {
     ConfigProxy.getConfig(function (err, data) {
         if (err) next(err);
 
+        console.log('hello world');
+
+        console.log(err);
+        console.log(data);
+
         data = JSON.parse(data);
         res.reply(0, "success", data);
 

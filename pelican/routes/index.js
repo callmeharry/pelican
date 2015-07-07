@@ -86,11 +86,11 @@ router.post('/mailTag/delete', mailTagController.deleteMailTag);
 
 /* 邮件处理人员 */
 router.get('/email/list', handlerController.getEmailList);
-router.post('/email/reply', handlerController.replyEmail);
+router.post('/email/reply', handlerController.replyOrSendEmail);
 router.post('/email/manage', handlerController.manageEmail);
-router.post('/email/send', handlerController.sendEmail);
+router.post('/email/send', handlerController.replyOrSendEmail);
 router.get('/email/managed', handlerController.getManagedEmailList);
-
+router.post('/email/return', handlerController.returnEmail);
 
 
 module.exports = router;
