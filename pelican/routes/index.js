@@ -7,6 +7,7 @@ var handlerController = require('../controllers/handler');
 var mailController = require('../controllers/mail');
 var mailConfigController = controller.mailConfig;
 var distributorController = controller.distributor;
+var mailTagController = controller.mailTag;
 
 var testApi = require('../test/api');
 
@@ -71,19 +72,25 @@ router.get("/admin/mailConfig", mailConfigController.getMailConfig);
 
 router.post("/admin/mailConfig", mailConfigController.setMailConfig);
 
+
+/*邮件分发人员*/
+
 router.get('/distribution/getMailList', distributorController.getMailList);
-
 router.get('/distribution/getMailInfo', mailController.getMailDetail);
-
 router.post('/distribution/distributeMail', distributorController.distribute);
+
+router.get('/mailTag', mailTagController.getAllMailTags);
+router.post('/mailTag/add', mailTagController.addMailTag);
+router.post('/mailTag/delete', mailTagController.deleteMailTag);
+
 
 /* 邮件处理人员 */
 router.get('/email/list', handlerController.getEmailList);
-router.post('/email/reply', handlerController.replyEmail);
+router.post('/email/reply', handlerController.replyOrSendEmail);
 router.post('/email/manage', handlerController.manageEmail);
-router.post('/email/send', handlerController.sendEmail);
+router.post('/email/send', handlerController.replyOrSendEmail);
 router.get('/email/managed', handlerController.getManagedEmailList);
-
+router.post('/email/return', handlerController.returnEmail);
 
 
 module.exports = router;

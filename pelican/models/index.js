@@ -34,8 +34,10 @@ mongoose.connect(config.db, opts, function (err) {
 //models
 require("./user");
 require("./mail");
+require("./mailTag");
 
 exports.User = mongoose.model("User");
 exports.Mail = mongoose.model("Mail");
+exports.MailTag = mongoose.model("MailTag");
 
 
