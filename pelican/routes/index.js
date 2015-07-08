@@ -21,6 +21,9 @@ router.get('/', function (req, res, next) {
 });
 
 
+router.post('/test', testApi.testApi);
+
+
 /*--------test-------------*/
 
 router.get('/test/addMail', testApi.testMail);
@@ -58,12 +61,11 @@ router.use(function (req, res, next) {
 
 /*---------以下的接口都需要提供token-----------*/
 
-router.post('/test', testApi.testApi);
-
 /*---------user------------*/
 
 router.post('/admin/user/create', userController.addUser);
 router.post('/admin/user/delete', userController.deleteUser);
+router.get('/admin/users', userController.getAllUsers);
 
 router.post('/login', userController.login);
 

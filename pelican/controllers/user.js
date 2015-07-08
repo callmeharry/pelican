@@ -184,3 +184,17 @@ exports.getAllChecker = function (req, res, next) {
         }
     });
 };
+
+
+exports.getAllUsers = function (req, res, next) {
+
+    UserProxy.getUsersByQuery({role: {$nin: ['admin']}}, {}, function (err, users) {
+        if (err) return next(err);
+        var data = {};
+        data['count'] = users.length;
+        data['users'] = users;
+        console.log(data);
+
+        res.reply(0, 'success', data);
+    });
+};

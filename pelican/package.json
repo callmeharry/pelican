@@ -29,7 +29,8 @@
     "moment": "^2.10.3"
   },
   "devDependencies": {
-    "mocha": "2.2.5",
-    "should": "4.1.0"
+    "mocha": "2.0.1",
+    "should": "4.1.0",
+    "supertest": "0.14.0"
   }
 }

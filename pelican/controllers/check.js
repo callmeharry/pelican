@@ -76,7 +76,7 @@ exports.getCheckedList = function (req, res, next) {
             list.push({
                 mailId: item._id,
                 title: item.subject,
-                receiver: item.from,
+                receiver: item.to,
                 receiveTime: item.date,
                 fromNow: moment(item.date).locale('zh-cn').toNow(),
                 isChecked: item.isChecked

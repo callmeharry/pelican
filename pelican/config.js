@@ -15,6 +15,14 @@ var config = {
     db: "mongodb://pelican:Pelican1221@123.57.211.52:27017/pelican",
     //db: "mongodb://localhost:27017/test",
 
+    dbOpts: {
+        server: {
+            socketOptions: {keepAlive: 10},
+            auto_reconnect: true, poolSize: 25
+        }
+    },
+
+
     //logFile path
     log: {
         "out": "/var/log/pelican/out.log",
