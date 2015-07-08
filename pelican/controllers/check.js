@@ -149,10 +149,9 @@ exports.setCheckStatus = function (req, res, next) {
                     name: sendMail.subject, run: function () {
                         var data = JSON.parse(arg2);
 
-                        console.log('The task is doing! %s', JSON.stringify(data));
 
                         var mailInstance = new mailTool(data);
-                        
+
 
                         mailInstance.sendMail(sendMail, function (err, info) {
                             if (err) {
