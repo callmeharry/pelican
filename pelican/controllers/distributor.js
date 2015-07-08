@@ -3,6 +3,7 @@
  */
 
 var MailProxy = require('../proxy').Mail;
+var MailTagProxy = require('../proxy').MailTag;
 var ROLE = require('../models/user').ROLE;
 var DISTRIBUTE_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
 var validator = require('validator');
@@ -69,20 +70,34 @@ exports.distribute = function (req, res, next) {
     var handlerId = validator.trim(req.body.handlerId);
     var readerIds = validator.trim(req.body.readerIds);
     var handleDeadline = validator.trim(req.body.deadline);
+    var reqTags = validator.trim(req.body.tags);
 
-    MailProxy.updateMailById(
-        mailId,
-        {
-            handler: handlerId,
-            readers: readerIds,
-            distributeStatus: DISTRIBUTE_STATUS.DISTRIBUTED,
-            handleDeadline: new Date(handleDeadline)
-        },
-        function (err) {
-            if (err) return next(err);
-            res.reply(101, "邮件分发成功");
+    MailTagProxy.findMailTagsByNames(reqTags, function (err, mailTags) {
+        if (err) {
+            return next(err);
+        }
 
-        });
+        var tags = [];
+        for (var i = 0; i < mailTags.length; ++i) {
+            tags.push(mailTags[i].name);
+        }
+
+        MailProxy.updateMailById(
+            mailId,
+            {
+                handler: handlerId,
+                readers: readerIds,
+                distributeStatus: DISTRIBUTE_STATUS.DISTRIBUTED,
+                handleDeadline: new Date(handleDeadline),
+                tags: tags
+            },
+            function (err) {
+                if (err) return next(err);
+                res.reply(101, "邮件分发成功");
+
+            }
+        );
+    });
 
 };
 

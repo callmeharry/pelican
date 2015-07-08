@@ -51,6 +51,13 @@ exports.findMailTagByName = function (tagName, callback) {
     MailTagModel.findOne({'name': tagName}, callback);
 };
 
+exports.findMailTagsByNames = function (tagNames, callback) {
+    MailTagModel.find({
+            'name': {$in: [tagNames]}
+        }, callback
+    );
+};
+
 exports.findAllMailTags = function (callback) {
     MailTagModel.find(callback);
 };
