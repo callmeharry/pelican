@@ -7,6 +7,9 @@ var proxy = require('../proxy');
 var MailProxy = proxy.Mail;
 var moment = require('moment');
 var validator = require('validator');
+var async = require('async');
+var mailTool = require('../common/mail');
+var mailConfig = proxy.MailConfig;
 
 
 
@@ -95,15 +98,74 @@ exports.setCheckStatus = function (req, res, next) {
     var check = req.body.check;
 
     if (check == 'passed') {  //审核通过
-        MailProxy.updateMailById(mailId, {isChecked: "checked"}, function (err) {
+        async.waterfall([
+
+            function (callback) {
+
+                MailProxy.findMailById(mailId, function (err, mail) {
+                    if (err) return callback(err);
+
+                    mail.isChecked = 'checked';
+                    mail.save();
+
+                    callback(null, JSON.stringify(mail));
+                });
+
+            },
+
+            function (arg1, callback) {
+
+
+                mailConfig.getConfig(function (err, data) {
+                    if (err) return callback(err);
+
+                    callback(null, arg1, data);
+                });
+            },
+
+            function (arg1, arg2, callback) {
+
+                var mail = JSON.parse(arg1);
+                mail = {
+                    from: mail.from,
+                    to: mail.to,
+                    html: mail.html,
+                    text: mail.text,
+                    attachment: mail.attachment,
+                    subject: mail.subject
+                };
+
+
+                var mailQueue = MailProxy.mailQueue;
+
+
+                mailQueue.push({
+                    name: mail.subject, run: function () {
+                        var data = JSON.parse(arg2);
+
+                        var mailInstance = new mailTool(data);
+
+                        mailInstance.sendMail(mail, function (err, info) {
+                            if (err) return callback(err);
+
+                            console.log(info);
+                            console.log()
+
+                        });
+                    }
+                });
+
+                callback(null, 'done');
+
+            }
+
+        ], function (err, result) {
             if (err) return next(err);
 
-            //todo 发送邮件
+            console.log(result);
 
-            res.reply(0, "发送成功")
-
+            res.reply(0, '发送成功');
         });
-
 
     } else if (check == 'failed') {    //审核未通过
 
