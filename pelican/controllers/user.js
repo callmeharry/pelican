@@ -193,6 +193,7 @@ exports.getAllUsers = function (req, res, next) {
         var data = {};
         data['count'] = users.length;
         data['users'] = users;
+        console.log(data);
 
         res.reply(0, 'success', data);
     });

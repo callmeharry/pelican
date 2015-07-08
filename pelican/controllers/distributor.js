@@ -26,13 +26,11 @@ exports.getMailList = function (req, res, next) {
             var items = new Array(results.length);
             for (var i = 0; i < results.length; i++) {
                 var item = {};
-
-                item.date = moment(results[i].date).locale('zh-cn').format('lll');
+                item.date = moment(results[i].date).locale('zh-cn');
                 item._id = results[i]._id;
                 item.subject = results[i].subject;
                 item.messageId = results[i].messageId;
                 item.from = results[i].from;
-
                 items[i] = item;
             }
 
