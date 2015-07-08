@@ -54,10 +54,8 @@ exports.getMailDetail = function (req, res, next) {
                         }
                         res.reply(0, 'success', mail);
                         console.log(mail);
-                        MailModel.updateMailByIdGyx(id, mail, function (err) {
-                            if (err)
-                                console.log(err);
-                        });
+                        mail.save();
+
                     }, function (err) {
                         if (err)
                             res.reply(101, '获取失败');
