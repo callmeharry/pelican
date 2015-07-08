@@ -78,7 +78,7 @@ exports.distribute = function (req, res, next) {
 
     var mailId = validator.trim(req.body.mailId);
     var handlerId = validator.trim(req.body.handlerId);
-    var readerIds = validator.trim(req.body.readerIds);
+    var readerIds = JSON.parse(validator.trim(req.body.readerIds));
     var handleDeadline = validator.trim(req.body.deadline);
     var reqTags = validator.trim(req.body.tags);
 
