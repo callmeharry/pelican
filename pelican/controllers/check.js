@@ -126,31 +126,32 @@ exports.setCheckStatus = function (req, res, next) {
             function (arg1, arg2, callback) {
 
                 var mail = JSON.parse(arg1);
-                mail = {
+                var sendMail = {
                     from: mail.from,
                     to: mail.to,
                     html: mail.html,
                     text: mail.text,
-                    attachment: mail.attachment,
                     subject: mail.subject
                 };
 
+                if (mail.hasOwnProperty('attachment')) {
+                    sendMail.attachment = mail.attachment;
+                }
 
                 var mailQueue = MailProxy.mailQueue;
 
 
-                console.log("before sending is ok!");
-                console.log(mail);
-                console.log("the config");
-                console.log(arg2);
+
 
                 mailQueue.push({
-                    name: mail.subject, run: function () {
+                    name: sendMail.subject, run: function () {
                         var data = JSON.parse(arg2);
+
+                        console.log('The task is doing! %s', JSON.stringify(data));
 
                         var mailInstance = new mailTool(data);
 
-                        mailInstance.sendMail(mail, function (err, info) {
+                        mailInstance.sendMail(sendMail, function (err, info) {
                             if (err) return callback(err);
 
                             console.log(info);
@@ -158,6 +159,11 @@ exports.setCheckStatus = function (req, res, next) {
 
                         });
                     }
+                }, function (err) {
+                    if (err)
+                        console.log('hello is bad! %s', err);
+                    else
+                        console.log("The task execute successfully");
                 });
 
                 callback(null, 'done');
