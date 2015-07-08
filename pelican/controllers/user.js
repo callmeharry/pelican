@@ -5,7 +5,7 @@ var UserProxy = require('../proxy').User;
 var validator = require('validator');
 var Log = require('../common').LogHelper;
 var jwt = require('jsonwebtoken');
-
+var moment = require('moment');
 var ROLE = require('../models/user').ROLE;
 
 exports.login = function (req, res, next) {
@@ -198,6 +198,17 @@ exports.getAllUsers = function (req, res, next) {
         data['count'] = users.length;
         data['users'] = users;
         console.log(data);
+        var usersList = [];
+
+        for (var i = 0; i < users.length; i++) {
+            var user = users[i];
+            usersList.push({
+                username: user.username,
+                role: user.role,
+                create: moment(user.create_at).locale('zh-cn').format('lll').toLocaleString()
+            });
+        }
+
 
         res.reply(0, 'success', data);
     });
