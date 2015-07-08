@@ -25,9 +25,9 @@ exports.getUnseenEmailList = function (req, res, next) {
     var query = {
         $or: [{handler: id}, {readers: id}],
         isHandled: false,
-        distributedStatus: DISTRIBUTED_STATUS.DISTRIBUTED
+        distributeStatus: DISTRIBUTED_STATUS.DISTRIBUTED
     };
-    if (req.user.role !== ROLE.HANDLER) {
+    if (req.user.role != ROLE.HANDLER) {
         res.reply(101, "没有权限");
         return;
     }

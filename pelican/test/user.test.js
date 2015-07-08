@@ -25,30 +25,21 @@ describe("user", function () {
 
     //链接mongodb
     before(function (done) {
-
-        mongoose.connect(config.db, config.dbOpts, function (err) {
-            if (err) {
-                console.error('connect to %s error: ', config.db, err.message);
-                process.exit(1);
-            }
-
-            token = jwt.sign({username: 'checker', password: '123456'}, app.get('superSecret'), {
-                expiresInMinutes: 1440 // expires in 24 hours
-            });
-
-            console.log('connect to mongodb successfully');
-            done();
-
+        token = jwt.sign({username: 'checker', password: '123456'}, app.get('superSecret'), {
+            expiresInMinutes: 1440 // expires in 24 hours
         });
 
+        console.log('connect to mongodb successfully');
+        done();
 
     });
 
 
     it("The post should get all Users", function (done) {
-        request.post('/test')
+        request.get('/username')
             .send({
-                token: token
+                token: token,
+                id: "5596938b6c6456be45d9d748"
             })
             .end(function (err, res) {
                 //should.not.exists(err);
@@ -60,8 +51,8 @@ describe("user", function () {
                     data: {change: '2015年7月7日'}
                 });
                 this.timeout(10000);
-                setTimeout(done, 10000);
-                //done();
+                // setTimeout(done, 10000);
+                done();
             });
     });
 

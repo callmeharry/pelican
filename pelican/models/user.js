@@ -4,6 +4,7 @@
  * User Model Schema
  */
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate');
 var Schema = mongoose.Schema;
 
 var ROLE = {
@@ -28,6 +29,8 @@ var UserSchema = new Schema({
 
 //index
 UserSchema.index({username: 1}, {unique: true});
+
+UserSchema.plugin(mongoosePaginate);
 
 
 mongoose.model('User', UserSchema);
