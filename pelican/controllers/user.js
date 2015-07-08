@@ -98,6 +98,33 @@ exports.addUser = function (req, res, next) {
     });
 };
 
+exports.changePassword = function (req, res, next) {
+    if (req.user.role !== ROLE.ADMIN) {
+        res.reply(1, "没有权限");
+        return;
+    }
+
+    var userId = validator.trim(req.body.id);
+    var password = validator.trim(req.body.password);
+
+
+    UserProxy.updateUserById(
+        userId,
+        {password: password},
+        function (err, user) {
+            if (err) {
+                return next(err);
+            }
+
+            if (!user) {
+                res.reply(101, "用户名不存在");
+                return;
+            }
+
+            res.reply(0, "修改密码成功", data);
+        });
+};
+
 
 exports.deleteUser = function (req, res, next) {
     if (req.user.role !== ROLE.ADMIN) {
@@ -189,7 +216,6 @@ exports.getAllChecker = function (req, res, next) {
 exports.getAllUsers = function (req, res, next) {
     var user = req.user;
     var page = req.query.page || 15;
-
 
 
     UserProxy.getUsersByQuery({role: {$nin: ['admin']}}, {}, function (err, users) {

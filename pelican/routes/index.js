@@ -64,7 +64,8 @@ router.use(function (req, res, next) {
 /*---------user------------*/
 
 router.post('/admin/user/create', userController.addUser);
-router.post('/admin/user/delete', userController.deleteUser);
+router.post('/admin/user/changePassword', userController.changePassword);
+//router.post('/admin/user/delete', userController.deleteUser);
 router.get('/admin/users', userController.getAllUsers);
 router.get('/username', userController.getUserName);
 
