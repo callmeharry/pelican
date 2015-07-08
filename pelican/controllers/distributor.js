@@ -80,7 +80,7 @@ exports.distribute = function (req, res, next) {
     var handlerId = validator.trim(req.body.handlerId);
     var readerIds = JSON.parse(validator.trim(req.body.readerIds));
     var handleDeadline = validator.trim(req.body.deadline);
-    var reqTags = validator.trim(req.body.tags);
+    var reqTags = JSON.parse(validator.trim(req.body.tags));
 
     MailTagProxy.findMailTagsByNames(reqTags, function (err, mailTags) {
         if (err) {
