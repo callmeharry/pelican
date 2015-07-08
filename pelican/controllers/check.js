@@ -150,11 +150,11 @@ exports.setCheckStatus = function (req, res, next) {
                         console.log('The task is doing! %s', JSON.stringify(data));
 
                         var mailInstance = new mailTool(data);
-
+                        console.log('going to send');
                         mailInstance.sendMail(sendMail, function (err, info) {
                             if (err) return callback(err);
 
-                            console.log(info);
+                            //  console.log(info);
                             console.log("send email successfully");
 
                         });
@@ -164,9 +164,10 @@ exports.setCheckStatus = function (req, res, next) {
                         console.log('hello is bad! %s', err);
                     else
                         console.log("The task execute successfully");
+                    
                 });
 
-                callback(null, 'done');
+                return callback(null, 'done');
 
             }
 
