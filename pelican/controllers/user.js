@@ -202,6 +202,7 @@ exports.getAllUsers = function (req, res, next) {
         for (var i = 0; i < users.length; i++) {
             var user = users[i];
             usersList.push({
+                id: user._id,
                 username: user.username,
                 role: user.role,
                 create: moment(user.create_at).locale('zh-cn').format('lll').toLocaleString()
