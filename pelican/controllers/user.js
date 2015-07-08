@@ -196,8 +196,7 @@ exports.getAllUsers = function (req, res, next) {
         if (err) return next(err);
         var data = {};
         data['count'] = users.length;
-        data['users'] = users;
-        console.log(data);
+      
         var usersList = [];
 
         for (var i = 0; i < users.length; i++) {
@@ -208,8 +207,7 @@ exports.getAllUsers = function (req, res, next) {
                 create: moment(user.create_at).locale('zh-cn').format('lll').toLocaleString()
             });
         }
-
-
+        data['users'] = usersList;
         res.reply(0, 'success', data);
     });
 };
