@@ -3,6 +3,7 @@
  */
 
 var MailProxy = require('../proxy').Mail;
+var MailTagProxy = require('../proxy').MailTag;
 var ROLE = require('../models/user').ROLE;
 var DISTRIBUTE_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
 var validator = require('validator');
@@ -25,13 +26,12 @@ exports.getMailList = function (req, res, next) {
             var items = new Array(results.length);
             for (var i = 0; i < results.length; i++) {
                 var item = {};
-
-                item.date = moment(results[i].date).locale('zh-cn').format('lll');
+                item.date = moment(results[i].date).locale('zh-cn');
                 item._id = results[i]._id;
                 item.subject = results[i].subject;
                 item.messageId = results[i].messageId;
                 item.from = results[i].from;
-
+                item.distributeStatus = results[i].distributeStatus;
                 items[i] = item;
             }
 
@@ -49,10 +49,21 @@ exports.getMailList = function (req, res, next) {
     if (type == 'outdated') {
         MailProxy.getDistributorOutDatedMailList(page, callback);
     } else {
-        if (!DISTRIBUTE_STATUS.hasOwnProperty(type)) {
+
+        // 判断type是否合法
+        var isTypeValid = false;
+        for (var property in DISTRIBUTE_STATUS) {
+            if (DISTRIBUTE_STATUS.hasOwnProperty(property) && type == DISTRIBUTE_STATUS[property]) {
+                isTypeValid = true;
+                break;
+            }
+        }
+
+        if (!isTypeValid) {
             // 若果type不合法，默认获取未分发的邮件
             type = DISTRIBUTE_STATUS.NEW;
         }
+
         MailProxy.getDistributorMailListByType(type, page, callback);
     }
 };
@@ -69,20 +80,34 @@ exports.distribute = function (req, res, next) {
     var handlerId = validator.trim(req.body.handlerId);
     var readerIds = validator.trim(req.body.readerIds);
     var handleDeadline = validator.trim(req.body.deadline);
+    var reqTags = validator.trim(req.body.tags);
 
-    MailProxy.updateMailById(
-        mailId,
-        {
-            handler: handlerId,
-            readers: readerIds,
-            distributeStatus: DISTRIBUTE_STATUS.DISTRIBUTED,
-            handleDeadline: new Date(handleDeadline)
-        },
-        function (err) {
-            if (err) return next(err);
-            res.reply(101, "邮件分发成功");
+    MailTagProxy.findMailTagsByNames(reqTags, function (err, mailTags) {
+        if (err) {
+            return next(err);
+        }
 
-        });
+        var tags = [];
+        for (var i = 0; i < mailTags.length; ++i) {
+            tags.push(mailTags[i].name);
+        }
+
+        MailProxy.updateMailById(
+            mailId,
+            {
+                handler: handlerId,
+                readers: readerIds,
+                distributeStatus: DISTRIBUTE_STATUS.DISTRIBUTED,
+                handleDeadline: new Date(handleDeadline),
+                tags: tags
+            },
+            function (err) {
+                if (err) return next(err);
+                res.reply(101, "邮件分发成功");
+
+            }
+        );
+    });
 
 };
 

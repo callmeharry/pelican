@@ -8,7 +8,7 @@ var DISTRIBUTE_STATUS = {
     NEW: 'new',
     DISTRIBUTED: 'distributed',
     RETURNED: 'returned',
-    NONE: 'none',
+    NONE: 'none'
 };
 
 var CHECKED_STATUS = {
@@ -21,7 +21,6 @@ var CHECKED_STATUS = {
 
 
 var MailSchema = new Schema({
-
     html: {type: String},
     text: {type: String},
     subject: {type: String},
@@ -59,6 +58,7 @@ var MailSchema = new Schema({
 
     handler: {type: String},  // 处理这封邮件的人员
     handleDeadline: {type: Date}, // 处理人员处理这封邮件的时限
+    tags: [{type: String}], // 邮件的标签
 
     readers: [{  // 阅读这封邮件的所有人员
         type: String
