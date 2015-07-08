@@ -78,7 +78,7 @@ exports.getDistributorMailListByType = function (type, page, callback) {
         {distributeStatus: type},
         page,
         15,
-        'messageId subject date from',
+        'messageId subject date from distributeStatus',
         callback
     );
 };
