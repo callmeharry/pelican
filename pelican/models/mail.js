@@ -8,7 +8,7 @@ var DISTRIBUTE_STATUS = {
     NEW: 'new',
     DISTRIBUTED: 'distributed',
     RETURNED: 'returned',
-    NONE: 'none',
+    NONE: 'none'
 };
 
 var CHECKED_STATUS = {
@@ -21,7 +21,6 @@ var CHECKED_STATUS = {
 
 
 var MailSchema = new Schema({
-
     html: {type: String},
     text: {type: String},
     subject: {type: String},
