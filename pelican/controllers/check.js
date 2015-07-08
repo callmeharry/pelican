@@ -149,7 +149,7 @@ exports.setCheckStatus = function (req, res, next) {
                             if (err) return callback(err);
 
                             console.log(info);
-                            console.log()
+                            console.log("send email successfully");
 
                         });
                     }
