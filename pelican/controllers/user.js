@@ -198,3 +198,19 @@ exports.getAllUsers = function (req, res, next) {
         res.reply(0, 'success', data);
     });
 };
+
+
+exports.getUserName = function (req, res, next) {
+    var id = req.query.id;
+
+    UserProxy.findUserById(id, function (err, user) {
+        if (err) return next(err);
+        if (!user) {
+            res.reply(101, "没有该用户");
+            return;
+        }
+        res.reply(0, 'success', user);
+
+    });
+    
+};
