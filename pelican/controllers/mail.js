@@ -3,6 +3,7 @@
  * 邮件controller 不分用户类型
  */
 var MailModel = require('../proxy').Mail;
+var UserModel = require('../proxy').User;
 var validator = require('validator');
 var ROLE = require('../models/user').ROLE;
 var MailControl = require('../common/mail.js');
@@ -16,6 +17,31 @@ var moment = require('moment');
  */
 exports.getMailDetail = function (req, res, next) {
     var id = validator.trim(req.query.mailId);
+
+    // 返回 handler 和 readers 的名称
+    function addHandlersAndReadersName(mail, callback) {
+        var ids = mail.readers.slice();
+        ids.push(mail.handler);
+
+        UserModel.findUsersByIds(ids, function (err, users) {
+            if (err) {
+                callback(err, mail);
+            } else {
+                var mailWithName = mail.toObject();
+
+                mailWithName.readerNames = [];
+                for (var i = 0; i < users.length; ++i) {
+                    if (users[i]._id == mailWithName.handler) {
+                        mailWithName.handlerName = users[i].username;
+                    } else {
+                        mailWithName.readerNames.push(users[i].username);
+                    }
+                }
+
+                callback(null, mailWithName);
+            }
+        });
+    }
 
     MailModel.findMailById(id, function (err, mail) {
         if (err) {
@@ -33,7 +59,9 @@ exports.getMailDetail = function (req, res, next) {
             mail.readers.indexOf(req.user._id) || req.user.role == ROLE.CHECKER) {
 
             if (mail.html != undefined || mail.text != undefined) {
-                res.reply(0, 'success', mail);
+                addHandlersAndReadersName(mail, function (err, data) {
+                    res.reply(0, 'success', data);
+                });
 
             } else {
                 //邮件里面没有正文进行下载
@@ -52,9 +80,11 @@ exports.getMailDetail = function (req, res, next) {
                                 mail[attr] = fullMail[attr];
                             }
                         }
-                        res.reply(0, 'success', mail);
-                        console.log(mail);
                         mail.save();
+
+                        addHandlersAndReadersName(mail, function (err, data) {
+                            res.reply(0, 'success', data);
+                        });
 
                     }, function (err) {
                         if (err)
