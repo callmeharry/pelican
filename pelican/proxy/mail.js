@@ -108,8 +108,6 @@ exports.getCheckMailList = function (query, page, callback) {
     return getMailList(query, page, 15, 'messageId subject date from to isChecked', callback);
 };
 
-
-
 /**
  * 通过id将邮件已处理信息置为true
  * @param id

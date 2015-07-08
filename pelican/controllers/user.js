@@ -196,7 +196,7 @@ exports.getAllUsers = function (req, res, next) {
         if (err) return next(err);
         var data = {};
         data['count'] = users.length;
-      
+
         var usersList = [];
 
         for (var i = 0; i < users.length; i++) {
