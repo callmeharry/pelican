@@ -49,7 +49,7 @@ exports.getMailDetail = function(req, res, next) {
                     var mailControl = new MailControl(data);
 
                     mailControl.getFullMail("INBOX", mail.messageId, function (mail) {
-                        mail.date=moment(mail.date).locale('zh-cn').toNow();
+                        mail.date=moment(mail.date).locale('zh-cn');
                         res.reply(0, 'success', mail);
                         MailModel.updateMailById(id, mail, function (err) {
                             if (err)
