@@ -118,7 +118,7 @@ exports.setCheckStatus = function (req, res, next) {
 
                 mailConfig.getConfig(function (err, data) {
                     if (err) return callback(err);
-
+                    console.log(JSON.parse(data));
                     callback(null, arg1, data);
                 });
             },
@@ -138,6 +138,11 @@ exports.setCheckStatus = function (req, res, next) {
 
                 var mailQueue = MailProxy.mailQueue;
 
+
+                console.log("before sending is ok!");
+                console.log(mail);
+                console.log("the config");
+                console.log(arg2);
 
                 mailQueue.push({
                     name: mail.subject, run: function () {
