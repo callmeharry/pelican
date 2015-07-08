@@ -54,7 +54,7 @@ exports.getMailDetail = function (req, res, next) {
                         }
                         res.reply(0, 'success', mail);
                         console.log(mail);
-                        MailModel.updateMailById(id, mail, function (err) {
+                        MailModel.updateMailByIdGyx(id, mail, function (err) {
                             if (err)
                                 console.log(err);
                         });

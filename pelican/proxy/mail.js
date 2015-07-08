@@ -127,6 +127,11 @@ exports.updateMailById = function (id, ups, callback) {
     MailModel.update({_id: id}, {"$set": ups}, callback);
 };
 
+
+exports.updateMailByIdGyx = function (id, ups, callback) {
+    MailModel.update({_id: id},  ups, callback);
+};
+
 exports.returnMail = function (id, callback) {
     this.findMailById(id, function (err, mail) {
         if (err)
