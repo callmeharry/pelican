@@ -31,6 +31,7 @@ exports.getMailList = function (req, res, next) {
                 item.subject = results[i].subject;
                 item.messageId = results[i].messageId;
                 item.from = results[i].from;
+                item.distributeStatus = results[i].distributeStatus;
                 items[i] = item;
             }
 
@@ -48,10 +49,21 @@ exports.getMailList = function (req, res, next) {
     if (type == 'outdated') {
         MailProxy.getDistributorOutDatedMailList(page, callback);
     } else {
-        if (!DISTRIBUTE_STATUS.hasOwnProperty(type)) {
+
+        // 判断type是否合法
+        var isTypeValid = false;
+        for (var property in DISTRIBUTE_STATUS) {
+            if (DISTRIBUTE_STATUS.hasOwnProperty(property) && type == DISTRIBUTE_STATUS[property]) {
+                isTypeValid = true;
+                break;
+            }
+        }
+
+        if (!isTypeValid) {
             // 若果type不合法，默认获取未分发的邮件
             type = DISTRIBUTE_STATUS.NEW;
         }
+
         MailProxy.getDistributorMailListByType(type, page, callback);
     }
 };
