@@ -133,7 +133,6 @@ exports.returnMail = function (id, callback) {
         if (err)
             return callback(err, null);
         mail.distributeStatus = DISTRIBUTE_STATUS.RETURNED;
-        mail.handler = '';
         mail.save(callback);
     })
 };
