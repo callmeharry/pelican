@@ -22,7 +22,11 @@ var CHECK_STATUS = require('../models/mail').CHECKED_STATUS;
 exports.getUnseenEmailList = function (req, res, next) {
     var id = validator.trim(req.user._id);
     var page = validator.trim(req.query.page);
-    var query = {handler: id, isHandled: false, distributedStatus: DISTRIBUTED_STATUS.DISTRIBUTED};
+    var query = {
+        $or: [{handler: id}, {readers: id}],
+        isHandled: false,
+        distributedStatus: DISTRIBUTED_STATUS.DISTRIBUTED
+    };
     if (req.user.role !== ROLE.HANDLER) {
         res.reply(101, "没有权限");
         return;
