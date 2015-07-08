@@ -99,3 +99,5 @@ exports.deleteUserById = function (id, callback) {
     UserModel.findOneAndRemove({'_id': id}, callback);
 };
 
+
+

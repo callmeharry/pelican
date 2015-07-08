@@ -10,7 +10,8 @@ var MailProxy = proxy.Mail;
 var validator = require('validator');
 var mailFs = require('../common/mailFs');
 var moment = require('moment');
-
+var mailTool = require('../common/mail');
+var mailConfig = proxy.MailConfig;
 
 exports.testApi = function (req, res, next) {
 
@@ -72,13 +73,80 @@ exports.testApi = function (req, res, next) {
     //});
 
 
-    var time = moment();
-    console.log(time.toLocaleString());
+    //var time = moment();
+    //console.log(time.toLocaleString());
+    //
+    //var change = time.locale('zh-cn').format('ll');
+    //
+    //res.reply(0, 'success', {change: change.toLocaleString()});
 
-    var change = time.locale('zh-cn').format('ll');
 
-    res.reply(0, 'success', {change: change.toLocaleString()});
+    var mailQueue = MailProxy.mailQueue;
+
+
+    mailQueue.push({
+        name: "hello", run: function (callback) {
+            mailConfig.getConfig(function (err, data) {
+                data = JSON.parse(data);
+
+                var mailInstance = new mailTool(data);
+
+                mailInstance.sendMail({
+                    from: data.mailAddress,
+                    to: 'lewisbuaa2012@163.com',
+                    subject: "hello from pelican",
+                    text: "ni shi sha bi",
+                    html: "<p>hello world!</p>"
+                }, function (err, info) {
+
+                    if (err) return;
+
+                    callback();
+
+                });
+
+            });
+
+        }
+    }, function (err) {
+        console.log('hello is bad! %s', err);
+    });
+
+
+    mailQueue.push({
+        name: "world", run: function (callback) {
+
+            console.log("the world task is running! let: %s", mailQueue.length());
+            callback();
+        }
+    }, function (err) {
+        console.log('hello is bad! %s', err);
+    });
+
+
+    mailQueue.push({
+        name: "is", run: function (callback) {
+
+            console.log("the is task is running! let: %s", mailQueue.length());
+            callback();
+        }
+    }, function (err) {
+        console.log('hello is bad! %s', err);
+
+    });
+
+    mailQueue.push({
+        name: "a", run: function (callback) {
+            console.log("the a task is running! let: %s", mailQueue.length());
+            callback();
+        }
+    }, function (err) {
+        console.log('hello is bad! %s', err);
+    });
+
+    res.reply(0, 'success', {length: mailQueue.length});
 };
+
 
 exports.testMail = function (req, res, next) {
     var mailContent = {
@@ -91,7 +159,7 @@ exports.testMail = function (req, res, next) {
         date: Date.now(),
         isDistribute: true,
         handler: '559693a96c6456be45d9d74a',
-        isChecked: 'unchecked',
+        isChecked: 'unchecked'
     };
 
     MailProxy.newAndSave(mailContent, function (err, mail) {

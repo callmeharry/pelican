@@ -14,16 +14,16 @@ var moment = require('moment');
  * @param res
  * @param next
  */
-exports.getMailDetail = function(req, res, next) {
+exports.getMailDetail = function (req, res, next) {
     var id = validator.trim(req.query.mailId);
 
     MailModel.findMailById(id, function (err, mail) {
-        if(err) {
+        if (err) {
             res.reply(101, '获取失败');
             return;
         }
-        if(!mail) {
-            res.reply(101,'邮件不存在');
+        if (!mail) {
+            res.reply(101, '邮件不存在');
             return;
         }
 
@@ -32,14 +32,10 @@ exports.getMailDetail = function(req, res, next) {
             req.user._id == mail.handler ||
             mail.readers.indexOf(req.user._id) || req.user.role == ROLE.CHECKER) {
 
-
-            if (mail.html!=undefined || mail.text!=undefined) {
+            if (mail.html != undefined || mail.text != undefined) {
                 res.reply(0, 'success', mail);
 
-
             } else {
-
-
                 //邮件里面没有正文进行下载
 
                 MailConfig.getConfig(function (err, data) {
@@ -48,8 +44,14 @@ exports.getMailDetail = function(req, res, next) {
 
                     var mailControl = new MailControl(data);
 
-                    mailControl.getFullMail("INBOX", mail.messageId, function (mail) {
-                        mail.date=moment(mail.date).locale('zh-cn');
+                    mailControl.getFullMail("INBOX", mail.messageId, function (fullMail) {
+
+                        // 把 fullMail 中的属性加入到 mail 中
+                        for (var attr in fullMail) {
+                            if (fullMail.hasOwnProperty(attr)) {
+                                mail[attr] = fullMail[attr];
+                            }
+                        }
                         res.reply(0, 'success', mail);
                         console.log(mail);
                         MailModel.updateMailById(id, mail, function (err) {
@@ -64,8 +66,6 @@ exports.getMailDetail = function(req, res, next) {
                 });
 
                 console.log(mail['']);
-
-
             }
 
 

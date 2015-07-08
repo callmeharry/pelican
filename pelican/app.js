@@ -28,6 +28,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 /**
  * 方便传输数据
  * 首先就做了关于status 和message 的解析

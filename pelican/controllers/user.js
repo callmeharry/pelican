@@ -5,7 +5,7 @@ var UserProxy = require('../proxy').User;
 var validator = require('validator');
 var Log = require('../common').LogHelper;
 var jwt = require('jsonwebtoken');
-
+var moment = require('moment');
 var ROLE = require('../models/user').ROLE;
 
 exports.login = function (req, res, next) {
@@ -187,14 +187,43 @@ exports.getAllChecker = function (req, res, next) {
 
 
 exports.getAllUsers = function (req, res, next) {
+    var user = req.user;
+    var page = req.query.page || 15;
+
+
 
     UserProxy.getUsersByQuery({role: {$nin: ['admin']}}, {}, function (err, users) {
         if (err) return next(err);
         var data = {};
         data['count'] = users.length;
-        data['users'] = users;
-        console.log(data);
 
+        var usersList = [];
+
+        for (var i = 0; i < users.length; i++) {
+            var user = users[i];
+            usersList.push({
+                username: user.username,
+                role: user.role,
+                create: moment(user.create_at).locale('zh-cn').format('lll').toLocaleString()
+            });
+        }
+        data['users'] = usersList;
         res.reply(0, 'success', data);
     });
+};
+
+
+exports.getUserName = function (req, res, next) {
+    var id = req.query.id;
+
+    UserProxy.findUserById(id, function (err, user) {
+        if (err) return next(err);
+        if (!user) {
+            res.reply(101, "没有该用户");
+            return;
+        }
+        res.reply(0, 'success', user);
+
+    });
+
 };

@@ -2,6 +2,7 @@ var moment = require('moment');
 var MailModel = require('../models').Mail;
 var DISTRIBUTE_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
 var MailConfig = require("../proxy").MailConfig;
+var async = require('async');
 
 exports.newAndSave = function (mail, callback) {
 
@@ -107,8 +108,6 @@ exports.getCheckMailList = function (query, page, callback) {
     return getMailList(query, page, 15, 'messageId subject date from to isChecked', callback);
 };
 
-
-
 /**
  * 通过id将邮件已处理信息置为true
  * @param id
@@ -133,9 +132,27 @@ exports.returnMail = function (id, callback) {
         if (err)
             return callback(err, null);
         mail.distributeStatus = DISTRIBUTE_STATUS.RETURNED;
-        mail.handler = '';
         mail.save(callback);
     })
 };
+
+var mailQueue = async.queue(function (task, callback) {
+    console.log('worker is processing task ', task.name);
+    task.run(callback);
+}, 1);
+
+
+mailQueue.saturated = function () {
+    console.log('all workers to be used');
+};
+
+/**
+ * 监听：当最后一个任务交给worker时，将调用该函数
+ */
+mailQueue.empty = function () {
+    console.log('no more tasks wating');
+};
+
+exports.mailQueue = mailQueue;
 
 
