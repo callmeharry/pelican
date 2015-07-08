@@ -51,6 +51,7 @@ exports.getMailDetail = function(req, res, next) {
                     mailControl.getFullMail("INBOX", mail.messageId, function (mail) {
                         mail.date=moment(mail.date).locale('zh-cn');
                         res.reply(0, 'success', mail);
+                        console.log(mail);
                         MailModel.updateMailById(id, mail, function (err) {
                             if (err)
                                 console.log(err);
@@ -75,3 +76,4 @@ exports.getMailDetail = function(req, res, next) {
     });
 
 };
+
