@@ -63,8 +63,6 @@ exports.getMailDetail = function(req, res, next) {
                 });
 
                 console.log(mail['']);
-
-
             }
 
 

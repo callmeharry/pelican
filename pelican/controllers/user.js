@@ -187,6 +187,10 @@ exports.getAllChecker = function (req, res, next) {
 
 
 exports.getAllUsers = function (req, res, next) {
+    var user = req.user;
+    var page = req.query.page || 15;
+
+
 
     UserProxy.getUsersByQuery({role: {$nin: ['admin']}}, {}, function (err, users) {
         if (err) return next(err);
@@ -212,5 +216,5 @@ exports.getUserName = function (req, res, next) {
         res.reply(0, 'success', user);
 
     });
-    
+
 };

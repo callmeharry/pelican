@@ -72,13 +72,62 @@ exports.testApi = function (req, res, next) {
     //});
 
 
-    var time = moment();
-    console.log(time.toLocaleString());
+    //var time = moment();
+    //console.log(time.toLocaleString());
+    //
+    //var change = time.locale('zh-cn').format('ll');
+    //
+    //res.reply(0, 'success', {change: change.toLocaleString()});
 
-    var change = time.locale('zh-cn').format('ll');
 
-    res.reply(0, 'success', {change: change.toLocaleString()});
+    var mailQueue = MailProxy.mailQueue;
+
+
+    mailQueue.push({
+        name: "hello", run: function (callback) {
+
+            console.log("the hello task is running! let: %s", mailQueue.length());
+            callback();
+        }
+    }, function (err) {
+        console.log('hello is bad! %s', err);
+    });
+
+
+    mailQueue.push({
+        name: "world", run: function (callback) {
+
+            console.log("the world task is running! let: %s", mailQueue.length());
+            callback();
+        }
+    }, function (err) {
+        console.log('hello is bad! %s', err);
+    });
+
+
+    mailQueue.push({
+        name: "is", run: function (callback) {
+
+            console.log("the is task is running! let: %s", mailQueue.length());
+            callback();
+        }
+    }, function (err) {
+        console.log('hello is bad! %s', err);
+
+    });
+
+    mailQueue.push({
+        name: "a", run: function (callback) {
+            console.log("the a task is running! let: %s", mailQueue.length());
+            callback();
+        }
+    }, function (err) {
+        console.log('hello is bad! %s', err);
+    });
+
+    res.reply(0, 'success', {length: mailQueue.length});
 };
+
 
 exports.testMail = function (req, res, next) {
     var mailContent = {
