@@ -52,8 +52,8 @@ exports.getMailDetail = function (req, res, next) {
                                 mail[attr] = fullMail[attr];
                             }
                         }
-
                         res.reply(0, 'success', mail);
+                        console.log(mail);
                         MailModel.updateMailById(id, mail, function (err) {
                             if (err)
                                 console.log(err);
@@ -76,3 +76,4 @@ exports.getMailDetail = function (req, res, next) {
     });
 
 };
+
