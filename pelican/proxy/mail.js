@@ -87,6 +87,7 @@ exports.getDistributorMailListByType = function (type, page, callback) {
 exports.getDistributorOutDatedMailList = function (page, callback) {
     return getMailList(
         {
+            isHandled: false,
             handleDeadline: {$gt: Date.now()}
         },
         page,

@@ -98,6 +98,33 @@ exports.addUser = function (req, res, next) {
     });
 };
 
+exports.changePassword = function (req, res, next) {
+    if (req.user.role !== ROLE.ADMIN) {
+        res.reply(1, "没有权限");
+        return;
+    }
+
+    var userId = validator.trim(req.body.id);
+    var password = validator.trim(req.body.password);
+
+
+    UserProxy.updateUserById(
+        userId,
+        {password: password},
+        function (err, user) {
+            if (err) {
+                return next(err);
+            }
+
+            if (!user) {
+                res.reply(101, "用户名不存在");
+                return;
+            }
+
+            res.reply(0, "修改密码成功");
+        });
+};
+
 
 exports.deleteUser = function (req, res, next) {
     if (req.user.role !== ROLE.ADMIN) {
@@ -191,7 +218,6 @@ exports.getAllUsers = function (req, res, next) {
     var page = req.query.page || 15;
 
 
-
     UserProxy.getUsersByQuery({role: {$nin: ['admin']}}, {}, function (err, users) {
         if (err) return next(err);
         var data = {};
@@ -202,6 +228,7 @@ exports.getAllUsers = function (req, res, next) {
         for (var i = 0; i < users.length; i++) {
             var user = users[i];
             usersList.push({
+                id: user._id,
                 username: user.username,
                 role: user.role,
                 create: moment(user.create_at).locale('zh-cn').format('lll').toLocaleString()

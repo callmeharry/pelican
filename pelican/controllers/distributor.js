@@ -26,7 +26,8 @@ exports.getMailList = function (req, res, next) {
             var items = new Array(results.length);
             for (var i = 0; i < results.length; i++) {
                 var item = {};
-                item.date = moment(results[i].date).locale('zh-cn');
+                item.date = results[i].date;
+                item.fromNow = moment(results[i].date).locale('zh-cn').toNow();
                 item._id = results[i]._id;
                 item.subject = results[i].subject;
                 item.messageId = results[i].messageId;
@@ -79,8 +80,14 @@ exports.distribute = function (req, res, next) {
     var mailId = validator.trim(req.body.mailId);
     var handlerId = validator.trim(req.body.handlerId);
     var readerIds = validator.trim(req.body.readerIds);
+    if (readerIds) {
+        readerIds = JSON.parse(readerIds);
+    }
     var handleDeadline = validator.trim(req.body.deadline);
     var reqTags = validator.trim(req.body.tags);
+    if (reqTags) {
+        reqTags = JSON.parse(reqTags);
+    }
 
     MailTagProxy.findMailTagsByNames(reqTags, function (err, mailTags) {
         if (err) {

@@ -82,6 +82,11 @@ exports.findUsersByRole = function (role, callback) {
 };
 
 
+exports.updateUserById = function (id, ups, callback) {
+    UserModel.update({_id: id}, {"$set": ups}, callback);
+};
+
+
 /**
  * 根据关键字，获取一组用户
  * Callback:
