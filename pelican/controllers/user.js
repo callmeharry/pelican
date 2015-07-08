@@ -121,7 +121,7 @@ exports.changePassword = function (req, res, next) {
                 return;
             }
 
-            res.reply(0, "修改密码成功", data);
+            res.reply(0, "修改密码成功");
         });
 };
 
