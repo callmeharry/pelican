@@ -142,9 +142,6 @@ exports.setCheckStatus = function (req, res, next) {
 
                 var mailQueue = MailProxy.mailQueue;
 
-
-
-
                 mailQueue.push({
                     name: sendMail.subject, run: function () {
                         var data = JSON.parse(arg2);
