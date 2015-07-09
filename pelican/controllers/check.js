@@ -157,16 +157,18 @@ exports.setCheckStatus = function (req, res, next) {
 
 
                         mailInstance.sendMail(sendMail, function (err, info) {
+                            var status;
                             if (err) {
                                 console.log("there is some err");
-                                return;
+                                status = 'failed';
+                            } else {
+                                console.log("send email successfully");
+                                status = 'send';
                             }
 
-                            MailProxy.updateMailById(mail._id, {isChecked: 'send'}, function (err) {
-                                
-                                console.log("send email successfully");
+                            MailProxy.updateMailById(mail._id, {isChecked: status}, function (err) {
+                                console.log('change status successfully');
                             });
-                            //  console.log(info);
 
 
                         });
