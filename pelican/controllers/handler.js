@@ -190,7 +190,7 @@ function getEmailListByQuery(query, page, res) {
                 senderName: results[i].from,
                 receiveTime: originDate,
                 fromNow: fromNow,
-                isHandler: isHandler
+                Handler: isHandler
                 
             };
         }
