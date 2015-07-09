@@ -176,13 +176,14 @@ function getEmailListByQuery(query, page, res) {
         data.pageCount = pageCount;
         var list = new Array();
         for (var i = 0; i < results.length; i++) {
-            results[i].date = moment(results[i].date).valueOf() + timeOffset;
+            var fromNow = moment(results[i].date).locale('zh-cn').toNow();//这里是将邮件的ISO时间与当前的ISO时间比较
+            results[i].date = moment(results[i].date).valueOf() + timeOffset;//传回的时间的值加8个小时
             list[i] = {
                 mailId: results[i]._id,
                 title: results[i].subject,
                 senderName: results[i].from,
                 receiveTime: results[i].date,
-                fromNow: moment(results[i].date).locale('zh-cn').toNow()
+                fromNow: fromNow
             };
         }
         data.list = list;
