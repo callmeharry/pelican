@@ -13,6 +13,7 @@ var ROLE = require('../models/user').ROLE;
 var DISTRIBUTED_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
 var CHECK_STATUS = require('../models/mail').CHECKED_STATUS;
 var timeOffset = 28800000;//时区offset
+var id_temp;//暂时存储handler_id
 
 /**
  * 获取未处理邮件
@@ -23,6 +24,7 @@ var timeOffset = 28800000;//时区offset
 exports.getUnseenEmailList = function (req, res, next) {
     var id = validator.trim(req.user._id);
     var page = validator.trim(req.query.page);
+    id_temp = id;
     var query = {
         $or: [{handler: id}, {readers: id}],
         isHandled: false,
@@ -179,12 +181,17 @@ function getEmailListByQuery(query, page, res) {
             var originDate = results[i].date;
             results[i].date = moment(results[i].date).valueOf() - timeOffset;//传回的时间的值减8个小时
             var fromNow = moment(results[i].date).locale('zh-cn').toNow();//这里是将邮件的ISO时间与当前的ISO时间比较
+            var isHandler = false;
+            if(results[i].handler == id_temp)
+                isHandler = true;
             list[i] = {
                 mailId: results[i]._id,
                 title: results[i].subject,
                 senderName: results[i].from,
                 receiveTime: originDate,
-                fromNow: fromNow
+                fromNow: fromNow,
+                isHandler: isHandler
+                
             };
         }
         data.list = list;
