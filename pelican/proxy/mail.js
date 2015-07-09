@@ -136,7 +136,9 @@ exports.returnMail = function (id, callback) {
         mail.save(callback);
     })
 };
-
+exports.deleteMail = function (id, callback) {
+    MailModel.findOneAndRemove({'_id': id}, callback);
+};
 var mailQueue = async.queue(function (task, callback) {
     console.log('worker is processing task ', task.name);
     task.run();
