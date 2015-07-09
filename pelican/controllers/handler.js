@@ -105,7 +105,7 @@ exports.sendEmail = function (req, res, next) {
             if (mail.isChecked === CHECK_STATUS.UNCHECKED) {
                 //这个逻辑并不好 应该直接根据id更新数据库，而不是先加新的邮件再删除原邮件
                 if(oldId != undefined || oldId != '') {
-                    MailProxy.deleteMail(id, function(err, mail) {
+                    MailProxy.deleteMail(oldId, function(err, mail) {
 
                     });
                 }
