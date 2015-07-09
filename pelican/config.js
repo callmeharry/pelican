@@ -12,7 +12,7 @@ var config = {
     apiVersion: "0.1",
 
     //mongodb 数据库配置
-    db: "mongodb://pelican:Pelican1221@123.57.211.52:27017/pelican",
+    db: "mongodb://pelican:Pelican1221@123.57.211.52:27017/pelicantest",
     //db: "mongodb://localhost:27017/test",
 
     dbOpts: {

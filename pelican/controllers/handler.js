@@ -66,6 +66,7 @@ exports.sendEmail = function (req, res, next) {
     var html = req.body.html;
     var mail = new MailModel();
     var checker = req.body.checker;
+    var tags = req.body.tags;
     if (req.user.role !== ROLE.HANDLER) {
         res.reply(101, "没有权限");
         return;
@@ -85,6 +86,7 @@ exports.sendEmail = function (req, res, next) {
         mail.distributeStatus = DISTRIBUTED_STATUS.NONE;
         mail.messageId = Date.now().toLocaleString() + '@pelican';
         mail.isHandled = false;
+        mail.tags = tags;
         if (checker != '0')
             mail.isChecked = CHECK_STATUS.UNCHECKED;
         else
@@ -176,13 +178,14 @@ function getEmailListByQuery(query, page, res) {
         data.pageCount = pageCount;
         var list = new Array();
         for (var i = 0; i < results.length; i++) {
+            var originDate = results[i].date;
+            results[i].date = moment(results[i].date).valueOf() - timeOffset;//传回的时间的值加8个小时
             var fromNow = moment(results[i].date).locale('zh-cn').toNow();//这里是将邮件的ISO时间与当前的ISO时间比较
-            results[i].date = moment(results[i].date).valueOf() + timeOffset;//传回的时间的值加8个小时
             list[i] = {
                 mailId: results[i]._id,
                 title: results[i].subject,
                 senderName: results[i].from,
-                receiveTime: results[i].date,
+                receiveTime: originDate,
                 fromNow: fromNow
             };
         }

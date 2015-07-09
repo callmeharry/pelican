@@ -6,10 +6,11 @@ var MailSender = require('../common/mail');
 var MailProxy = require('../proxy').Mail;
 var eventproxy = require('eventproxy');
 var DISTRIBUTE_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
-var mailCount = 1;//default mailCount;
+var mailCount = 2;//default mailCount for each handler;
 var success = 0;
 var failure = 0;
 var ep = new eventproxy();
+var handlerIds = [];
 
 ep.after('send', mailCount, function (infos) {
     console.log(mailCount + ' attempts, success:' + success + ', failure:' + failure);
@@ -23,7 +24,7 @@ function sendOneEmail() {
         var date = new Date();
         var mailOptions = {
             from: '522919608@qq.com', // sender address
-            to: '442500347@qq.com', // list of receivers
+            to: 'pelicanfly@163.com', // list of receivers
             subject: '测试邮件(自动生成于' + date + ')', // Subject line
             text: '测试邮件(自动生成于' + date + ')', // plaintext body
             html: '<b>测试邮件(自动生成于' + date + ') </b>' // html body
@@ -52,27 +53,29 @@ function sendOneEmail() {
 }
 
 function saveMail() {
-    for (var i = 0; i < mailCount; i++) {
-        var mail = new MailModel();
-        var date = new Date();
-        mail.handler = '';
-        mail.subject = '测试邮件(自动生成于' + date + ')';
-        mail.text = '测试邮件(自动生成于' + date + ')'; // plaintext body
-        mail.html = '<b>测试邮件(自动生成于' + date + ') </b>';
-        mail.from = {name: 'steve', address: '442500347@qq.com'};
-        mail.checkMan = '';
-        mail.distributeStatus = DISTRIBUTE_STATUS.NEW;
-        mail.messageId = Date.now().toLocaleString() + '@pelican';
-        mail.to = [{name: '鹈鹕邮件', address: 'gyxln@buaa.edu.cn'}];
-        mail.isHandled = false;
-        MailProxy.newAndSave(mail, function (err, data2) {
-            if (err) {
-                failure++;
-                ep.emit('send', err);
-            } else {
-                success++;
-                ep.emit('send', data2);
-            }
-        });
+    for (var x = 0; x < handlerIds.length; x++) {
+        for (var i = 0; i < mailCount; i++) {
+            var mail = new MailModel();
+            var date = new Date();
+            mail.handler = handlerIds[x];
+            mail.subject = '测试邮件(自动生成于' + date + ')';
+            mail.text = '测试邮件(自动生成于' + date + ')'; // plaintext body
+            mail.html = '<b>测试邮件(自动生成于' + date + ') </b>';
+            mail.from = {name: 'steve', address: '442500347@qq.com'};
+            mail.checkMan = '';
+            mail.distributeStatus = DISTRIBUTE_STATUS.DISTRIBUTED;
+            mail.messageId = Date.now().toLocaleString() + '@pelican';
+            mail.to = [{name: '鹈鹕邮件', address: 'gyxln@buaa.edu.cn'}];
+            mail.isHandled = false;
+            MailProxy.newAndSave(mail, function (err, data2) {
+                if (err) {
+                    failure++;
+                    ep.emit('send', err);
+                } else {
+                    success++;
+                    ep.emit('send', data2);
+                }
+            });
+        }
     }
 }
