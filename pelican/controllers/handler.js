@@ -194,7 +194,8 @@ function getEmailListByQuery(query, page, res) {
         var list = new Array();
         for (var i = 0; i < results.length; i++) {
             var originDate = results[i].date;
-            results[i].date = moment(results[i].date).valueOf() - timeOffset;//传回的时间的值加8个小时
+            if(results[i].from[0].name != senderName)
+                results[i].date = moment(results[i].date).valueOf() - timeOffset;//传回的时间的值加8个小时
             var fromNow = moment(results[i].date).locale('zh-cn').toNow();//这里是将邮件的ISO时间与当前的ISO时间比较
             console.log(results[i].handler);
             console.log(id_temp);
