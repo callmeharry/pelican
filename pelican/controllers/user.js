@@ -218,7 +218,7 @@ exports.getAllUsers = function (req, res, next) {
     var page = req.query.page || 15;
 
 
-    UserProxy.getUsersByQuery({role: {$nin: ['admin']}}, {}, function (err, users) {
+    UserProxy.getAllSortedUserExceptAdmin(function (err, users) {
         if (err) return next(err);
         var data = {};
         data['count'] = users.length;
