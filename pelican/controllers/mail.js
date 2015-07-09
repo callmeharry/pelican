@@ -9,6 +9,7 @@ var ROLE = require('../models/user').ROLE;
 var MailControl = require('../common/mail.js');
 var MailConfig = require('../proxy').MailConfig;
 var moment = require('moment');
+var timeOffset = 28800000;//时区offset
 /**
  * 获取单个邮件详情
  * @param req
@@ -52,14 +53,19 @@ exports.getMailDetail = function (req, res, next) {
             res.reply(101, '邮件不存在');
             return;
         }
-
         //判断是否有阅读权限
         if (req.user.role == ROLE.DISTRIBUTOR ||
-            req.user.role == ROLE.HANDLER ||
-            mail.readers.indexOf(req.user._id) || req.user.role == ROLE.CHECKER) {
+            req.user._id == mail.handler ||
+            mail.readers.indexOf(req.user._id) > -1 || req.user.role == ROLE.CHECKER) {
 
             if (mail.html != undefined || mail.text != undefined) {
+                //将时间改为当前时区时间
+                mail.date = moment(mail.date).valueOf() + timeOffset;
+                mail.reCeivedDate = moment(mail.date).valueOf() + timeOffset;
                 addHandlersAndReadersName(mail, function (err, data) {
+                    for (var i = 0; i < data.attachments.length; i++) {
+                        delete data.attachments[i].content;
+                    }
                     res.reply(0, 'success', data);
                 });
 
@@ -80,8 +86,14 @@ exports.getMailDetail = function (req, res, next) {
                                 mail[attr] = fullMail[attr];
                             }
                         }
-                        mail.save();
 
+                        mail.save();
+                        //将时间改为当前时区时间
+                        mail.date = moment(mail.date).valueOf() + timeOffset;
+                        mail.receivedDate = moment(mail.date).valueOf() + timeOffset;
+                        for (var i = 0; i < data.attachments.length; i++) {
+                            delete data.attachments[i].content;
+                        }
                         addHandlersAndReadersName(mail, function (err, data) {
                             res.reply(0, 'success', data);
                         });

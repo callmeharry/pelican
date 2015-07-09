@@ -12,6 +12,7 @@ var senderName = '鹈鹕邮件';
 var ROLE = require('../models/user').ROLE;
 var DISTRIBUTED_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
 var CHECK_STATUS = require('../models/mail').CHECKED_STATUS;
+var timeOffset = 28800000;//时区offset
 
 /**
  * 获取未处理邮件
@@ -175,6 +176,7 @@ function getEmailListByQuery(query, page, res) {
         data.pageCount = pageCount;
         var list = new Array();
         for (var i = 0; i < results.length; i++) {
+            results[i].date = moment(results[i].date).valueOf() + timeOffset;
             list[i] = {
                 mailId: results[i]._id,
                 title: results[i].subject,
