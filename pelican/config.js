@@ -17,8 +17,8 @@ var config = {
 
     dbOpts: {
         server: {
-            socketOptions: {keepAlive: 10},
-            auto_reconnect: true, poolSize: 25
+            socketOptions: {keepAlive: 30},
+            auto_reconnect: true, poolSize: 100
         }
     },
 

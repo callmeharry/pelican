@@ -21,6 +21,9 @@ ep.after('send', mailCount * handlerIds.length, function (infos) {
     console.log(mailCount * handlerIds.length + ' attempts, success:' + success + ', failure:' + failure);
 });
 
+console.log('insert start!');
+console.log('trying to connect mongodb.');
+
 //sendOneEmail();
 
 function sendOneEmail() {
