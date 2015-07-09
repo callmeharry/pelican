@@ -194,7 +194,7 @@ function getEmailListByQuery(query, page, res) {
                 senderName: results[i].from,
                 receiveTime: originDate,
                 fromNow: fromNow,
-                handler: isHandler
+                isHandler: isHandler
             };
         }
         data.list = list;
