@@ -13,7 +13,7 @@ var ROLE = require('../models/user').ROLE;
 var DISTRIBUTED_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
 var CHECK_STATUS = require('../models/mail').CHECKED_STATUS;
 var timeOffset = 28800000;//时区offset
-var id_temp;//暂时存储handler_id
+var id_temp;//暂时存储id
 
 /**
  * 获取未处理邮件
@@ -68,6 +68,7 @@ exports.sendEmail = function (req, res, next) {
     var html = req.body.html;
     var mail = new MailModel();
     var checker = req.body.checker;
+    var tags = req.body.tags;
     if (req.user.role !== ROLE.HANDLER) {
         res.reply(101, "没有权限");
         return;
@@ -86,7 +87,8 @@ exports.sendEmail = function (req, res, next) {
         mail.checkMan = checker;
         mail.distributeStatus = DISTRIBUTED_STATUS.NONE;
         mail.messageId = Date.now().toLocaleString() + '@pelican';
-        mail.isHandled = false;
+        mail.isHandled = true;
+        mail.tags = tags;
         if (checker != '0')
             mail.isChecked = CHECK_STATUS.UNCHECKED;
         else
@@ -179,8 +181,10 @@ function getEmailListByQuery(query, page, res) {
         var list = new Array();
         for (var i = 0; i < results.length; i++) {
             var originDate = results[i].date;
-            results[i].date = moment(results[i].date).valueOf() - timeOffset;//传回的时间的值减8个小时
+            results[i].date = moment(results[i].date).valueOf() - timeOffset;//传回的时间的值加8个小时
             var fromNow = moment(results[i].date).locale('zh-cn').toNow();//这里是将邮件的ISO时间与当前的ISO时间比较
+            console.log(results[i].handler);
+            console.log(id_temp);
             var isHandler = false;
             if(results[i].handler == id_temp)
                 isHandler = true;
@@ -190,8 +194,7 @@ function getEmailListByQuery(query, page, res) {
                 senderName: results[i].from,
                 receiveTime: originDate,
                 fromNow: fromNow,
-                Handler: isHandler
-                
+                handler: isHandler
             };
         }
         data.list = list;
