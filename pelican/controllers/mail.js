@@ -55,7 +55,7 @@ exports.getMailDetail = function (req, res, next) {
 
         //判断是否有阅读权限
         if (req.user.role == ROLE.DISTRIBUTOR ||
-            req.user._id == mail.handler ||
+            req.user.role == ROLE.HANDLER ||
             mail.readers.indexOf(req.user._id) || req.user.role == ROLE.CHECKER) {
 
             if (mail.html != undefined || mail.text != undefined) {

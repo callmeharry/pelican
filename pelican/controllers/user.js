@@ -239,7 +239,6 @@ exports.getAllUsers = function (req, res, next) {
     });
 };
 
-
 exports.getUserName = function (req, res, next) {
     var id = req.query.id;
 

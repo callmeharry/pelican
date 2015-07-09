@@ -85,7 +85,7 @@ exports.testApi = function (req, res, next) {
 
 
     mailQueue.push({
-        name: "hello", run: function (callback) {
+        name: "hello", run: function () {
             mailConfig.getConfig(function (err, data) {
                 data = JSON.parse(data);
 
@@ -100,8 +100,8 @@ exports.testApi = function (req, res, next) {
                 }, function (err, info) {
 
                     if (err) return;
+                    console.log('send successfully');
 
-                    callback();
 
                 });
 
@@ -114,10 +114,10 @@ exports.testApi = function (req, res, next) {
 
 
     mailQueue.push({
-        name: "world", run: function (callback) {
+        name: "world", run: function () {
 
             console.log("the world task is running! let: %s", mailQueue.length());
-            callback();
+
         }
     }, function (err) {
         console.log('hello is bad! %s', err);
@@ -125,10 +125,10 @@ exports.testApi = function (req, res, next) {
 
 
     mailQueue.push({
-        name: "is", run: function (callback) {
+        name: "is", run: function () {
 
             console.log("the is task is running! let: %s", mailQueue.length());
-            callback();
+
         }
     }, function (err) {
         console.log('hello is bad! %s', err);
@@ -136,9 +136,9 @@ exports.testApi = function (req, res, next) {
     });
 
     mailQueue.push({
-        name: "a", run: function (callback) {
+        name: "a", run: function () {
             console.log("the a task is running! let: %s", mailQueue.length());
-            callback();
+
         }
     }, function (err) {
         console.log('hello is bad! %s', err);

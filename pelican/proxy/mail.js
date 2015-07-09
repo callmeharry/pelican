@@ -139,7 +139,8 @@ exports.returnMail = function (id, callback) {
 
 var mailQueue = async.queue(function (task, callback) {
     console.log('worker is processing task ', task.name);
-    task.run(callback);
+    task.run();
+    callback();
 }, 1);
 
 

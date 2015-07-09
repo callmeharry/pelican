@@ -7,6 +7,9 @@ var proxy = require('../proxy');
 var MailProxy = proxy.Mail;
 var moment = require('moment');
 var validator = require('validator');
+var async = require('async');
+var mailTool = require('../common/mail');
+var mailConfig = proxy.MailConfig;
 
 
 
@@ -95,15 +98,97 @@ exports.setCheckStatus = function (req, res, next) {
     var check = req.body.check;
 
     if (check == 'passed') {  //审核通过
-        MailProxy.updateMailById(mailId, {isChecked: "checked"}, function (err) {
+        async.waterfall([
+
+            function (callback) {
+
+                MailProxy.findMailById(mailId, function (err, mail) {
+                    if (err) return callback(err);
+
+                    mail.isChecked = 'checked';
+                    mail.save();
+
+                    callback(null, JSON.stringify(mail));
+                });
+
+            },
+
+            function (arg1, callback) {
+
+
+                mailConfig.getConfig(function (err, data) {
+                    if (err) return callback(err);
+                    console.log(JSON.parse(data));
+                    callback(null, arg1, data);
+                });
+            },
+
+            function (arg1, arg2, callback) {
+
+                var mail = JSON.parse(arg1);
+                console.log(mail);
+
+                var toPalaces = [];
+                for (var i = 0; i < mail.to.length; i++) {
+                    toPalaces.push(mail.to[i].name + " <" + mail.to[i].address + ">");
+                }
+
+
+                var sendMail = {
+                    from: mail.from[0].name + ' <' + mail.from[0].address + '>',
+                    html: mail.html,
+                    text: mail.text,
+                    subject: mail.subject,
+                    to: toPalaces
+                };
+
+                if (mail.hasOwnProperty('attachment')) {
+                    sendMail.attachment = mail.attachment;
+                }
+
+                var mailQueue = MailProxy.mailQueue;
+
+                mailQueue.push({
+                    name: sendMail.subject, run: function () {
+                        var data = JSON.parse(arg2);
+
+
+                        var mailInstance = new mailTool(data);
+
+
+                        mailInstance.sendMail(sendMail, function (err, info) {
+                            if (err) {
+                                console.log("there is some err");
+                                return;
+                            }
+
+                            MailProxy.updateMailById(mail._id, {isChecked: 'send'}, function (err) {
+                                
+                                console.log("send email successfully");
+                            });
+                            //  console.log(info);
+
+
+                        });
+                    }
+                }, function (err) {
+                    if (err)
+                        console.log('hello is bad! %s', err);
+                    else
+                        console.log("The task execute successfully");
+
+                });
+                callback(null, 'done');
+
+            }
+
+        ], function (err, result) {
             if (err) return next(err);
 
-            //todo 发送邮件
+            console.log(result);
 
-            res.reply(0, "发送成功")
-
+            res.reply(0, '发送成功');
         });
-
 
     } else if (check == 'failed') {    //审核未通过
 
