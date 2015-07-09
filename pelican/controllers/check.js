@@ -56,7 +56,7 @@ exports.getCheckedList = function (req, res, next) {
     var user = req.user;
     var page = req.query.page;
 
-    var query = {checkMan: user._id, isChecked: {"$in": ['checked', 'returned']}};
+    var query = {checkMan: user._id, isChecked: {"$in": ['checked', 'returned', 'send', 'failed']}};
 
     MailProxy.getCheckMailList(query, page, function (err, results, pageCount, itemCount) {
         if (err) return next(err);
