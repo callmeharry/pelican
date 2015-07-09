@@ -87,6 +87,12 @@ exports.getMailDetail = function (req, res, next) {
                             }
                         }
 
+                        if (!mail.hasOwnProperty('html')) {
+                            mail.html = mail.text;
+                        }
+
+                        mail.save();
+
                         mail.save();
                         //将时间改为当前时区时间
                         mail.date = moment(mail.date).valueOf() + timeOffset;

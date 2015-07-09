@@ -128,12 +128,18 @@ exports.setCheckStatus = function (req, res, next) {
                 var mail = JSON.parse(arg1);
                 console.log(mail);
 
+                var toPalaces = [];
+                for (var i = 0; i < mail.to.length; i++) {
+                    toPalaces.push(mail.to[i].name + " <" + mail.to[i].address + ">");
+                }
+
+
                 var sendMail = {
-                    from: mail.from[0].address,
+                    from: mail.from[0].name + ' <' + mail.from[0].address + '>',
                     html: mail.html,
                     text: mail.text,
                     subject: mail.subject,
-                    to: mail.to[0].address
+                    to: toPalaces
                 };
 
                 if (mail.hasOwnProperty('attachment')) {
@@ -151,12 +157,19 @@ exports.setCheckStatus = function (req, res, next) {
 
 
                         mailInstance.sendMail(sendMail, function (err, info) {
+                            var status;
                             if (err) {
                                 console.log("there is some err");
-                                return;
+                                status = 'failed';
+                            } else {
+                                console.log("send email successfully");
+                                status = 'send';
                             }
-                            //  console.log(info);
-                            console.log("send email successfully");
+
+                            MailProxy.updateMailById(mail._id, {isChecked: status}, function (err) {
+                                console.log('change status successfully');
+                            });
+
 
                         });
                     }

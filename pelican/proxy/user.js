@@ -100,6 +100,11 @@ exports.getUsersByQuery = function (query, opt, callback) {
     UserModel.find(query, '', opt, callback);
 };
 
+
+exports.getAllSortedUserExceptAdmin = function (callback) {
+    UserModel.find({role: {$nin: ['admin']}}).sort('role').exec(callback);
+};
+
 exports.deleteUserById = function (id, callback) {
     UserModel.findOneAndRemove({'_id': id}, callback);
 };
