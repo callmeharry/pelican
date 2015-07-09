@@ -69,6 +69,7 @@ exports.sendEmail = function (req, res, next) {
     var mail = new MailModel();
     var checker = req.body.checker;
     var tags = req.body.tags;
+    var oldId = req.body.id;
     if (req.user.role !== ROLE.HANDLER) {
         res.reply(101, "没有权限");
         return;
@@ -102,6 +103,12 @@ exports.sendEmail = function (req, res, next) {
                 return;
             }
             if (mail.isChecked === CHECK_STATUS.UNCHECKED) {
+                //这个逻辑并不好 应该直接根据id更新数据库，而不是先加新的邮件再删除原邮件
+                if(oldId != undefined || oldId != '') {
+                    MailProxy.deleteMail(id, function(err, mail) {
+
+                    });
+                }
                 res.reply(0, '邮件回复成功，等待审核人员审核');
                 return;
             }
@@ -118,6 +125,12 @@ exports.sendEmail = function (req, res, next) {
                     res.reply(104, err);
                 } else {
                     res.reply(0, '邮件已发送');
+                    //这个逻辑并不好 应该直接根据id更新数据库，而不是先加新的邮件再删除原邮件
+                    if(oldId != undefined || oldId != '') {
+                         MailProxy.deleteMail(id, function(err, mail) {
+
+                        });
+                    }
                 }
             });
         });
