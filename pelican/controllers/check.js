@@ -161,8 +161,13 @@ exports.setCheckStatus = function (req, res, next) {
                                 console.log("there is some err");
                                 return;
                             }
+
+                            MailProxy.updateMailById(mail._id, {isChecked: 'send'}, function (err) {
+                                
+                                console.log("send email successfully");
+                            });
                             //  console.log(info);
-                            console.log("send email successfully");
+
 
                         });
                     }
