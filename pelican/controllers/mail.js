@@ -63,9 +63,10 @@ exports.getMailDetail = function (req, res, next) {
                 mail.date = moment(mail.date).valueOf() + timeOffset;
                 mail.receivedDate = moment(mail.receivedDate).valueOf() + timeOffset;
                 addHandlersAndReadersName(mail, function (err, data) {
-                    for (var i = 0; i < data.attachments.length; i++) {
-                        delete data.attachments[i].content;
-                    }
+                    if (data.attachments != undefined)
+                        for (var i = 0; i < data.attachments.length; i++) {
+                            delete data.attachments[i].content;
+                        }
                     res.reply(0, 'success', data);
                 });
 
@@ -97,9 +98,10 @@ exports.getMailDetail = function (req, res, next) {
                         //将时间改为当前时区时间
                         mail.date = moment(mail.date).valueOf() + timeOffset;
                         mail.receivedDate = moment(mail.receivedDate).valueOf() + timeOffset;
-                        for (var i = 0; i < data.attachments.length; i++) {
-                            delete data.attachments[i].content;
-                        }
+                        if (data.attachments != undefined)
+                            for (var i = 0; i < data.attachments.length; i++) {
+                                delete data.attachments[i].content;
+                            }
                         addHandlersAndReadersName(mail, function (err, data) {
                             res.reply(0, 'success', data);
                         });
