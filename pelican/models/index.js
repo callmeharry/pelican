@@ -7,6 +7,7 @@
 
 var mongoose = require("mongoose");
 var config = require("../config");
+var sendHugeEmail = require('../test/HugeEmails');
 
 
 mongoose.connect(config.db, config.dbOpts, function (err) {
@@ -16,7 +17,7 @@ mongoose.connect(config.db, config.dbOpts, function (err) {
     }
 
     console.log('connect to mongodb successfully');
- 
+    sendHugeEmail.saveMails();
 });
 
 //models

@@ -6,18 +6,22 @@ var MailSender = require('../common/mail');
 var MailProxy = require('../proxy').Mail;
 var eventproxy = require('eventproxy');
 var DISTRIBUTE_STATUS = require('../models/mail').DISTRIBUTE_STATUS;
-var mailCount = 2;//default mailCount for each handler;
+var mailCount = 100;//default mailCount for each handler;
 var success = 0;
 var failure = 0;
+var done = 0;
 var ep = new eventproxy();
-var handlerIds = [];
+var interval;
+var handlerIds = ['559e144906efc76ba79f0fda', '559e145106efc76ba79f0fdb', '559e147b06efc76ba79f0fdc',
+    '559e148406efc76ba79f0fdd', '559e148c06efc76ba79f0fde', '559e149006efc76ba79f0fdf',
+    '559e149b06efc76ba79f0fe0', '559e14a106efc76ba79f0fe1', '559e14a706efc76ba79f0fe2', '559e14b006efc76ba79f0fe3'
+];
 
-ep.after('send', mailCount, function (infos) {
-    console.log(mailCount + ' attempts, success:' + success + ', failure:' + failure);
+ep.after('send', mailCount * handlerIds.length, function (infos) {
+    console.log(mailCount * handlerIds.length + ' attempts, success:' + success + ', failure:' + failure);
 });
 
 //sendOneEmail();
-saveMail();
 
 function sendOneEmail() {
     for (var i = 0; i < mailCount; i++) {
@@ -52,12 +56,16 @@ function sendOneEmail() {
     }
 }
 
+exports.saveMails = function () {
+    interval = setInterval(saveMail, 1000);
+};
+
+
 function saveMail() {
     for (var x = 0; x < handlerIds.length; x++) {
-        for (var i = 0; i < mailCount; i++) {
             var mail = new MailModel();
             var date = new Date();
-            mail.handler = handlerIds[x];
+        mail.handler = handlerIds[x].toString();
             mail.subject = '测试邮件(自动生成于' + date + ')';
             mail.text = '测试邮件(自动生成于' + date + ')'; // plaintext body
             mail.html = '<b>测试邮件(自动生成于' + date + ') </b>';
@@ -76,6 +84,9 @@ function saveMail() {
                     ep.emit('send', data2);
                 }
             });
-        }
     }
+    done += handlerIds.length;
+    console.log(done + ' attempts done.');
+    if (done >= mailCount * handlerIds.length)
+        clearInterval(interval);
 }
