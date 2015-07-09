@@ -80,6 +80,11 @@ exports.getMailDetail = function (req, res, next) {
                                 mail[attr] = fullMail[attr];
                             }
                         }
+
+                        if (!mail.hasOwnProperty('html')) {
+                            mail.html = mail.text;
+                        }
+
                         mail.save();
 
                         addHandlersAndReadersName(mail, function (err, data) {
@@ -93,7 +98,7 @@ exports.getMailDetail = function (req, res, next) {
 
                 });
 
-                console.log(mail['']);
+                console.log(mail);
             }
 
 
