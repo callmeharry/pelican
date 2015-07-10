@@ -42,8 +42,8 @@ exports.setConfig =function(config,callback) {
                     callback(err, msg);
                 }
                 else {
-                    getConfig(function(err,data){
-                        if(data!=config){
+                    //getConfig(function(err,data){
+                    //    if(data!=config){
                             mailFs.writeMailConfig(config, function (err) {
                                 if (err) callback(-1, "internal error");
 
@@ -59,8 +59,8 @@ exports.setConfig =function(config,callback) {
                                 });
 
                             });
-                        }
-                    });
+                    //    }
+                    //});
 
                 }
             });
