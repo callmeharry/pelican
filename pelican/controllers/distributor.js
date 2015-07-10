@@ -25,9 +25,12 @@ exports.getMailList = function (req, res, next) {
         } else {
             var items = new Array(results.length);
             for (var i = 0; i < results.length; i++) {
+                var originDate = results[i].date;
+                results[i].date = moment(results[i].date).valueOf() - 28800000;//传回的时间的值加8个小时
+            var fromNow = moment(results[i].date).locale('zh-cn').toNow();//这里是将邮件的ISO时间与当前的ISO时间比较
                 var item = {};
-                item.date = results[i].date;
-                item.fromNow = moment(results[i].date).locale('zh-cn').toNow();
+                item.date = originDate;
+                item.fromNow = fromNow;
                 item._id = results[i]._id;
                 item.subject = results[i].subject;
                 item.messageId = results[i].messageId;
