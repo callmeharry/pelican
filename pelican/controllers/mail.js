@@ -88,9 +88,9 @@ exports.getMailDetail = function (req, res, next) {
                             }
                         }
 
-                        if (!mail.hasOwnProperty('html')) {
-                            mail.html = mail.text;
-                        }
+                        //if (!mail.hasOwnProperty('html')) {
+                        //    mail.html = mail.text;
+                        //}
 
                         mail.save();
 
