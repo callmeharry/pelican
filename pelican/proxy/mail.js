@@ -88,7 +88,7 @@ exports.getDistributorOutDatedMailList = function (page, callback) {
     return getMailList(
         {
             isHandled: false,
-            handleDeadline: {$gt: Date.now()}
+            handleDeadline: {$lt: Date.now()}
         },
         page,
         15,
