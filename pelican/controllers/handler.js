@@ -127,7 +127,7 @@ exports.sendEmail = function (req, res, next) {
                     res.reply(0, '邮件已发送');
                     //这个逻辑并不好 应该直接根据id更新数据库，而不是先加新的邮件再删除原邮件
                     if(oldId != undefined || oldId != '') {
-                         MailProxy.deleteMail(id, function(err, mail) {
+                         MailProxy.deleteMail(oldId, function(err, mail) {
 
                         });
                     }
